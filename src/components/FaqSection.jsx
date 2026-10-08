@@ -48,10 +48,10 @@ export default function FaqSection() {
           {/* Left Column: Support Info Card */}
           <div className="lg:col-span-4 flex flex-col justify-between">
             <div>
-              <p className="text-xs sm:text-sm 2xl:text-base 4xl:text-lg uppercase tracking-[0.24em] font-medium mb-3 text-[#EC2024]">
+              <p className="text-xs sm:text-sm 2xl:text-base 4xl:text-lg uppercase tracking-[0.24em] font-semibold mb-3 text-[#EC2024]">
                 LUMA RED LIGHT THERAPY
               </p>
-              <h2 className="text-3xl sm:text-4xl lg:text-[46px] 2xl:text-[56px] 4xl:text-[68px] font-extralight uppercase tracking-tight text-[#131313] leading-none mb-6">
+              <h2 className="text-3xl sm:text-4xl lg:text-[46px] 2xl:text-[56px] 4xl:text-[68px] font-bold uppercase tracking-tight text-[#131313] leading-none mb-6">
                 FAQs
               </h2>
               <div className="w-14 2xl:w-18 4xl:w-22 h-1 2xl:h-1.5 bg-[#EC2024] mb-8 2xl:mb-10" />

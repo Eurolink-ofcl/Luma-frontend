@@ -22,9 +22,9 @@ export default function CommunitySection() {
           {/* Content Container */}
           <div className="relative z-10 max-w-4xl 2xl:max-w-5xl 4xl:max-w-6xl mx-auto px-6 py-12 2xl:py-16 flex flex-col items-center">
             {/* Title */}
-            <h2 className="text-3xl sm:text-5xl md:text-6xl lg:text-[68px] 2xl:text-[80px] 4xl:text-[96px] font-extralight tracking-tight text-white uppercase leading-[1.08] mb-5 2xl:mb-7 select-none">
+            <h2 className="text-3xl sm:text-5xl md:text-6xl lg:text-[68px] 2xl:text-[80px] 4xl:text-[96px] font-bold tracking-tight text-white uppercase leading-[1.08] mb-5 2xl:mb-7 select-none">
               JOIN<br />
-              THE <span className="font-extrabold text-white tracking-normal">LUMA</span><br />
+              THE <span className="font-extrabold text-[#EC2024] tracking-normal">LUMA</span><br />
               COMMUNITY
             </h2>
 
