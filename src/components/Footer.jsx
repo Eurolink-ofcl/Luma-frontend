@@ -19,7 +19,7 @@ export default function Footer({ onOpenCart }) {
         {/* Row 1: LET'S CONNECT (Layer 19) */}
         <div className="py-10 sm:py-14 2xl:py-16 4xl:py-20 flex flex-col lg:flex-row lg:items-center justify-between gap-8 border-b border-gray-200">
           <div>
-            <h3 className="text-2xl sm:text-3xl lg:text-4xl 2xl:text-5xl 4xl:text-[54px] font-light text-[#EC2024] tracking-tight uppercase leading-none mb-2 2xl:mb-3">
+            <h3 className="text-2xl sm:text-3xl lg:text-4xl 2xl:text-5xl 4xl:text-[54px] font-bold text-[#EC2024] tracking-tight uppercase leading-none mb-2 2xl:mb-3">
               LET'S CONNECT
             </h3>
             <p className="text-xs sm:text-sm 2xl:text-base 4xl:text-lg text-[#333333] font-normal">
@@ -207,7 +207,7 @@ export default function Footer({ onOpenCart }) {
         </div>
 
         {/* Row 5: Copyright & Legal (Layer 27) */}
-        <div className="py-6 2xl:py-8 4xl:py-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs 2xl:text-sm 4xl:text-base text-gray-500 font-light">
+        <div className="py-6 2xl:py-8 4xl:py-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs 2xl:text-sm 4xl:text-base text-gray-500 font-normal">
           <p>Copyright © 2026 LUMA. All rights reserved</p>
           <div className="flex items-center gap-6 2xl:gap-8">
             <a href="#terms" className="hover:text-black transition-colors">
