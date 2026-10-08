@@ -41,7 +41,7 @@ export default function FaqSection() {
   return (
     <section
       id="faqs"
-      className="relative w-full bg-[#FFFFFF] text-[#131313] py-20 lg:py-28 2xl:py-36 4xl:py-44 overflow-hidden font-['Manrope'] border-t border-gray-100"
+      className="relative w-full bg-white text-[#131313] py-20 lg:py-28 2xl:py-36 4xl:py-44 overflow-hidden font-['Manrope']"
     >
       <div className="max-w-[1400px] 2xl:max-w-[1750px] 3xl:max-w-[1950px] 4xl:max-w-[2300px] mx-auto px-6 lg:px-12 2xl:px-16 4xl:px-20">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 2xl:gap-20 4xl:gap-24">
@@ -56,7 +56,7 @@ export default function FaqSection() {
               </h2>
               <div className="w-14 2xl:w-18 4xl:w-22 h-1 2xl:h-1.5 bg-[#EC2024] mb-8 2xl:mb-10" />
 
-              <div className="bg-[#FAFAFA] rounded-[16px] 2xl:rounded-[22px] 4xl:rounded-[28px] p-7 2xl:p-9 4xl:p-11 border border-gray-100 space-y-4 2xl:space-y-6">
+              <div className="bg-[#F6F6F6] rounded-[18px] 2xl:rounded-[24px] 4xl:rounded-[30px] p-7 2xl:p-9 4xl:p-11 border border-gray-200/80 space-y-4 2xl:space-y-6">
                 <h3 className="text-base 2xl:text-lg 4xl:text-xl font-semibold text-[#131313]">
                   Our customer support is available
                 </h3>
@@ -79,25 +79,40 @@ export default function FaqSection() {
             </div>
           </div>
 
-          {/* Right Column: Interactive Accordion */}
-          <div className="lg:col-span-8 divide-y divide-gray-200">
+          {/* Right Column: Interactive Accordion as individual boxed cards (PSD Rectangle 58: #F1F0F0) */}
+          <div className="lg:col-span-8 space-y-3.5 2xl:space-y-4.5 4xl:space-y-6">
             {faqs.map((faq, idx) => {
               const isOpen = openIndex === idx;
               return (
-                <div key={idx} className="py-5 sm:py-6 2xl:py-8 first:pt-0 last:pb-0">
+                <div
+                  key={idx}
+                  className={`rounded-[16px] 2xl:rounded-[20px] 4xl:rounded-[24px] border transition-all duration-300 overflow-hidden ${
+                    isOpen
+                      ? 'bg-[#F1F0F0] border-[#EC2024]/40 shadow-md ring-1 ring-[#EC2024]/10'
+                      : 'bg-[#F1F0F0] border-gray-200 hover:border-gray-300 shadow-xs'
+                  }`}
+                >
                   <button
                     type="button"
                     onClick={() => toggle(idx)}
-                    className="w-full flex items-center justify-between text-left gap-4 cursor-pointer group"
+                    className="w-full flex items-center justify-between text-left gap-4 p-5 sm:p-6 2xl:p-7 4xl:p-8 cursor-pointer group"
                   >
-                    <span className="text-base sm:text-lg 2xl:text-xl 4xl:text-2xl font-medium text-[#131313] group-hover:text-[#EC2024] transition-colors leading-snug">
-                      {faq.q}
-                    </span>
+                    <div className="flex items-center gap-3.5 2xl:gap-4.5">
+                      {/* Subtle red bullet matching PSD Ellipse 9 */}
+                      <span
+                        className={`w-2 h-2 2xl:w-2.5 2xl:h-2.5 rounded-full shrink-0 transition-colors ${
+                          isOpen ? 'bg-[#EC2024]' : 'bg-gray-300 group-hover:bg-[#EC2024]'
+                        }`}
+                      />
+                      <span className="text-base sm:text-lg 2xl:text-xl 4xl:text-2xl font-semibold text-[#131313] group-hover:text-[#EC2024] transition-colors leading-snug">
+                        {faq.q}
+                      </span>
+                    </div>
                     <span
-                      className={`w-8 2xl:w-10 h-8 2xl:h-10 rounded-full border border-gray-200 flex items-center justify-center shrink-0 text-base 2xl:text-lg font-light transition-all ${
+                      className={`w-8 2xl:w-10 h-8 2xl:h-10 rounded-full border flex items-center justify-center shrink-0 text-base 2xl:text-lg font-light transition-all ${
                         isOpen
-                          ? 'bg-[#EC2024] border-[#EC2024] text-white rotate-180'
-                          : 'bg-white text-gray-500 group-hover:border-gray-400'
+                          ? 'bg-[#EC2024] border-[#EC2024] text-white rotate-180 shadow-xs'
+                          : 'bg-white border-gray-200 text-gray-500 group-hover:border-gray-400'
                       }`}
                     >
                       {isOpen ? '−' : '+'}
@@ -105,7 +120,7 @@ export default function FaqSection() {
                   </button>
 
                   {isOpen && (
-                    <div className="mt-4 2xl:mt-6 text-[#555555] text-sm sm:text-[15px] 2xl:text-base 4xl:text-lg leading-relaxed pr-8 animate-fadeIn">
+                    <div className="px-5 sm:px-6 2xl:px-7 4xl:px-8 pb-5 sm:pb-6 2xl:pb-7 4xl:pb-8 pt-1 text-[#555555] text-sm sm:text-[15px] 2xl:text-base 4xl:text-lg leading-relaxed border-t border-gray-100 animate-fadeIn">
                       <p>{faq.a}</p>
                     </div>
                   )}

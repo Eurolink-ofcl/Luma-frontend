@@ -167,6 +167,24 @@
       "priority": 12,
       "passes": true,
       "notes": "All 10 post-hero sections verified against PSD canvas text layers and visual groups."
+    },
+    {
+      "id": "US-013",
+      "title": "Post-Hero Visual Design & CSS Styles Alignment with PSD",
+      "description": "Refactor visual styles and component shapes across all sections after Hero to match PSD design: unbox cards in Benefits Overview (Rectangle 51) and Product Range (Rectangle 52), implement discrete 5-segment progress bar in Quiz (Rectangle 54), individual boxed FAQ cards (#F1F0F0 Rectangle 58), segmented pillbox in Before/After (Rectangle 57), and restore authentic white canvas background with overlaid cards in Experts (Group 32).",
+      "acceptanceCriteria": [
+        "Benefits Overview cards unboxed (no outer card box/border/shadow; title and 15 min badge sit below rounded image container Rectangle 51)",
+        "Product Range cards unboxed (no outer card box; image container Rectangle 52 in #F3F3F3; compact pill Buy Now button; 4 pagination dots Ellipse 6)",
+        "Assessment Quiz has 5 discrete horizontal progress bars (Rectangle 54) in #EC2024/#333333, centered question text, and Back/Next navigation",
+        "FAQs rendered as individual rounded boxed cards in #F1F0F0 (Rectangle 58) with red bullet Ellipse 9",
+        "Before & After has segmented pillbox container in #EBEBEB (Rectangle 57) with active black pill",
+        "Expert Testimonials has clean white canvas background with dark eyebrow, red heading, and overlaid video cards (Rectangle 61)",
+        "Clean seamless section transitions with zero artificial divider borders",
+        "npm run build passes with zero errors"
+      ],
+      "priority": 13,
+      "passes": true,
+      "notes": "All visual design and CSS styles refactored to 100% fidelity with PSD layer shapes and canvas aesthetics."
     }
   ]
 }

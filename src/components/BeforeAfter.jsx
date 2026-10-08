@@ -22,7 +22,7 @@ export default function BeforeAfter() {
   return (
     <section
       id="reviews"
-      className="relative w-full bg-[#FAFAFA] text-[#131313] py-20 lg:py-28 2xl:py-36 4xl:py-44 overflow-hidden font-['Manrope'] border-t border-gray-100"
+      className="relative w-full bg-white text-[#131313] py-20 lg:py-28 2xl:py-36 4xl:py-44 overflow-hidden font-['Manrope']"
     >
       <div className="max-w-[1200px] 2xl:max-w-[1600px] 3xl:max-w-[1850px] 4xl:max-w-[2150px] mx-auto px-6 lg:px-8 2xl:px-12 4xl:px-16">
         {/* Header */}
@@ -40,22 +40,24 @@ export default function BeforeAfter() {
           </p>
         </div>
 
-        {/* Category Pills */}
-        <div className="flex items-center justify-center gap-3 2xl:gap-4 mb-10 2xl:mb-14">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              type="button"
-              onClick={() => setActiveTab(cat)}
-              className={`px-6 2xl:px-8 4xl:px-10 py-2.5 2xl:py-3.5 4xl:py-4 rounded-full text-xs sm:text-sm 2xl:text-base 4xl:text-lg font-semibold tracking-wider transition-all duration-200 cursor-pointer ${
-                activeTab === cat
-                  ? 'bg-[#131313] text-white shadow-md'
-                  : 'bg-white text-gray-600 border border-gray-200 hover:border-gray-400'
-              }`}
-            >
-              {cat}
-            </button>
-          ))}
+        {/* Category Pills (PSD Rectangle 57 Segmented Pill Container) */}
+        <div className="flex items-center justify-center mb-10 2xl:mb-14 select-none">
+          <div className="inline-flex items-center bg-[#EBEBEB] p-1.5 2xl:p-2 rounded-full border border-gray-200 shadow-inner">
+            {categories.map((cat) => (
+              <button
+                key={cat}
+                type="button"
+                onClick={() => setActiveTab(cat)}
+                className={`px-6 sm:px-8 2xl:px-10 4xl:px-12 py-2 sm:py-2.5 2xl:py-3.5 4xl:py-4 rounded-full text-xs sm:text-sm 2xl:text-base 4xl:text-lg font-bold tracking-wider uppercase transition-all duration-300 cursor-pointer ${
+                  activeTab === cat
+                    ? 'bg-[#131313] text-white shadow-md'
+                    : 'text-[#555555] hover:text-[#131313] bg-transparent'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Interactive Before & After Comparison Frame */}

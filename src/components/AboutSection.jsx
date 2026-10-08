@@ -2,7 +2,7 @@ import React from 'react';
 
 export default function AboutSection() {
   return (
-    <section id="about" className="relative w-full bg-[#FAFAFA] text-[#131313] py-20 lg:py-28 2xl:py-36 4xl:py-44 font-['Manrope']">
+    <section id="about" className="relative w-full bg-white text-[#131313] py-20 lg:py-28 2xl:py-36 4xl:py-44 font-['Manrope']">
       <div className="about-container max-w-[1360px] 2xl:max-w-[1680px] 3xl:max-w-[1850px] 4xl:max-w-[2150px] mx-auto px-6 lg:px-12 2xl:px-16 4xl:px-20">
         {/* Section Header */}
         <div className="text-center max-w-5xl lg:max-w-6xl 2xl:max-w-7xl mx-auto mb-14 md:mb-18 2xl:mb-24">

@@ -135,7 +135,7 @@ export default function AssessmentQuiz() {
   return (
     <section
       id="assessment"
-      className="relative w-full bg-[#0a0a0a] text-white py-20 lg:py-28 2xl:py-36 4xl:py-44 overflow-hidden font-['Manrope'] border-t border-white/10"
+      className="relative w-full bg-[#0a0a0a] text-white py-20 lg:py-28 2xl:py-36 4xl:py-44 overflow-hidden font-['Manrope']"
     >
       {/* Full-bleed unboxed subtle ambient glow matching PSD Group 26 */}
       <div className="absolute inset-0 w-full h-full pointer-events-none bg-[radial-gradient(ellipse_70%_45%_at_50%_45%,rgba(236,32,36,0.08),transparent_70%)] z-0" />
@@ -155,37 +155,33 @@ export default function AssessmentQuiz() {
           </p>
         </div>
 
-        {/* Step Content */}
+        {/* Step Content matching PSD Group 26 Rectangle 53 copy */}
         {currentStep < 5 ? (
-          <div className="max-w-2xl 2xl:max-w-3xl 4xl:max-w-4xl mx-auto bg-white/3 border border-white/10 rounded-[20px] 2xl:rounded-[28px] 4xl:rounded-[36px] p-8 sm:p-12 2xl:p-16 4xl:p-20 shadow-2xl backdrop-blur-md">
-            {/* Progress indicator */}
-            <div className="flex items-center justify-between mb-8 pb-4 border-b border-white/10">
-              <span className="text-xs sm:text-sm 2xl:text-base uppercase tracking-widest font-mono text-[#EC2024]">
-                {currentQ.title}
-              </span>
-              <div className="flex items-center gap-1.5">
-                {questions.map((_, i) => (
-                  <div
-                    key={i}
-                    className={`h-1.5 rounded-full transition-all duration-300 ${
-                      i === currentStep
-                        ? 'w-6 bg-[#EC2024]'
-                        : i < currentStep
-                        ? 'w-2.5 bg-white/60'
-                        : 'w-2.5 bg-white/20'
-                    }`}
-                  />
-                ))}
-              </div>
+          <div className="max-w-2xl 2xl:max-w-3xl 4xl:max-w-4xl mx-auto bg-[#0E0E10] border border-white/15 rounded-[24px] 2xl:rounded-[36px] 4xl:rounded-[44px] p-6 sm:p-10 2xl:p-14 4xl:p-18 shadow-2xl">
+            {/* Discrete 5-Bar Progress Indicator matching PSD Group 26 Nav (Rectangle 54) */}
+            <div className="grid grid-cols-5 gap-2.5 sm:gap-3.5 2xl:gap-4 mb-8 2xl:mb-10">
+              {questions.map((_, i) => (
+                <div
+                  key={i}
+                  className={`h-1.5 2xl:h-2 rounded-full transition-all duration-300 ${
+                    i <= currentStep ? 'bg-[#EC2024]' : 'bg-[#333333]'
+                  }`}
+                />
+              ))}
             </div>
 
-            {/* Question title */}
-            <h3 className="text-xl sm:text-2xl font-light text-white mb-8 text-center sm:text-left leading-snug">
-              {currentQ.question}
-            </h3>
+            {/* Question Header Centered matching PSD */}
+            <div className="text-center mb-8 2xl:mb-10">
+              <span className="text-xs sm:text-sm 2xl:text-base uppercase tracking-[0.2em] font-semibold text-gray-400 block mb-2">
+                Question {currentStep + 1} of 5
+              </span>
+              <h3 className="text-2xl sm:text-3xl 2xl:text-4xl 4xl:text-[42px] font-bold text-white tracking-tight leading-snug">
+                {currentQ.question}
+              </h3>
+            </div>
 
-            {/* Options list */}
-            <div className="space-y-3.5 mb-8">
+            {/* Options List matching PSD Rectangle 53 copy */}
+            <div className="space-y-3.5 2xl:space-y-4.5 mb-10 2xl:mb-12">
               {currentQ.options.map((option, idx) => {
                 const isSelected = answers[currentStep] === idx;
                 return (
@@ -193,16 +189,16 @@ export default function AssessmentQuiz() {
                     key={idx}
                     type="button"
                     onClick={() => handleSelectOption(idx)}
-                    className={`w-full text-left p-4 sm:p-5 rounded-[12px] border transition-all duration-200 cursor-pointer flex flex-col justify-center ${
+                    className={`w-full text-left p-5 sm:p-6 2xl:p-7 rounded-[14px] 2xl:rounded-[18px] border transition-all duration-200 cursor-pointer flex flex-col justify-center ${
                       isSelected
-                        ? 'border-[#EC2024] bg-red-500/10 shadow-[0_0_15px_rgba(236,32,36,0.2)]'
-                        : 'border-white/10 bg-white/2 hover:border-white/30 hover:bg-white/5'
+                        ? 'border-[#EC2024] bg-[#EC2024]/15 shadow-[0_0_20px_rgba(236,32,36,0.25)] ring-1 ring-[#EC2024]'
+                        : 'border-white/10 bg-[#161618] hover:border-white/30 hover:bg-[#1D1D20]'
                     }`}
                   >
-                    <span className="text-base sm:text-lg font-medium text-white mb-0.5">
+                    <span className="text-base sm:text-lg 2xl:text-xl font-bold text-white mb-1">
                       {option.title}
                     </span>
-                    <span className="text-xs sm:text-sm text-white/50">
+                    <span className="text-xs sm:text-sm 2xl:text-base text-gray-400">
                       {option.subtitle}
                     </span>
                   </button>
@@ -210,18 +206,28 @@ export default function AssessmentQuiz() {
               })}
             </div>
 
-            {/* Footer Navigation */}
-            <div className="flex items-center justify-between pt-2">
+            {/* Footer Navigation matching PSD Back-Btn & Next-Btn */}
+            <div className="flex items-center justify-between pt-4 border-t border-white/10">
               {currentStep > 0 ? (
                 <button
                   type="button"
                   onClick={handlePrev}
-                  className="text-xs sm:text-sm text-white/60 hover:text-white flex items-center gap-1.5 transition-colors cursor-pointer"
+                  className="text-xs sm:text-sm 2xl:text-base text-gray-400 hover:text-white flex items-center gap-2 uppercase tracking-wider font-semibold transition-colors cursor-pointer"
                 >
                   &larr; Back
                 </button>
               ) : (
                 <div />
+              )}
+
+              {answers[currentStep] !== undefined && (
+                <button
+                  type="button"
+                  onClick={handleNext}
+                  className="text-xs sm:text-sm 2xl:text-base text-[#EC2024] hover:text-[#ff3b3e] flex items-center gap-2 uppercase tracking-wider font-bold transition-colors cursor-pointer"
+                >
+                  Next &rarr;
+                </button>
               )}
             </div>
           </div>

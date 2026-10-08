@@ -35,22 +35,22 @@ export default function CommunitySection() {
               {' '}ANYTHING ABOUT RED LIGHT THERAPY.
             </p>
 
-            {/* Action Buttons */}
+            {/* Action Buttons matching PSD Group 31 CTAs (Rectangle 11) */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 2xl:gap-6 w-full sm:w-auto">
-              {/* Join Us CTA */}
+              {/* Join Us CTA (PSD CTA 1 width 290px) */}
               <a
                 href="#join"
-                className="w-full sm:w-auto min-w-[160px] 2xl:min-w-[190px] 4xl:min-w-[220px] px-8 2xl:px-10 4xl:px-12 py-3.5 2xl:py-4.5 4xl:py-5 rounded-[8px] 2xl:rounded-[10px] bg-[#EC2024] hover:bg-[#d6191d] text-white font-bold text-xs sm:text-sm 2xl:text-base 4xl:text-lg tracking-widest uppercase transition-all duration-200 shadow-[0_4px_20px_rgba(236,32,36,0.35)] hover:shadow-[0_6px_25px_rgba(236,32,36,0.5)] transform hover:-translate-y-0.5 text-center cursor-pointer"
+                className="w-full sm:w-auto min-w-[160px] 2xl:min-w-[190px] 4xl:min-w-[220px] px-8 2xl:px-10 4xl:px-12 py-3.5 2xl:py-4.5 4xl:py-5 rounded-[6px] 2xl:rounded-[8px] bg-[#EC2024] hover:bg-[#d6191d] text-white font-bold text-xs sm:text-sm 2xl:text-base 4xl:text-lg tracking-wider transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-center cursor-pointer"
               >
-                JOIN US
+                Join Us
               </a>
 
-              {/* Ask a question CTA */}
+              {/* Ask a question CTA (PSD CTA 2 width 420px) */}
               <a
                 href="#contact"
-                className="w-full sm:w-auto min-w-[180px] 2xl:min-w-[210px] 4xl:min-w-[240px] px-8 2xl:px-10 4xl:px-12 py-3.5 2xl:py-4.5 4xl:py-5 rounded-[8px] 2xl:rounded-[10px] bg-black/80 hover:bg-black text-white font-bold text-xs sm:text-sm 2xl:text-base 4xl:text-lg tracking-widest uppercase transition-all duration-200 border border-white/20 hover:border-white/40 text-center cursor-pointer"
+                className="w-full sm:w-auto min-w-[180px] 2xl:min-w-[220px] 4xl:min-w-[260px] px-8 2xl:px-10 4xl:px-12 py-3.5 2xl:py-4.5 4xl:py-5 rounded-[6px] 2xl:rounded-[8px] bg-black/85 hover:bg-black text-white font-bold text-xs sm:text-sm 2xl:text-base 4xl:text-lg tracking-wider transition-all duration-200 border border-white/25 hover:border-white/50 text-center cursor-pointer"
               >
-                ASK A QUESTION
+                Ask a question
               </a>
             </div>
           </div>

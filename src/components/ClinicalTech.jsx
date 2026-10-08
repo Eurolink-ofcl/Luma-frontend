@@ -164,7 +164,7 @@ export default function ClinicalTech() {
   return (
     <section
       id="clinical-technology"
-      className="relative w-full bg-[#0a0a0a] text-white py-20 lg:py-28 2xl:py-36 4xl:py-44 overflow-hidden font-['Manrope'] border-t border-white/10"
+      className="relative w-full bg-[#0a0a0a] text-white py-20 lg:py-28 2xl:py-36 4xl:py-44 overflow-hidden font-['Manrope']"
     >
       {/* Full-bleed unboxed ambient red glow behind chart matching PSD Group 17 */}
       <div className="absolute inset-0 w-full h-full pointer-events-none bg-[radial-gradient(ellipse_75%_50%_at_50%_35%,rgba(236,32,36,0.12),transparent_75%)] z-0" />

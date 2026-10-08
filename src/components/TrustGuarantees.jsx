@@ -25,7 +25,7 @@ const guarantees = [
 
 export default function TrustGuarantees() {
   return (
-    <section className="relative w-full bg-[#080808] text-white py-16 lg:py-20 2xl:py-28 4xl:py-36 overflow-hidden font-['Manrope'] border-y border-white/10">
+    <section className="relative w-full bg-[#080808] text-white py-16 lg:py-20 2xl:py-28 4xl:py-36 overflow-hidden font-['Manrope']">
       <div className="max-w-[1400px] 2xl:max-w-[1750px] 3xl:max-w-[1950px] 4xl:max-w-[2300px] mx-auto px-6 lg:px-12 2xl:px-16 4xl:px-20">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 2xl:gap-12 4xl:gap-16 text-center">
           {guarantees.map((item, idx) => (

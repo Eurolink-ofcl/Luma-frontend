@@ -103,58 +103,75 @@ export default function ProductRange({ onAddToCart }) {
           </div>
         </div>
 
-        {/* 3-Column Products Grid */}
+        {/* 3-Column Products Grid - Unboxed cards matching PSD Group 19 */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 2xl:gap-14 4xl:gap-16">
           {products.map((product) => (
             <div
               key={product.id}
-              className="group bg-[#FAFAFA] rounded-[20px] 2xl:rounded-[26px] 4xl:rounded-[32px] p-6 sm:p-8 2xl:p-10 4xl:p-12 flex flex-col justify-between border border-gray-100 hover:border-gray-200 hover:shadow-xl transition-all duration-300 hover:-translate-y-1.5"
+              className="group flex flex-col justify-between transition-all duration-300 select-none"
             >
-              {/* Product Showcase Frame (Rectangle 52) */}
               <div>
-                <div className="relative w-full aspect-square bg-[#F0F0F0] rounded-[16px] 2xl:rounded-[22px] flex items-center justify-center p-8 2xl:p-12 overflow-hidden mb-7 2xl:mb-9">
+                {/* Product Showcase Frame matching PSD Rectangle 52 (800x800 square, #F3F3F3) */}
+                <div className="relative w-full aspect-square bg-[#F3F3F3] rounded-[18px] 2xl:rounded-[24px] 4xl:rounded-[30px] flex items-center justify-center p-8 2xl:p-12 overflow-hidden mb-6 2xl:mb-8 shadow-xs">
                   {/* Badge */}
-                  <span className="absolute top-4 left-4 text-[11px] font-semibold tracking-wider uppercase px-2.5 py-1 bg-white/90 backdrop-blur-xs text-[#131313] rounded-full shadow-xs">
+                  <span className="absolute top-4 left-4 text-[11px] font-semibold tracking-wider uppercase px-3 py-1 bg-white text-[#131313] rounded-full shadow-xs border border-gray-100">
                     {product.badge}
                   </span>
 
                   <img
                     src={product.image}
                     alt={product.name}
-                    className="max-h-full max-w-full object-contain group-hover:scale-108 transition-transform duration-500 drop-shadow-md"
+                    className="max-h-[85%] max-w-[85%] object-contain group-hover:scale-108 transition-transform duration-500 drop-shadow-md"
                   />
                 </div>
 
-                {/* Typography */}
-                <div className="mb-6">
-                  <div className="flex items-baseline justify-between gap-2 mb-1">
-                    <h3 className="text-xl sm:text-2xl 2xl:text-3xl 4xl:text-4xl font-bold tracking-tight text-[#131313]">
+                {/* Typography matching PSD Group 19 */}
+                <div className="mb-5 2xl:mb-6">
+                  <div className="flex items-baseline justify-between gap-2 mb-1.5">
+                    <h3 className="text-xl sm:text-2xl 2xl:text-3xl 4xl:text-4xl font-extrabold tracking-tight uppercase text-[#131313]">
                       {product.name}
                     </h3>
-                    <span className="text-sm 2xl:text-base 4xl:text-lg font-semibold text-[#EC2024]">
+                    <span className="text-sm sm:text-base 2xl:text-lg 4xl:text-xl font-bold text-[#EC2024]">
                       {product.price}
                     </span>
                   </div>
-                  <p className="text-xs 2xl:text-sm 4xl:text-base uppercase tracking-wider text-[#EC2024] font-medium mb-3">
+                  <p className="text-xs 2xl:text-sm 4xl:text-base uppercase tracking-wider text-[#777777] font-semibold mb-2.5">
                     {product.category}
                   </p>
-                  <p className="text-[#666666] text-xs sm:text-[13.5px] 2xl:text-[15px] 4xl:text-[17px] leading-relaxed line-clamp-3">
+                  <p className="text-[#555555] text-xs sm:text-[14px] 2xl:text-[15.5px] 4xl:text-[17px] leading-relaxed line-clamp-3">
                     {product.description}
                   </p>
                 </div>
               </div>
 
-              {/* Action Button (Rectangle 11) */}
-              <div>
+              {/* Action Button (PSD Rectangle 11: left-aligned pill button width ~280px) */}
+              <div className="pt-2">
                 <button
                   type="button"
                   onClick={() => onAddToCart && onAddToCart(product)}
-                  className="w-full inline-flex items-center justify-center py-3.5 2xl:py-4.5 4xl:py-5 px-6 rounded-[6px] 2xl:rounded-[8px] bg-[#EC2024] hover:bg-[#c9181b] text-white font-semibold text-xs sm:text-sm 2xl:text-base 4xl:text-lg uppercase tracking-wider transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer"
+                  className="w-full sm:w-auto min-w-[150px] 2xl:min-w-[180px] 4xl:min-w-[210px] inline-flex items-center justify-center py-3.5 2xl:py-4.5 4xl:py-5 px-8 2xl:px-10 rounded-[6px] 2xl:rounded-[8px] bg-[#EC2024] hover:bg-[#c9181b] text-white font-bold text-xs sm:text-sm 2xl:text-base 4xl:text-lg uppercase tracking-wider transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer"
                 >
                   Buy Now
                 </button>
               </div>
             </div>
+          ))}
+        </div>
+
+        {/* Carousel Pagination Dots matching PSD Group 19 Nav (Ellipse 6) */}
+        <div className="flex items-center justify-center gap-2.5 2xl:gap-3.5 mt-10 2xl:mt-14 select-none">
+          {[0, 1, 2, 3].map((dot) => (
+            <button
+              key={dot}
+              type="button"
+              onClick={() => setActiveIndex(dot % products.length)}
+              aria-label={`Product slide ${dot + 1}`}
+              className={`w-2.5 h-2.5 2xl:w-3 2xl:h-3 rounded-full transition-all cursor-pointer ${
+                activeIndex === dot % products.length
+                  ? 'bg-[#EC2024] scale-110 shadow-[0_0_8px_rgba(236,32,36,0.6)]'
+                  : 'bg-gray-300 hover:bg-gray-400'
+              }`}
+            />
           ))}
         </div>
       </div>
