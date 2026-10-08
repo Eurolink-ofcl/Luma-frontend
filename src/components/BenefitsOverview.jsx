@@ -68,15 +68,15 @@ export default function BenefitsOverview() {
       <div className="benefits-container max-w-[1400px] 2xl:max-w-[1750px] 3xl:max-w-[1950px] 4xl:max-w-[2300px] mx-auto px-6 lg:px-12 2xl:px-16 4xl:px-20">
         {/* Section Header */}
         <div className="text-center max-w-3xl 2xl:max-w-4xl 4xl:max-w-5xl mx-auto mb-16 md:mb-20 2xl:mb-24">
-          <p className="text-xs sm:text-sm 2xl:text-base 4xl:text-lg uppercase tracking-[0.24em] font-medium mb-3">
+          <p className="text-xs sm:text-sm 2xl:text-base 4xl:text-lg uppercase tracking-[0.24em] font-semibold mb-3">
             <span className="text-[#131313]">WHY </span>
             <span className="text-[#EC2024]">LUMA</span>
           </p>
-          <h2 className="text-[#131313] font-extralight text-2xl sm:text-3xl md:text-4xl lg:text-[44px] 2xl:text-[54px] 4xl:text-[64px] tracking-tight uppercase leading-tight mt-2">
+          <h2 className="text-[#131313] font-bold text-2xl sm:text-3xl md:text-4xl lg:text-[44px] 2xl:text-[54px] 4xl:text-[64px] tracking-tight uppercase leading-tight mt-2">
             BENEFITS OVERVIEW
           </h2>
           <div className="w-16 2xl:w-20 4xl:w-24 h-1 2xl:h-1.5 bg-[#EC2024] mx-auto mt-4 mb-4" />
-          <p className="text-[#555555] text-sm sm:text-base 2xl:text-lg 4xl:text-xl leading-relaxed mt-3">
+          <p className="text-[#444444] text-sm sm:text-base 2xl:text-lg 4xl:text-xl leading-relaxed mt-3 font-normal">
             Evidence-based protocols calibrated for specific wellness outcomes.
           </p>
         </div>
