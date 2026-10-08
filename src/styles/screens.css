@@ -1,0 +1,548 @@
+/* ==========================================================================
+   LUMA DISPLAY RESPONSIVENESS SYSTEM - DEDICATED PER-SCREEN CSS
+   Screens targeted:
+   1. Laptop 1366 × 768   (1366px · 16:9)
+   2. Laptop 1440 × 900   (1440px · 16:10 / MacBook)
+   3. Laptop 1536 × 864   (1536px · 125% Windows scaling)
+   4. Full HD 1920 × 1080 (1920px · 16:9 / 1080p Standard)
+   5. 2K QHD 2560 × 1440  (2560px · 16:9 / QHD Gaming & Pro)
+   6. 3K / 4K UHD / Ultrawide (2880px - 3840px+)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. LAPTOP 1366 × 768 (1280px to 1439px)
+   Compact 13-14" laptops, 768px height constraints
+   -------------------------------------------------------------------------- */
+@media screen and (min-width: 1280px) and (max-width: 1439px) {
+  /* Navbar */
+  .luma-navbar-header {
+    height: 72px !important;
+  }
+  .luma-navbar-container {
+    max-width: 100% !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+  .luma-navbar-links {
+    gap: 14px !important;
+  }
+  .luma-navbar-links a {
+    font-size: 11px !important;
+    white-space: nowrap !important;
+  }
+  .luma-navbar-actions {
+    gap: 8px !important;
+  }
+  .luma-navbar-actions a[href="#get-panel"] {
+    padding: 4px 10px !important;
+    font-size: 10.5px !important;
+    height: 28px !important;
+  }
+
+  /* Hero */
+  #hero {
+    height: min(780px, 94vh) !important;
+    min-height: 640px !important;
+    padding-top: 120px !important;
+    padding-bottom: 30px !important;
+  }
+  #hero h1 {
+    font-size: 50px !important;
+    line-height: 1.15 !important;
+    margin-bottom: 14px !important;
+  }
+  #hero p {
+    font-size: 12px !important;
+    margin-bottom: 24px !important;
+  }
+  #hero .luma-hero-buttons {
+    margin-bottom: 32px !important;
+  }
+  #hero .luma-hero-buttons a {
+    padding: 10px 22px !important;
+    font-size: 12px !important;
+    min-width: 160px !important;
+  }
+
+  /* Trust Strip */
+  #trust-strip {
+    min-height: 52px !important;
+  }
+  #trust-strip .trust-container {
+    max-width: 1320px !important;
+    gap: 24px !important;
+    font-size: 11px !important;
+  }
+
+  /* About Section */
+  #about .about-container {
+    max-width: 1300px !important;
+    gap: 48px !important;
+  }
+  #about .about-text {
+    font-size: 15px !important;
+    line-height: 1.65 !important;
+  }
+
+  /* Clinical Technology */
+  #clinical-technology .clinical-container {
+    max-width: 1320px !important;
+  }
+  #clinical-technology .wavelength-chart {
+    height: 440px !important;
+  }
+
+  /* Product Range */
+  #products .products-container {
+    max-width: 1320px !important;
+  }
+
+  /* Benefits Overview */
+  #benefits .benefits-container {
+    max-width: 1320px !important;
+  }
+
+  /* Community */
+  #community .community-banner {
+    min-height: 480px !important;
+  }
+  #community h2 {
+    font-size: 48px !important;
+  }
+
+  /* Footer */
+  footer .footer-container {
+    max-width: 1320px !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   2. LAPTOP 1440 × 900 (1440px to 1535px)
+   Standard MacBook Air & 14" Pro 16:10 aspect ratio
+   -------------------------------------------------------------------------- */
+@media screen and (min-width: 1440px) and (max-width: 1535px) {
+  /* Navbar */
+  .luma-navbar-header {
+    height: 78px !important;
+  }
+  .luma-navbar-container {
+    max-width: 100% !important;
+    padding-left: 24px !important;
+    padding-right: 24px !important;
+  }
+  .luma-navbar-links {
+    gap: 18px !important;
+  }
+  .luma-navbar-links a {
+    font-size: 11.5px !important;
+    white-space: nowrap !important;
+  }
+  .luma-navbar-actions {
+    gap: 10px !important;
+  }
+  .luma-navbar-actions a[href="#get-panel"] {
+    padding: 5px 12px !important;
+    font-size: 11px !important;
+    height: 30px !important;
+  }
+
+  /* Hero */
+  #hero {
+    height: min(840px, 94vh) !important;
+    min-height: 700px !important;
+    padding-top: 130px !important;
+    padding-bottom: 36px !important;
+  }
+  #hero h1 {
+    font-size: 56px !important;
+    line-height: 1.15 !important;
+    margin-bottom: 16px !important;
+  }
+  #hero p {
+    font-size: 12.5px !important;
+    margin-bottom: 28px !important;
+  }
+  #hero .luma-hero-buttons {
+    margin-bottom: 36px !important;
+  }
+  #hero .luma-hero-buttons a {
+    padding: 11px 26px !important;
+    font-size: 12.5px !important;
+    min-width: 175px !important;
+  }
+
+  /* Trust Strip */
+  #trust-strip {
+    min-height: 56px !important;
+  }
+  #trust-strip .trust-container {
+    max-width: 1390px !important;
+    gap: 32px !important;
+    font-size: 11.5px !important;
+  }
+
+  /* About Section */
+  #about .about-container {
+    max-width: 1380px !important;
+    gap: 56px !important;
+  }
+  #about .about-text {
+    font-size: 15.5px !important;
+    line-height: 1.68 !important;
+  }
+
+  /* Clinical Technology */
+  #clinical-technology .clinical-container {
+    max-width: 1390px !important;
+  }
+  #clinical-technology .wavelength-chart {
+    height: 480px !important;
+  }
+
+  /* Product Range */
+  #products .products-container {
+    max-width: 1390px !important;
+  }
+
+  /* Community */
+  #community .community-banner {
+    min-height: 520px !important;
+  }
+  #community h2 {
+    font-size: 54px !important;
+  }
+
+  /* Footer */
+  footer .footer-container {
+    max-width: 1390px !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   3. LAPTOP 1536 × 864 (1536px to 1799px)
+   15" Windows Laptops with 125% DPI scale, 864px height
+   -------------------------------------------------------------------------- */
+@media screen and (min-width: 1536px) and (max-width: 1799px) {
+  /* Navbar */
+  .luma-navbar-header {
+    height: 84px !important;
+  }
+  .luma-navbar-container {
+    max-width: 100% !important;
+    padding-left: 28px !important;
+    padding-right: 28px !important;
+  }
+  .luma-navbar-links {
+    gap: 22px !important;
+  }
+  .luma-navbar-links a {
+    font-size: 12px !important;
+    white-space: nowrap !important;
+  }
+  .luma-navbar-actions {
+    gap: 12px !important;
+  }
+  .luma-navbar-actions a[href="#get-panel"] {
+    padding: 6px 14px !important;
+    font-size: 11.5px !important;
+    height: 32px !important;
+  }
+
+  /* Hero */
+  #hero {
+    height: min(850px, 94vh) !important;
+    min-height: 720px !important;
+    padding-top: 136px !important;
+    padding-bottom: 40px !important;
+  }
+  #hero h1 {
+    font-size: 62px !important;
+    line-height: 1.14 !important;
+    margin-bottom: 18px !important;
+  }
+  #hero p {
+    font-size: 13px !important;
+    margin-bottom: 30px !important;
+  }
+  #hero .luma-hero-buttons {
+    margin-bottom: 40px !important;
+  }
+  #hero .luma-hero-buttons a {
+    padding: 12px 28px !important;
+    font-size: 13px !important;
+    min-width: 185px !important;
+  }
+
+  /* Trust Strip */
+  #trust-strip {
+    min-height: 58px !important;
+  }
+  #trust-strip .trust-container {
+    max-width: 1480px !important;
+    gap: 40px !important;
+    font-size: 12px !important;
+  }
+
+  /* About Section */
+  #about .about-container {
+    max-width: 1460px !important;
+    gap: 68px !important;
+  }
+  #about .about-text {
+    font-size: 16px !important;
+    line-height: 1.7 !important;
+  }
+
+  /* Clinical Technology */
+  #clinical-technology .clinical-container {
+    max-width: 1480px !important;
+  }
+  #clinical-technology .wavelength-chart {
+    height: 500px !important;
+  }
+
+  /* Product Range */
+  #products .products-container {
+    max-width: 1480px !important;
+  }
+
+  /* Community */
+  #community .community-banner {
+    min-height: 540px !important;
+  }
+  #community h2 {
+    font-size: 60px !important;
+  }
+
+  /* Footer */
+  footer .footer-container {
+    max-width: 1480px !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. FULL HD 16:9 (1920 × 1080) (1800px to 2399px)
+   Standard Full HD Monitored Desktop & 1080p Full Viewport
+   -------------------------------------------------------------------------- */
+@media screen and (min-width: 1800px) and (max-width: 2399px) {
+  /* Navbar */
+  .luma-navbar-header {
+    height: 96px !important;
+  }
+  .luma-navbar-header nav {
+  }
+  .luma-navbar-container {
+    max-width: 1760px !important;
+    padding-left: 48px !important;
+    padding-right: 48px !important;
+  }
+  .luma-navbar-links {
+    gap: 48px !important;
+  }
+  .luma-navbar-links a {
+    font-size: 13.5px !important;
+    white-space: nowrap !important;
+  }
+
+  /* Hero */
+  #hero {
+    height: 930px !important;
+    padding-top: 140px !important;
+    padding-bottom: 24px !important;
+  }
+  #hero h1 {
+    font-size: 74px !important;
+    line-height: 1.12 !important;
+    margin-bottom: 22px !important;
+  }
+  #hero p {
+    font-size: 15px !important;
+    margin-bottom: 38px !important;
+  }
+  #hero .luma-hero-buttons {
+    margin-bottom: 52px !important;
+  }
+  #hero .luma-hero-buttons a {
+    padding: 14px 34px !important;
+    font-size: 14px !important;
+    min-width: 200px !important;
+  }
+
+  /* Trust Strip */
+  #trust-strip {
+    min-height: 64px !important;
+  }
+  #trust-strip .trust-container {
+    max-width: 1720px !important;
+    gap: 56px !important;
+    font-size: 13px !important;
+  }
+
+  /* About Section */
+  #about .about-container {
+    max-width: 1650px !important;
+    gap: 84px !important;
+  }
+  #about .about-text {
+    font-size: 18px !important;
+    line-height: 1.75 !important;
+  }
+
+  /* Clinical Technology */
+  #clinical-technology .clinical-container {
+    max-width: 1700px !important;
+  }
+  #clinical-technology .wavelength-chart {
+    height: 560px !important;
+  }
+
+  /* Product Range */
+  #products .products-container {
+    max-width: 1700px !important;
+  }
+
+  /* Community */
+  #community .community-banner {
+    min-height: 620px !important;
+  }
+  #community h2 {
+    font-size: 72px !important;
+  }
+
+  /* Footer */
+  footer .footer-container {
+    max-width: 1720px !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   5. 2K QHD 16:9 (2560 × 1440) (2400px to 3199px)
+   High-Resolution 2K QHD Gaming & Production Monitors
+   -------------------------------------------------------------------------- */
+@media screen and (min-width: 2400px) and (max-width: 3199px) {
+  /* Navbar */
+  .luma-navbar-header {
+    height: 128px !important;
+  }
+  .luma-navbar-header nav {
+  }
+  .luma-navbar-container {
+    max-width: 2360px !important;
+    padding-left: 64px !important;
+    padding-right: 64px !important;
+  }
+  .luma-navbar-links {
+    gap: 64px !important;
+  }
+  .luma-navbar-links a {
+    font-size: 15.5px !important;
+    white-space: nowrap !important;
+  }
+
+  /* Hero */
+  #hero {
+    height: 1240px !important;
+    padding-top: 184px !important;
+    padding-bottom: 28px !important;
+  }
+  #hero h1 {
+    font-size: 96px !important;
+    line-height: 1.1 !important;
+    margin-bottom: 28px !important;
+  }
+  #hero p {
+    font-size: 19px !important;
+    margin-bottom: 52px !important;
+  }
+  #hero .luma-hero-buttons {
+    margin-bottom: 72px !important;
+  }
+  #hero .luma-hero-buttons a {
+    padding: 18px 44px !important;
+    font-size: 17px !important;
+    min-width: 250px !important;
+  }
+
+  /* Trust Strip */
+  #trust-strip {
+    min-height: 76px !important;
+  }
+  #trust-strip .trust-container {
+    max-width: 2300px !important;
+    gap: 80px !important;
+    font-size: 15px !important;
+  }
+
+  /* About Section */
+  #about .about-container {
+    max-width: 2150px !important;
+    gap: 120px !important;
+  }
+  #about .about-text {
+    font-size: 22px !important;
+    line-height: 1.8 !important;
+  }
+
+  /* Clinical Technology */
+  #clinical-technology .clinical-container {
+    max-width: 2300px !important;
+  }
+  #clinical-technology .wavelength-chart {
+    height: 720px !important;
+  }
+
+  /* Product Range */
+  #products .products-container {
+    max-width: 2300px !important;
+  }
+
+  /* Community */
+  #community .community-banner {
+    min-height: 760px !important;
+  }
+  #community h2 {
+    font-size: 96px !important;
+  }
+
+  /* Footer */
+  footer .footer-container {
+    max-width: 2300px !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   6. 3K (2880 × 1800), ULTRAWIDE (3440 × 1440), 4K UHD (3840 × 2160)
+   Screen width >= 3200px or Ultra-Wide Displays
+   -------------------------------------------------------------------------- */
+@media screen and (min-width: 3200px) {
+  .luma-navbar-header {
+    height: 191px !important;
+  }
+  .luma-navbar-container,
+  #trust-strip .trust-container,
+  #clinical-technology .clinical-container,
+  #products .products-container,
+  footer .footer-container {
+    max-width: 3200px !important;
+    padding-left: 96px !important;
+    padding-right: 96px !important;
+  }
+  .luma-navbar-links {
+    gap: 76px !important;
+  }
+  .luma-navbar-links a {
+    font-size: 17px !important;
+  }
+  #hero {
+    height: 1860px !important;
+    padding-top: 270px !important;
+  }
+  #about .about-container {
+    max-width: 2400px !important;
+    gap: 140px !important;
+  }
+  #hero h1 {
+    font-size: 108px !important;
+  }
+}
+

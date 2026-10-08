@@ -1,0 +1,10 @@
+# Ralph Progress Log
+Started: Thu Oct 8 2026
+
+## Codebase Patterns
+- **Tech Stack:** React 19, Vite, Tailwind CSS v4.
+- **Main Entry:** `src/App.jsx` controls drawer state and core layout sections.
+- **Quality Verification:** Run `npm run build` to verify JSX, Tailwind, and Vite imports.
+- **Color Accent:** Primary brand red `#EC2024`, dark background `#0a0a0a`.
+
+---

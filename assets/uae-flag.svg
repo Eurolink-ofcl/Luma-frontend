@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+  <defs>
+    <clipPath id="circle-clip">
+      <circle cx="12" cy="12" r="11.5" />
+    </clipPath>
+  </defs>
+  <g clip-path="url(#circle-clip)">
+    <!-- Right Horizontal Stripes -->
+    <!-- Top Green -->
+    <rect x="0" y="0" width="24" height="8" fill="#00732F" />
+    <!-- Middle White -->
+    <rect x="0" y="8" width="24" height="8" fill="#FFFFFF" />
+    <!-- Bottom Black -->
+    <rect x="0" y="16" width="24" height="8" fill="#000000" />
+    <!-- Left Vertical Red Bar (1/4 width) -->
+    <rect x="0" y="0" width="6.5" height="24" fill="#CE1126" />
+  </g>
+  <circle cx="12" cy="12" r="11.5" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="0.8" />
+</svg>

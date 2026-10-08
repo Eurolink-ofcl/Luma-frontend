@@ -1,0 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Tajawal:wght@500;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-manrope: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-arabic: 'Tajawal', 'Manrope', sans-serif;
+  --color-brand-red: #EC2024;
+  --color-brand-red-hover: #ff3337;
+  --color-dark-bg: #0a0a0a;
+
+  --breakpoint-laptop: 1366px;
+  --breakpoint-mac: 1440px;
+  --breakpoint-3xl: 1920px;
+  --breakpoint-4xl: 2560px;
+}
+
+@import "./styles/screens.css";
+
+/* Custom Base Styles for LUMA */
+*, *::before, *::after {
+  font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  box-sizing: border-box;
+}
+
+html, body {
+  background-color: #0a0a0a;
+  color: #ffffff;
+  min-height: 100vh;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scroll indicator animation */
+@keyframes mouseScroll {
+  0% { transform: translateY(0); opacity: 1; }
+  60% { transform: translateY(12px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 0; }
+}
+
+@keyframes mouseBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+.animate-mouse-wheel {
+  animation: mouseScroll 1.8s infinite ease-in-out;
+}
+
+.animate-mouse-bounce {
+  animation: mouseBounce 2.2s infinite ease-in-out;
+}
+
