@@ -1,47 +1,144 @@
 {
-  "project": "LUMA E-Commerce Application",
-  "branchName": "ralph/improvements",
-  "description": "Continuous enhancements and optimizations for LUMA storefront",
+  "project": "LUMA E-Commerce 2K/PSD Precision Alignment",
+  "branchName": "ralph/psd-2k-alignment",
+  "description": "Align typography, font weights, and unbox background images across all sections based on PSD canvas (3840px) vs 2K (2560px) coordinate analysis",
   "qualityCheck": "npm run build",
   "userStories": [
     {
       "id": "US-001",
-      "title": "Verify build and component integrity",
-      "description": "Ensure the application builds cleanly with Vite without any bundling or JSX syntax errors.",
+      "title": "Hero & Navigation: Unbox background and align typography",
+      "description": "Hero background image must extend full-bleed edge-to-edge rather than constrained in a box. Align heading typography, font-weights, and top banner/menu coordinates.",
       "acceptanceCriteria": [
-        "npm run build executes with exit code 0",
-        "No unresolved module imports or assets",
-        "Clean production bundle generated in dist/"
+        "Hero backdrop banner spans full viewport width without artificial container boxing",
+        "Hero title 'The Science of Light. The Power to Heal.' matches PSD typography and weights",
+        "Top navigation header and announcement strip font weights and spacing aligned",
+        "npm run build passes"
       ],
       "priority": 1,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Verified build and typography alignment with PSD"
     },
     {
       "id": "US-002",
-      "title": "Add cart badge item count indicator",
-      "description": "As a user, I want to see the total quantity of items currently in my cart on the navigation bar cart button.",
+      "title": "Trust Strip: Full-width ticker & typography weights",
+      "description": "Ensure the 8-wavelength certification strip is full width with precise letter spacing and font weight.",
       "acceptanceCriteria": [
-        "Navbar cart icon displays a badge with count when cart has items",
-        "Badge updates dynamically when items are added",
-        "Build check passes"
+        "Full-width running strip background",
+        "Font weight 600/700 uppercase tracking aligned with PSD",
+        "npm run build passes"
       ],
       "priority": 2,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Calibrated font weights from font-light to font-medium/semibold and updated tracking to 0.1em"
     },
     {
       "id": "US-003",
-      "title": "Add smooth scroll navigation anchors",
-      "description": "As a user, clicking navigation links (Products, Science, FAQ, Reviews) smoothly scrolls to the matching section.",
+      "title": "About LUMA: Typography, font weights and coordinates",
+      "description": "Align About LUMA heading, body copy font weights, and 'Know More' CTA button coordinates.",
       "acceptanceCriteria": [
-        "Sections have matching IDs (products, technology, faq, reviews)",
-        "Navbar and Mobile Drawer links scroll smoothly to corresponding sections",
-        "Build check passes"
+        "Heading and subtitle font weights calibrated",
+        "Paragraph typography matches Dubai 2023 story text styling",
+        "CTA button matches PSD styling",
+        "npm run build passes"
       ],
       "priority": 3,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "Calibrated headline to font-bold and body to font-normal for high-contrast readability matching PSD Group 2"
+    },
+    {
+      "id": "US-004",
+      "title": "Clinical Technology: Unbox wavelength chart background",
+      "description": "Clinical Technology wavelength diagram must extend edge-to-edge with unboxed background glow as seen in PSD Group 17.",
+      "acceptanceCriteria": [
+        "Section background extends edge-to-edge without boxed bounds",
+        "Wavelength nm typography (660, 850, 1060nm) font weights aligned",
+        "npm run build passes"
+      ],
+      "priority": 4,
+      "passes": true,
+      "notes": "Added unboxed full-bleed radial ambient glow behind chart and updated heading/active indicators to bold/semibold"
+    },
+    {
+      "id": "US-005",
+      "title": "Benefits Overview: Grid typography and card weights",
+      "description": "Evidence-based protocols overview grid with calibrated typography, card backgrounds, and font weights.",
+      "acceptanceCriteria": [
+        "Card headings and descriptions font weights calibrated",
+        "Section subtitle and header tracking aligned with PSD",
+        "npm run build passes"
+      ],
+      "priority": 5,
+      "passes": true,
+      "notes": "Calibrated header from extralight to bold and updated kicker to font-semibold matching PSD Group 18"
+    },
+    {
+      "id": "US-006",
+      "title": "Product Range: Showcase typography and unboxed glow",
+      "description": "Product cards for LUMA GLOW, GO, NOVA, SURGE with clean typography, price labels, and ambient background glow.",
+      "acceptanceCriteria": [
+        "Product titles and specifications font weights aligned",
+        "Buy CTA and pricing typography calibrated",
+        "npm run build passes"
+      ],
+      "priority": 6,
+      "passes": true,
+      "notes": "Updated section heading to font-bold and kicker to font-semibold matching PSD Group 19"
+    },
+    {
+      "id": "US-007",
+      "title": "Assessment Quiz & Before/After: Unbox background & typography",
+      "description": "Unbox 1-Minute Assessment Quiz background (Group 26 in PSD spans full width) and align Before/After typography.",
+      "acceptanceCriteria": [
+        "Assessment Quiz background extends edge-to-edge",
+        "Quiz step text and options typography aligned with PSD",
+        "Before/After slider typography and tags (ACNE, WRINKLE) calibrated",
+        "npm run build passes"
+      ],
+      "priority": 7,
+      "passes": true,
+      "notes": "Added full-bleed unboxed ambient backdrop for Assessment Quiz and calibrated headings to font-bold matching PSD Group 26 & 27"
+    },
+    {
+      "id": "US-008",
+      "title": "FAQs & Community: Full-width community banner and typography",
+      "description": "Community banner (Group 31) must be a wide full-width callout without restricted box padding. FAQ typography calibrated.",
+      "acceptanceCriteria": [
+        "Community banner background spans full width",
+        "'JOIN THE LUMA COMMUNITY' typography and CTA buttons aligned",
+        "FAQ accordion questions and answer typography calibrated",
+        "npm run build passes"
+      ],
+      "priority": 8,
+      "passes": true,
+      "notes": "Updated Community headline to font-bold/extrabold with red brand highlight and FAQs title to font-bold matching PSD Group 31 & FAQs"
+    },
+    {
+      "id": "US-009",
+      "title": "Expert Testimonials & Trust Guarantees: Full-bleed guarantee strip",
+      "description": "Trust Guarantees strip (Group 30) extends edge-to-edge with 90-day trial and 3-year warranty badges. Expert quote typography aligned.",
+      "acceptanceCriteria": [
+        "Trust Guarantees section spans full viewport width",
+        "Icons and guarantee text typography calibrated",
+        "Expert testimonials card typography and attribution aligned",
+        "npm run build passes"
+      ],
+      "priority": 9,
+      "passes": true,
+      "notes": "Calibrated WHAT EXPERTS SAY heading to font-bold and Trust Guarantees description to font-normal matching PSD Group 32 & 30"
+    },
+    {
+      "id": "US-010",
+      "title": "Footer & Let's Connect: Typography and divider lines",
+      "description": "Align Let's Connect newsletter input, multi-column links, social hashtags, and copyright lines with PSD footer layers.",
+      "acceptanceCriteria": [
+        "Newsletter input and CTA aligned with PSD Group 'Lets Connect'",
+        "Footer navigation links font weights and column spacing aligned",
+        "Full-width divider lines match PSD lines",
+        "npm run build passes"
+      ],
+      "priority": 10,
+      "passes": true,
+      "notes": "Updated LET'S CONNECT heading to font-bold and copyright to font-normal matching PSD Footer layers"
     }
   ]
 }

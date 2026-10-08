@@ -7,4 +7,8 @@ Started: Thu Oct 8 2026
 - **Quality Verification:** Run `npm run build` to verify JSX, Tailwind, and Vite imports.
 - **Color Accent:** Primary brand red `#EC2024`, dark background `#0a0a0a`.
 
+## 2026-10-08 - US-010: Footer & Let's Connect Typography Alignment
+- **Implemented:** Updated "LET'S CONNECT" heading from font-light to font-bold (700) matching PSD Group 'Lets Connect', and updated copyright and legal links from font-light to font-normal for high-contrast crisp rendering.
+- **Files Modified:** `src/components/Footer.jsx`.
+- **Verification:** `npm run build` passed cleanly.
 ---
