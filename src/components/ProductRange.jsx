@@ -56,15 +56,15 @@ export default function ProductRange({ onAddToCart }) {
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 2xl:mb-20">
           <div>
-            <p className="text-xs sm:text-sm 2xl:text-base 4xl:text-lg uppercase tracking-[0.24em] font-medium mb-3">
+            <p className="text-xs sm:text-sm 2xl:text-base 4xl:text-lg uppercase tracking-[0.24em] font-semibold mb-3">
               <span className="text-[#131313]">PRODUCT </span>
               <span className="text-[#EC2024]">RANGE</span>
             </p>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[44px] 2xl:text-[54px] 4xl:text-[64px] font-extralight tracking-tight uppercase leading-tight text-[#131313]">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[44px] 2xl:text-[54px] 4xl:text-[64px] font-bold tracking-tight uppercase leading-tight text-[#131313]">
               LUMA RED LIGHT PANELS
             </h2>
             <div className="w-16 2xl:w-20 4xl:w-24 h-1 2xl:h-1.5 bg-[#EC2024] mt-4 mb-3" />
-            <p className="text-[#555555] text-sm sm:text-[15px] 2xl:text-base 4xl:text-lg leading-relaxed">
+            <p className="text-[#555555] text-sm sm:text-[15px] 2xl:text-base 4xl:text-lg leading-relaxed font-normal">
               Featuring exclusive 1060nm — unavailable from any competitor globally.
             </p>
           </div>
