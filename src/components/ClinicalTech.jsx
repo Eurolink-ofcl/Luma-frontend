@@ -166,16 +166,19 @@ export default function ClinicalTech() {
       id="clinical-technology"
       className="relative w-full bg-[#0a0a0a] text-white py-20 lg:py-28 2xl:py-36 4xl:py-44 overflow-hidden font-['Manrope'] border-t border-white/10"
     >
-      <div className="clinical-container max-w-[1400px] 2xl:max-w-[1750px] 3xl:max-w-[1950px] 4xl:max-w-[2300px] mx-auto px-6 lg:px-12 2xl:px-16 4xl:px-20">
+      {/* Full-bleed unboxed ambient red glow behind chart matching PSD Group 17 */}
+      <div className="absolute inset-0 w-full h-full pointer-events-none bg-[radial-gradient(ellipse_75%_50%_at_50%_35%,rgba(236,32,36,0.12),transparent_75%)] z-0" />
+
+      <div className="clinical-container relative z-10 max-w-[1400px] 2xl:max-w-[1750px] 3xl:max-w-[1950px] 4xl:max-w-[2300px] mx-auto px-6 lg:px-12 2xl:px-16 4xl:px-20">
         {/* Section Header */}
         <div className="max-w-3xl 2xl:max-w-4xl 4xl:max-w-5xl">
-          <p className="text-xs sm:text-sm 2xl:text-base 4xl:text-lg uppercase tracking-[0.24em] text-white/60 font-medium mb-3">
+          <p className="text-xs sm:text-sm 2xl:text-base 4xl:text-lg uppercase tracking-[0.24em] text-[#EC2024] font-semibold mb-3">
             CLINICAL TECHNOLOGY
           </p>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[46px] 2xl:text-[56px] 4xl:text-[68px] font-extralight tracking-tight uppercase leading-tight text-white">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[46px] 2xl:text-[56px] 4xl:text-[68px] font-bold tracking-tight uppercase leading-tight text-white">
             HOW FAR DOES EACH <span className="text-[#EC2024]">LIGHT</span> REACH?
           </h2>
-          <p className="mt-4 text-white/55 text-sm sm:text-[15px] 2xl:text-base 4xl:text-lg leading-relaxed">
+          <p className="mt-4 text-white/70 text-sm sm:text-[15px] 2xl:text-base 4xl:text-lg leading-relaxed font-normal">
             Red stays near the surface. Near-infrared travels deeper.
             <br className="hidden sm:inline" />
             Hover over a wavelength to see how far it goes.
@@ -189,14 +192,14 @@ export default function ClinicalTech() {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-6 lg:gap-8 2xl:gap-12 4xl:gap-16 items-start mb-14 2xl:mb-20 min-h-[90px] 2xl:min-h-[110px] transition-all duration-300">
           {/* Active Wavelength & Target */}
           <div className="col-span-2 sm:col-span-1">
-            <p className="text-xs sm:text-sm 2xl:text-base text-[#EC2024] font-medium tracking-wide mb-1">
+            <p className="text-xs sm:text-sm 2xl:text-base text-[#EC2024] font-semibold tracking-wide mb-1">
               {active.label}
             </p>
             <div className="flex items-baseline gap-1">
-              <span className="text-4xl sm:text-5xl lg:text-[54px] 2xl:text-[68px] 4xl:text-[80px] font-light text-white tracking-tight leading-none">
+              <span className="text-4xl sm:text-5xl lg:text-[54px] 2xl:text-[68px] 4xl:text-[80px] font-semibold text-white tracking-tight leading-none">
                 {active.value}
               </span>
-              <span className="text-sm sm:text-base 2xl:text-xl 4xl:text-2xl text-white/45 font-light">
+              <span className="text-sm sm:text-base 2xl:text-xl 4xl:text-2xl text-white/60 font-medium">
                 {active.unit}
               </span>
             </div>
