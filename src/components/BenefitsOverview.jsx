@@ -75,8 +75,7 @@ export default function BenefitsOverview() {
           <h2 className="text-[#131313] font-bold text-2xl sm:text-3xl md:text-4xl lg:text-[44px] 2xl:text-[54px] 4xl:text-[64px] tracking-tight uppercase leading-tight mt-2">
             BENEFITS OVERVIEW
           </h2>
-          <div className="w-16 2xl:w-20 4xl:w-24 h-1 2xl:h-1.5 bg-[#EC2024] mx-auto mt-4 mb-4" />
-          <p className="text-[#444444] text-sm sm:text-base 2xl:text-lg 4xl:text-xl leading-relaxed mt-3 font-normal">
+          <p className="text-[#444444] text-sm sm:text-base 2xl:text-lg 4xl:text-xl leading-relaxed mt-4 font-normal">
             Evidence-based protocols calibrated for specific wellness outcomes.
           </p>
         </div>
@@ -99,14 +98,19 @@ export default function BenefitsOverview() {
 
               {/* Card Meta Content directly on section background (Unboxed per PSD Group 18) */}
               <div className="pt-5 2xl:pt-6 flex flex-col">
-                <div className="flex items-center justify-between gap-3 mb-2 2xl:mb-3">
-                  <h3 className="text-lg sm:text-xl 2xl:text-2xl 4xl:text-[26px] font-bold text-[#131313] leading-snug group-hover:text-[#EC2024] transition-colors">
+                <div className="flex items-start justify-between gap-3 mb-2 2xl:mb-3">
+                  <h3 className="text-lg sm:text-xl 2xl:text-2xl 4xl:text-[26px] font-bold text-[#131313] leading-snug">
                     {item.title}
                   </h3>
-                  {/* Duration Badge matching PSD Ellipse 5 */}
-                  <span className="inline-flex items-center px-3 2xl:px-4 py-1 2xl:py-1.5 rounded-full text-xs 2xl:text-sm font-semibold bg-[#F0F0F0] text-[#131313] shrink-0 border border-gray-200">
-                    {item.duration}
-                  </span>
+                  {/* Duration Circular Badge matching PSD Ellipse 5 (Red outline, stacked text) */}
+                  <div className="w-11 h-11 2xl:w-13 2xl:h-13 4xl:w-15 4xl:h-15 rounded-full border-2 border-[#EC2024] bg-white flex flex-col items-center justify-center shrink-0 shadow-xs select-none">
+                    <span className="text-sm 2xl:text-base 4xl:text-lg font-bold text-[#131313] leading-none">
+                      {item.duration.replace(/[^0-9]/g, '')}
+                    </span>
+                    <span className="text-[10px] 2xl:text-[11px] 4xl:text-xs font-semibold text-[#555555] leading-none mt-0.5">
+                      Min
+                    </span>
+                  </div>
                 </div>
                 <p className="text-[#555555] text-xs sm:text-[14px] 2xl:text-[15.5px] 4xl:text-[17px] leading-relaxed">
                   {item.description}
@@ -134,13 +138,19 @@ export default function BenefitsOverview() {
 
               {/* Card Meta Content directly on section background */}
               <div className="pt-5 2xl:pt-6 flex flex-col">
-                <div className="flex items-center justify-between gap-3 mb-2 2xl:mb-3">
-                  <h3 className="text-lg sm:text-xl 2xl:text-2xl 4xl:text-[26px] font-bold text-[#131313] leading-snug group-hover:text-[#EC2024] transition-colors">
+                <div className="flex items-start justify-between gap-3 mb-2 2xl:mb-3">
+                  <h3 className="text-lg sm:text-xl 2xl:text-2xl 4xl:text-[26px] font-bold text-[#131313] leading-snug">
                     {item.title}
                   </h3>
-                  <span className="inline-flex items-center px-3 2xl:px-4 py-1 2xl:py-1.5 rounded-full text-xs 2xl:text-sm font-semibold bg-[#F0F0F0] text-[#131313] shrink-0 border border-gray-200">
-                    {item.duration}
-                  </span>
+                  {/* Duration Circular Badge matching PSD Ellipse 5 */}
+                  <div className="w-11 h-11 2xl:w-13 2xl:h-13 4xl:w-15 4xl:h-15 rounded-full border-2 border-[#EC2024] bg-white flex flex-col items-center justify-center shrink-0 shadow-xs select-none">
+                    <span className="text-sm 2xl:text-base 4xl:text-lg font-bold text-[#131313] leading-none">
+                      {item.duration.replace(/[^0-9]/g, '')}
+                    </span>
+                    <span className="text-[10px] 2xl:text-[11px] 4xl:text-xs font-semibold text-[#555555] leading-none mt-0.5">
+                      Min
+                    </span>
+                  </div>
                 </div>
                 <p className="text-[#555555] text-xs sm:text-[14px] 2xl:text-[15.5px] 4xl:text-[17px] leading-relaxed">
                   {item.description}

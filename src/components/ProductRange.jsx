@@ -63,8 +63,7 @@ export default function ProductRange({ onAddToCart }) {
             <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[44px] 2xl:text-[54px] 4xl:text-[64px] font-bold tracking-tight uppercase leading-tight text-[#131313]">
               LUMA RED LIGHT PANELS
             </h2>
-            <div className="w-16 2xl:w-20 4xl:w-24 h-1 2xl:h-1.5 bg-[#EC2024] mt-4 mb-3" />
-            <p className="text-[#555555] text-sm sm:text-[15px] 2xl:text-base 4xl:text-lg leading-relaxed font-normal">
+            <p className="text-[#555555] text-sm sm:text-[15px] 2xl:text-base 4xl:text-lg leading-relaxed font-normal mt-3">
               Featuring exclusive 1060nm — unavailable from any competitor in Global.
             </p>
           </div>
@@ -73,11 +72,11 @@ export default function ProductRange({ onAddToCart }) {
           <div className="flex items-center gap-6 shrink-0">
             <a
               href="#all-products"
-              className="text-xs sm:text-sm 2xl:text-base font-semibold uppercase tracking-[0.12em] text-[#131313] hover:text-[#EC2024] flex items-center gap-1.5 transition-colors group"
+              className="text-xs sm:text-sm 2xl:text-base font-bold uppercase tracking-[0.14em] text-[#131313] hover:text-[#EC2024] flex items-center gap-1.5 transition-colors group"
             >
               VIEW ALL
               <span className="text-[#EC2024] group-hover:translate-x-1 transition-transform">
-                &rarr;
+                &gt;
               </span>
             </a>
 
@@ -113,11 +112,6 @@ export default function ProductRange({ onAddToCart }) {
               <div>
                 {/* Product Showcase Frame matching PSD Rectangle 52 (800x800 square, #F3F3F3) */}
                 <div className="relative w-full aspect-square bg-[#F3F3F3] rounded-[18px] 2xl:rounded-[24px] 4xl:rounded-[30px] flex items-center justify-center p-8 2xl:p-12 overflow-hidden mb-6 2xl:mb-8 shadow-xs">
-                  {/* Badge */}
-                  <span className="absolute top-4 left-4 text-[11px] font-semibold tracking-wider uppercase px-3 py-1 bg-white text-[#131313] rounded-full shadow-xs border border-gray-100">
-                    {product.badge}
-                  </span>
-
                   <img
                     src={product.image}
                     alt={product.name}
@@ -127,15 +121,10 @@ export default function ProductRange({ onAddToCart }) {
 
                 {/* Typography matching PSD Group 19 */}
                 <div className="mb-5 2xl:mb-6">
-                  <div className="flex items-baseline justify-between gap-2 mb-1.5">
-                    <h3 className="text-xl sm:text-2xl 2xl:text-3xl 4xl:text-4xl font-extrabold tracking-tight uppercase text-[#131313]">
-                      {product.name}
-                    </h3>
-                    <span className="text-sm sm:text-base 2xl:text-lg 4xl:text-xl font-bold text-[#EC2024]">
-                      {product.price}
-                    </span>
-                  </div>
-                  <p className="text-xs 2xl:text-sm 4xl:text-base uppercase tracking-wider text-[#777777] font-semibold mb-2.5">
+                  <h3 className="text-xl sm:text-2xl 2xl:text-3xl 4xl:text-4xl font-extrabold tracking-tight uppercase text-[#131313] mb-1">
+                    {product.name}
+                  </h3>
+                  <p className="text-xs sm:text-sm 2xl:text-base italic uppercase tracking-wider text-[#777777] font-medium mb-3">
                     {product.category}
                   </p>
                   <p className="text-[#555555] text-xs sm:text-[14px] 2xl:text-[15.5px] 4xl:text-[17px] leading-relaxed line-clamp-3">

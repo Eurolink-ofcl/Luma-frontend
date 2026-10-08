@@ -149,8 +149,7 @@ export default function AssessmentQuiz() {
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[44px] 2xl:text-[54px] 4xl:text-[64px] font-bold tracking-tight uppercase leading-tight text-white">
             Find the light that fits you
           </h2>
-          <div className="w-16 2xl:w-20 4xl:w-24 h-1 2xl:h-1.5 bg-[#EC2024] mx-auto mt-4 mb-4" />
-          <p className="text-white/70 text-sm sm:text-base 2xl:text-lg 4xl:text-xl leading-relaxed font-normal">
+          <p className="text-white/70 text-sm sm:text-base 2xl:text-lg 4xl:text-xl leading-relaxed font-normal mt-3">
             Five questions. One panel, matched to your body, your space and your ritual.
           </p>
         </div>

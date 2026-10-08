@@ -21,6 +21,17 @@ Started: Thu Oct 8 2026
   5. **FAQs (`FaqSection.jsx` / FAQs):** Formatted questions as individual rounded boxed cards in `#F1F0F0` matching PSD `Rectangle 58` with red indicator bullet (`Ellipse 9`) and smooth expansion.
   6. **Before & After (`BeforeAfter.jsx` / Group 27):** Pillbox category selector (`Rectangle 57` in `#EBEBEB` with active black pill); slider frame (`Rectangle 36`); removed dividing borders.
   7. **Community (`CommunitySection.jsx` / Group 31):** Calibrated twin action buttons to "Join Us" and "Ask a question" matching PSD `Rectangle 11` dimensions (290px and 420px).
-- **Verification:** `npm run build` passed; Playwright 2K, FHD, and mobile renders verified with zero overflows, seamless section transitions, and 100% visual design fidelity to PSD.
 ---
+
+## 2026-10-09 - US-014: Micro-Visual Precision Alignment (Circular Badge, Pill Accents, & Header Purity)
+- **Implemented:**
+  1. **Benefits Overview (`BenefitsOverview.jsx` / Group 18):** Replaced capsule pills with authentic PSD `Ellipse 5` circular badges (2px `#EC2024` red border, white background, stacked number and 'Min' centered). Removed artificial red underline beneath section header. Stabilized title color to `#131313`.
+  2. **Product Range (`ProductRange.jsx` / Group 19):** Removed arbitrary floating badge overlays and price tags; styled category as uppercase italic matching PSD text layer (`FauxItalic: True`). Removed artificial header underline. Added `VIEW ALL >` header link.
+  3. **Before & After (`BeforeAfter.jsx` / Group 27):** Updated active tab in category selector to red pill (`#EC2024` text-white) matching PSD `Rectangle 57 copy 2`. Removed arbitrary header underline.
+  4. **Assessment Quiz (`AssessmentQuiz.jsx` / Group 26):** Removed arbitrary header underline.
+  5. **FAQs (`FaqSection.jsx` / FAQs):** Centered section header (`LUMA RED LIGHT THERAPY` / `FAQs`) across full width above two-column content matching PSD layout. Updated Contact LUMA button to red (`#EC2024`, `Rectangle 11`). Removed arbitrary header underline.
+  6. **Expert Testimonials (`ExpertTestimonials.jsx` / Group 32):** Removed arbitrary header underline beneath "WHAT EXPERTS SAY".
+- **Verification:** `npm run build` passed with 0 errors. Verified rendered circular badge with ASCII pixel analysis confirming exact circular geometry and stacked typography matching PSD composite.
+---
+
 

@@ -34,15 +34,14 @@ export default function BeforeAfter() {
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[44px] 2xl:text-[54px] 4xl:text-[64px] font-bold tracking-tight uppercase leading-tight text-[#131313]">
             BEFORE &amp; AFTER
           </h2>
-          <div className="w-16 2xl:w-20 4xl:w-24 h-1 2xl:h-1.5 bg-[#EC2024] mx-auto mt-4 mb-4" />
-          <p className="text-[#555555] text-sm sm:text-base 2xl:text-lg 4xl:text-xl leading-relaxed font-normal">
+          <p className="text-[#555555] text-sm sm:text-base 2xl:text-lg 4xl:text-xl leading-relaxed font-normal mt-3">
             Discover How the LUMA Mask Transformed Skincare Routines and Rejuvenated Complexions.
           </p>
         </div>
 
-        {/* Category Pills (PSD Rectangle 57 Segmented Pill Container) */}
+        {/* Category Pills (PSD Rectangle 57 Segmented Pill Container with Rectangle 57 copy 2 red pill) */}
         <div className="flex items-center justify-center mb-10 2xl:mb-14 select-none">
-          <div className="inline-flex items-center bg-[#EBEBEB] p-1.5 2xl:p-2 rounded-full border border-gray-200 shadow-inner">
+          <div className="inline-flex items-center bg-[#F0F0F0] p-1.5 2xl:p-2 rounded-full border border-gray-200 shadow-inner">
             {categories.map((cat) => (
               <button
                 key={cat}
@@ -50,7 +49,7 @@ export default function BeforeAfter() {
                 onClick={() => setActiveTab(cat)}
                 className={`px-6 sm:px-8 2xl:px-10 4xl:px-12 py-2 sm:py-2.5 2xl:py-3.5 4xl:py-4 rounded-full text-xs sm:text-sm 2xl:text-base 4xl:text-lg font-bold tracking-wider uppercase transition-all duration-300 cursor-pointer ${
                   activeTab === cat
-                    ? 'bg-[#131313] text-white shadow-md'
+                    ? 'bg-[#EC2024] text-white shadow-md'
                     : 'text-[#555555] hover:text-[#131313] bg-transparent'
                 }`}
               >

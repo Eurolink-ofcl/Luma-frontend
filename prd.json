@@ -185,6 +185,22 @@
       "priority": 13,
       "passes": true,
       "notes": "All visual design and CSS styles refactored to 100% fidelity with PSD layer shapes and canvas aesthetics."
+    },
+    {
+      "id": "US-014",
+      "title": "Micro-Visual Precision Alignment: Circular Duration Badge, Pill Accents, & Header Purity",
+      "description": "Align micro-visual design elements across all post-hero sections with exact PSD layers: replace horizontal duration pills with circular red-outlined badges (Ellipse 5) with vertically stacked number and 'Min'; remove artificial red header lines across Benefits, Products, Quiz, Before/After, FAQs, and Experts; change active Before/After tab to red pill (Rectangle 57 copy 2); center FAQs header and make Contact LUMA button red (Rectangle 11); clean Product Range cards to remove floating badges and price tags.",
+      "acceptanceCriteria": [
+        "Benefits Overview duration badge matches PSD Ellipse 5 (circle with 2px #EC2024 border, stacked number and Min)",
+        "Artificial red header lines removed from Benefits, Products, Before/After, Quiz, FAQs, and Experts",
+        "Before & After category pill container active tab styled as red pill (Rectangle 57 copy 2)",
+        "FAQs section header centered across full width, and Contact LUMA button rendered in #EC2024",
+        "Product Range card typography strictly matches PSD Group 19 (italic category, clean titles, no extra badge/price overlays)",
+        "npm run build passes with zero errors"
+      ],
+      "priority": 14,
+      "passes": true,
+      "notes": "All minute visual design details verified against actual PSD raster layers and composite crops."
     }
   ]
 }

@@ -32,7 +32,6 @@ export default function ExpertTestimonials() {
           <h2 className="text-3xl sm:text-4xl md:text-5xl 2xl:text-6xl 4xl:text-7xl font-extrabold tracking-tight uppercase leading-tight text-[#EC2024]">
             WHAT EXPERTS SAY
           </h2>
-          <div className="w-16 2xl:w-20 4xl:w-24 h-1 2xl:h-1.5 bg-[#EC2024] mx-auto mt-4" />
         </div>
 
         {/* Two Expert Video Cards matching PSD Rectangle 61 (989x1198 aspect) */}
