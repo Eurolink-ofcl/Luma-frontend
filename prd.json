@@ -139,6 +139,20 @@
       "priority": 10,
       "passes": true,
       "notes": "Updated LET'S CONNECT heading to font-bold and copyright to font-normal matching PSD Footer layers"
+    },
+    {
+      "id": "US-011",
+      "title": "Cross-Viewport Responsive Coordinate Verification (Mobile to 4K)",
+      "description": "Execute automated Playwright coordinate testing across 8 distinct viewports (Mobile 390px, Tablet 768px, Laptop 1366px, MacBook 1440px, Laptop 1536px, FHD 1920px, 2K QHD 2560px, 4K 3840px) ensuring zero horizontal blowout, seamless section flow, and centered containers.",
+      "acceptanceCriteria": [
+        "0 horizontal overflow across all 8 viewports (scrollWidth == viewportWidth)",
+        "Zero vertical stacking gaps or overlaps across all 14 sections",
+        "Container centering verified across all screen widths",
+        "Automated report generated in responsive_coordination_report.json"
+      ],
+      "priority": 11,
+      "passes": true,
+      "notes": "Verified via headless Chromium across 8 viewports: 0 overflows, 100% centered containers, and zero section gaps."
     }
   ]
 }

@@ -1,0 +1,970 @@
+{
+  "Mobile 390x844": {
+    "viewport_width": 390,
+    "viewport_height": 844,
+    "scrollWidth": 390,
+    "total_height": 15354,
+    "overflow": false,
+    "sections": [
+      {
+        "name": "Top Banner",
+        "selector": "#top-banner",
+        "y": 0,
+        "height": 36,
+        "width": 390,
+        "centered": true
+      },
+      {
+        "name": "Navbar",
+        "selector": "#navbar",
+        "y": 36,
+        "height": 72,
+        "width": 390,
+        "centered": true
+      },
+      {
+        "name": "Hero",
+        "selector": "#hero",
+        "y": 36,
+        "height": 900,
+        "width": 390,
+        "centered": true
+      },
+      {
+        "name": "Trust Strip",
+        "selector": "#trust-strip",
+        "y": 936,
+        "height": 48,
+        "width": 390,
+        "centered": true
+      },
+      {
+        "name": "About LUMA",
+        "selector": "#about",
+        "y": 984,
+        "height": 1148.2,
+        "width": 390,
+        "centered": true
+      },
+      {
+        "name": "Clinical Tech",
+        "selector": "#clinical-technology",
+        "y": 2132.2,
+        "height": 1271.2,
+        "width": 390,
+        "centered": true
+      },
+      {
+        "name": "Benefits Overview",
+        "selector": "#benefits",
+        "y": 3403.4,
+        "height": 3395.5,
+        "width": 390,
+        "centered": true
+      },
+      {
+        "name": "Product Range",
+        "selector": "#products",
+        "y": 6798.9,
+        "height": 2134,
+        "width": 390,
+        "centered": true
+      },
+      {
+        "name": "Assessment Quiz",
+        "selector": "#assessment",
+        "y": 8932.9,
+        "height": 960.5,
+        "width": 390,
+        "centered": true
+      },
+      {
+        "name": "Before & After",
+        "selector": "#reviews",
+        "y": 9893.4,
+        "height": 641,
+        "width": 390,
+        "centered": true
+      },
+      {
+        "name": "FAQs",
+        "selector": "#faqs",
+        "y": 10534.4,
+        "height": 1226.8,
+        "width": 390,
+        "centered": true
+      },
+      {
+        "name": "Community",
+        "selector": "#community",
+        "y": 11761.2,
+        "height": 588,
+        "width": 390,
+        "centered": true
+      },
+      {
+        "name": "Experts",
+        "selector": "#experts",
+        "y": 12349.2,
+        "height": 1142.2,
+        "width": 390,
+        "centered": true
+      },
+      {
+        "name": "Footer",
+        "selector": "footer",
+        "y": 14345.4,
+        "height": 1009,
+        "width": 390,
+        "centered": true
+      }
+    ]
+  },
+  "Tablet 768x1024": {
+    "viewport_width": 768,
+    "viewport_height": 1024,
+    "scrollWidth": 768,
+    "total_height": 12878,
+    "overflow": false,
+    "sections": [
+      {
+        "name": "Top Banner",
+        "selector": "#top-banner",
+        "y": 0,
+        "height": 36,
+        "width": 768,
+        "centered": true
+      },
+      {
+        "name": "Navbar",
+        "selector": "#navbar",
+        "y": 36,
+        "height": 72,
+        "width": 768,
+        "centered": true
+      },
+      {
+        "name": "Hero",
+        "selector": "#hero",
+        "y": 36,
+        "height": 900,
+        "width": 768,
+        "centered": true
+      },
+      {
+        "name": "Trust Strip",
+        "selector": "#trust-strip",
+        "y": 936,
+        "height": 48,
+        "width": 768,
+        "centered": true
+      },
+      {
+        "name": "About LUMA",
+        "selector": "#about",
+        "y": 984,
+        "height": 1285.0,
+        "width": 768,
+        "centered": true
+      },
+      {
+        "name": "Clinical Tech",
+        "selector": "#clinical-technology",
+        "y": 2269.0,
+        "height": 1093.8,
+        "width": 768,
+        "centered": true
+      },
+      {
+        "name": "Benefits Overview",
+        "selector": "#benefits",
+        "y": 3362.8,
+        "height": 2064.5,
+        "width": 768,
+        "centered": true
+      },
+      {
+        "name": "Product Range",
+        "selector": "#products",
+        "y": 5427.3,
+        "height": 1538,
+        "width": 768,
+        "centered": true
+      },
+      {
+        "name": "Assessment Quiz",
+        "selector": "#assessment",
+        "y": 6965.3,
+        "height": 1054,
+        "width": 768,
+        "centered": true
+      },
+      {
+        "name": "Before & After",
+        "selector": "#reviews",
+        "y": 8019.3,
+        "height": 835.9,
+        "width": 768,
+        "centered": true
+      },
+      {
+        "name": "FAQs",
+        "selector": "#faqs",
+        "y": 8855.2,
+        "height": 1202.6,
+        "width": 768,
+        "centered": true
+      },
+      {
+        "name": "Community",
+        "selector": "#community",
+        "y": 10057.8,
+        "height": 648,
+        "width": 768,
+        "centered": true
+      },
+      {
+        "name": "Experts",
+        "selector": "#experts",
+        "y": 10705.8,
+        "height": 733.3,
+        "width": 768,
+        "centered": true
+      },
+      {
+        "name": "Footer",
+        "selector": "footer",
+        "y": 11932.1,
+        "height": 945.5,
+        "width": 768,
+        "centered": true
+      }
+    ]
+  },
+  "Laptop 1366x768": {
+    "viewport_width": 1366,
+    "viewport_height": 768,
+    "scrollWidth": 1366,
+    "total_height": 11135,
+    "overflow": false,
+    "sections": [
+      {
+        "name": "Top Banner",
+        "selector": "#top-banner",
+        "y": 0,
+        "height": 36,
+        "width": 1366,
+        "centered": true
+      },
+      {
+        "name": "Navbar",
+        "selector": "#navbar",
+        "y": 36,
+        "height": 72,
+        "width": 1366,
+        "centered": true
+      },
+      {
+        "name": "Hero",
+        "selector": "#hero",
+        "y": 36,
+        "height": 721.9,
+        "width": 1366,
+        "centered": true
+      },
+      {
+        "name": "Trust Strip",
+        "selector": "#trust-strip",
+        "y": 757.9,
+        "height": 52,
+        "width": 1366,
+        "centered": true
+      },
+      {
+        "name": "About LUMA",
+        "selector": "#about",
+        "y": 809.9,
+        "height": 793.8,
+        "width": 1366,
+        "centered": true
+      },
+      {
+        "name": "Clinical Tech",
+        "selector": "#clinical-technology",
+        "y": 1603.7,
+        "height": 1110.2,
+        "width": 1366,
+        "centered": true
+      },
+      {
+        "name": "Benefits Overview",
+        "selector": "#benefits",
+        "y": 2713.9,
+        "height": 1703.2,
+        "width": 1366,
+        "centered": true
+      },
+      {
+        "name": "Product Range",
+        "selector": "#products",
+        "y": 4417.1,
+        "height": 1043.5,
+        "width": 1366,
+        "centered": true
+      },
+      {
+        "name": "Assessment Quiz",
+        "selector": "#assessment",
+        "y": 5460.6,
+        "height": 1128,
+        "width": 1366,
+        "centered": true
+      },
+      {
+        "name": "Before & After",
+        "selector": "#reviews",
+        "y": 6588.6,
+        "height": 1022.4,
+        "width": 1366,
+        "centered": true
+      },
+      {
+        "name": "FAQs",
+        "selector": "#faqs",
+        "y": 7611.0,
+        "height": 807.8,
+        "width": 1366,
+        "centered": true
+      },
+      {
+        "name": "Community",
+        "selector": "#community",
+        "y": 8418.8,
+        "height": 672,
+        "width": 1366,
+        "centered": true
+      },
+      {
+        "name": "Experts",
+        "selector": "#experts",
+        "y": 9090.8,
+        "height": 981.4,
+        "width": 1366,
+        "centered": true
+      },
+      {
+        "name": "Footer",
+        "selector": "footer",
+        "y": 10395.7,
+        "height": 739.5,
+        "width": 1366,
+        "centered": true
+      }
+    ]
+  },
+  "MacBook 1440x900": {
+    "viewport_width": 1440,
+    "viewport_height": 900,
+    "scrollWidth": 1440,
+    "total_height": 11381,
+    "overflow": false,
+    "sections": [
+      {
+        "name": "Top Banner",
+        "selector": "#top-banner",
+        "y": 0,
+        "height": 36,
+        "width": 1440,
+        "centered": true
+      },
+      {
+        "name": "Navbar",
+        "selector": "#navbar",
+        "y": 36,
+        "height": 78,
+        "width": 1440,
+        "centered": true
+      },
+      {
+        "name": "Hero",
+        "selector": "#hero",
+        "y": 36,
+        "height": 840,
+        "width": 1440,
+        "centered": true
+      },
+      {
+        "name": "Trust Strip",
+        "selector": "#trust-strip",
+        "y": 876,
+        "height": 56,
+        "width": 1440,
+        "centered": true
+      },
+      {
+        "name": "About LUMA",
+        "selector": "#about",
+        "y": 932,
+        "height": 814.5,
+        "width": 1440,
+        "centered": true
+      },
+      {
+        "name": "Clinical Tech",
+        "selector": "#clinical-technology",
+        "y": 1746.5,
+        "height": 1150.2,
+        "width": 1440,
+        "centered": true
+      },
+      {
+        "name": "Benefits Overview",
+        "selector": "#benefits",
+        "y": 2896.7,
+        "height": 1703.2,
+        "width": 1440,
+        "centered": true
+      },
+      {
+        "name": "Product Range",
+        "selector": "#products",
+        "y": 4599.9,
+        "height": 1066.9,
+        "width": 1440,
+        "centered": true
+      },
+      {
+        "name": "Assessment Quiz",
+        "selector": "#assessment",
+        "y": 5666.8,
+        "height": 1128,
+        "width": 1440,
+        "centered": true
+      },
+      {
+        "name": "Before & After",
+        "selector": "#reviews",
+        "y": 6794.8,
+        "height": 1022.4,
+        "width": 1440,
+        "centered": true
+      },
+      {
+        "name": "FAQs",
+        "selector": "#faqs",
+        "y": 7817.1,
+        "height": 807.8,
+        "width": 1440,
+        "centered": true
+      },
+      {
+        "name": "Community",
+        "selector": "#community",
+        "y": 8624.9,
+        "height": 712,
+        "width": 1440,
+        "centered": true
+      },
+      {
+        "name": "Experts",
+        "selector": "#experts",
+        "y": 9336.9,
+        "height": 981.4,
+        "width": 1440,
+        "centered": true
+      },
+      {
+        "name": "Footer",
+        "selector": "footer",
+        "y": 10641.8,
+        "height": 739.5,
+        "width": 1440,
+        "centered": true
+      }
+    ]
+  },
+  "Laptop 1536x864": {
+    "viewport_width": 1536,
+    "viewport_height": 864,
+    "scrollWidth": 1536,
+    "total_height": 13652,
+    "overflow": false,
+    "sections": [
+      {
+        "name": "Top Banner",
+        "selector": "#top-banner",
+        "y": 0,
+        "height": 40,
+        "width": 1536,
+        "centered": true
+      },
+      {
+        "name": "Navbar",
+        "selector": "#navbar",
+        "y": 40,
+        "height": 84,
+        "width": 1536,
+        "centered": true
+      },
+      {
+        "name": "Hero",
+        "selector": "#hero",
+        "y": 40,
+        "height": 812.2,
+        "width": 1536,
+        "centered": true
+      },
+      {
+        "name": "Trust Strip",
+        "selector": "#trust-strip",
+        "y": 852.2,
+        "height": 64.5,
+        "width": 1536,
+        "centered": true
+      },
+      {
+        "name": "About LUMA",
+        "selector": "#about",
+        "y": 916.7,
+        "height": 973.2,
+        "width": 1536,
+        "centered": true
+      },
+      {
+        "name": "Clinical Tech",
+        "selector": "#clinical-technology",
+        "y": 1889.8,
+        "height": 1400,
+        "width": 1536,
+        "centered": true
+      },
+      {
+        "name": "Benefits Overview",
+        "selector": "#benefits",
+        "y": 3289.8,
+        "height": 2120.6,
+        "width": 1536,
+        "centered": true
+      },
+      {
+        "name": "Product Range",
+        "selector": "#products",
+        "y": 5410.4,
+        "height": 1211.0,
+        "width": 1536,
+        "centered": true
+      },
+      {
+        "name": "Assessment Quiz",
+        "selector": "#assessment",
+        "y": 6621.4,
+        "height": 1273.8,
+        "width": 1536,
+        "centered": true
+      },
+      {
+        "name": "Before & After",
+        "selector": "#reviews",
+        "y": 7895.2,
+        "height": 1309.6,
+        "width": 1536,
+        "centered": true
+      },
+      {
+        "name": "FAQs",
+        "selector": "#faqs",
+        "y": 9204.8,
+        "height": 1035,
+        "width": 1536,
+        "centered": true
+      },
+      {
+        "name": "Community",
+        "selector": "#community",
+        "y": 10239.8,
+        "height": 796,
+        "width": 1536,
+        "centered": true
+      },
+      {
+        "name": "Experts",
+        "selector": "#experts",
+        "y": 11035.8,
+        "height": 1276.6,
+        "width": 1536,
+        "centered": true
+      },
+      {
+        "name": "Footer",
+        "selector": "footer",
+        "y": 12742.4,
+        "height": 910,
+        "width": 1536,
+        "centered": true
+      }
+    ]
+  },
+  "FHD 1920x1080": {
+    "viewport_width": 1920,
+    "viewport_height": 1080,
+    "scrollWidth": 1920,
+    "total_height": 14023,
+    "overflow": false,
+    "sections": [
+      {
+        "name": "Top Banner",
+        "selector": "#top-banner",
+        "y": 0,
+        "height": 40,
+        "width": 1920,
+        "centered": true
+      },
+      {
+        "name": "Navbar",
+        "selector": "#navbar",
+        "y": 40,
+        "height": 96,
+        "width": 1920,
+        "centered": true
+      },
+      {
+        "name": "Hero",
+        "selector": "#hero",
+        "y": 40,
+        "height": 930,
+        "width": 1920,
+        "centered": true
+      },
+      {
+        "name": "Trust Strip",
+        "selector": "#trust-strip",
+        "y": 970,
+        "height": 64.5,
+        "width": 1920,
+        "centered": true
+      },
+      {
+        "name": "About LUMA",
+        "selector": "#about",
+        "y": 1034.5,
+        "height": 1012.8,
+        "width": 1920,
+        "centered": true
+      },
+      {
+        "name": "Clinical Tech",
+        "selector": "#clinical-technology",
+        "y": 2047.3,
+        "height": 1460,
+        "width": 1920,
+        "centered": true
+      },
+      {
+        "name": "Benefits Overview",
+        "selector": "#benefits",
+        "y": 3507.3,
+        "height": 2120.6,
+        "width": 1920,
+        "centered": true
+      },
+      {
+        "name": "Product Range",
+        "selector": "#products",
+        "y": 5627.9,
+        "height": 1284.3,
+        "width": 1920,
+        "centered": true
+      },
+      {
+        "name": "Assessment Quiz",
+        "selector": "#assessment",
+        "y": 6912.2,
+        "height": 1273.8,
+        "width": 1920,
+        "centered": true
+      },
+      {
+        "name": "Before & After",
+        "selector": "#reviews",
+        "y": 8186.0,
+        "height": 1309.6,
+        "width": 1920,
+        "centered": true
+      },
+      {
+        "name": "FAQs",
+        "selector": "#faqs",
+        "y": 9495.6,
+        "height": 1035,
+        "width": 1920,
+        "centered": true
+      },
+      {
+        "name": "Community",
+        "selector": "#community",
+        "y": 10530.6,
+        "height": 876,
+        "width": 1920,
+        "centered": true
+      },
+      {
+        "name": "Experts",
+        "selector": "#experts",
+        "y": 11406.6,
+        "height": 1276.6,
+        "width": 1920,
+        "centered": true
+      },
+      {
+        "name": "Footer",
+        "selector": "footer",
+        "y": 13113.2,
+        "height": 910,
+        "width": 1920,
+        "centered": true
+      }
+    ]
+  },
+  "2K QHD 2560x1440": {
+    "viewport_width": 2560,
+    "viewport_height": 1440,
+    "scrollWidth": 2560,
+    "total_height": 14993,
+    "overflow": false,
+    "sections": [
+      {
+        "name": "Top Banner",
+        "selector": "#top-banner",
+        "y": 0,
+        "height": 40,
+        "width": 2560,
+        "centered": true
+      },
+      {
+        "name": "Navbar",
+        "selector": "#navbar",
+        "y": 40,
+        "height": 128,
+        "width": 2560,
+        "centered": true
+      },
+      {
+        "name": "Hero",
+        "selector": "#hero",
+        "y": 40,
+        "height": 1240,
+        "width": 2560,
+        "centered": true
+      },
+      {
+        "name": "Trust Strip",
+        "selector": "#trust-strip",
+        "y": 1280,
+        "height": 76,
+        "width": 2560,
+        "centered": true
+      },
+      {
+        "name": "About LUMA",
+        "selector": "#about",
+        "y": 1356,
+        "height": 1160.8,
+        "width": 2560,
+        "centered": true
+      },
+      {
+        "name": "Clinical Tech",
+        "selector": "#clinical-technology",
+        "y": 2516.8,
+        "height": 1620,
+        "width": 2560,
+        "centered": true
+      },
+      {
+        "name": "Benefits Overview",
+        "selector": "#benefits",
+        "y": 4136.8,
+        "height": 2120.6,
+        "width": 2560,
+        "centered": true
+      },
+      {
+        "name": "Product Range",
+        "selector": "#products",
+        "y": 6257.4,
+        "height": 1484.3,
+        "width": 2560,
+        "centered": true
+      },
+      {
+        "name": "Assessment Quiz",
+        "selector": "#assessment",
+        "y": 7741.7,
+        "height": 1273.8,
+        "width": 2560,
+        "centered": true
+      },
+      {
+        "name": "Before & After",
+        "selector": "#reviews",
+        "y": 9015.4,
+        "height": 1309.6,
+        "width": 2560,
+        "centered": true
+      },
+      {
+        "name": "FAQs",
+        "selector": "#faqs",
+        "y": 10325.1,
+        "height": 1035,
+        "width": 2560,
+        "centered": true
+      },
+      {
+        "name": "Community",
+        "selector": "#community",
+        "y": 11360.1,
+        "height": 1016,
+        "width": 2560,
+        "centered": true
+      },
+      {
+        "name": "Experts",
+        "selector": "#experts",
+        "y": 12376.1,
+        "height": 1276.6,
+        "width": 2560,
+        "centered": true
+      },
+      {
+        "name": "Footer",
+        "selector": "footer",
+        "y": 14082.7,
+        "height": 910,
+        "width": 2560,
+        "centered": true
+      }
+    ]
+  },
+  "4K UHD 3840x2160": {
+    "viewport_width": 3840,
+    "viewport_height": 2160,
+    "scrollWidth": 3840,
+    "total_height": 15718,
+    "overflow": false,
+    "sections": [
+      {
+        "name": "Top Banner",
+        "selector": "#top-banner",
+        "y": 0,
+        "height": 40,
+        "width": 3840,
+        "centered": true
+      },
+      {
+        "name": "Navbar",
+        "selector": "#navbar",
+        "y": 40,
+        "height": 191,
+        "width": 3840,
+        "centered": true
+      },
+      {
+        "name": "Hero",
+        "selector": "#hero",
+        "y": 40,
+        "height": 1860,
+        "width": 3840,
+        "centered": true
+      },
+      {
+        "name": "Trust Strip",
+        "selector": "#trust-strip",
+        "y": 1900,
+        "height": 64.5,
+        "width": 3840,
+        "centered": true
+      },
+      {
+        "name": "About LUMA",
+        "selector": "#about",
+        "y": 1964.5,
+        "height": 1243.3,
+        "width": 3840,
+        "centered": true
+      },
+      {
+        "name": "Clinical Tech",
+        "selector": "#clinical-technology",
+        "y": 3207.8,
+        "height": 1500,
+        "width": 3840,
+        "centered": true
+      },
+      {
+        "name": "Benefits Overview",
+        "selector": "#benefits",
+        "y": 4707.8,
+        "height": 2120.6,
+        "width": 3840,
+        "centered": true
+      },
+      {
+        "name": "Product Range",
+        "selector": "#products",
+        "y": 6828.4,
+        "height": 1738.6,
+        "width": 3840,
+        "centered": true
+      },
+      {
+        "name": "Assessment Quiz",
+        "selector": "#assessment",
+        "y": 8567.0,
+        "height": 1273.8,
+        "width": 3840,
+        "centered": true
+      },
+      {
+        "name": "Before & After",
+        "selector": "#reviews",
+        "y": 9840.7,
+        "height": 1309.6,
+        "width": 3840,
+        "centered": true
+      },
+      {
+        "name": "FAQs",
+        "selector": "#faqs",
+        "y": 11150.3,
+        "height": 1035,
+        "width": 3840,
+        "centered": true
+      },
+      {
+        "name": "Community",
+        "selector": "#community",
+        "y": 12185.3,
+        "height": 916,
+        "width": 3840,
+        "centered": true
+      },
+      {
+        "name": "Experts",
+        "selector": "#experts",
+        "y": 13101.3,
+        "height": 1276.6,
+        "width": 3840,
+        "centered": true
+      },
+      {
+        "name": "Footer",
+        "selector": "footer",
+        "y": 14808.0,
+        "height": 910,
+        "width": 3840,
+        "centered": true
+      }
+    ]
+  }
+}
