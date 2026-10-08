@@ -88,7 +88,7 @@ export default function BeforeAfter() {
               BEFORE
             </span>
             <span className="absolute bottom-6 right-6 px-4 py-1.5 rounded-full bg-black/70 backdrop-blur-md text-white font-mono text-xs uppercase tracking-widest border border-white/20 z-10">
-              AFTER (4 WEEKS)
+              AFTER
             </span>
           </div>
         </div>

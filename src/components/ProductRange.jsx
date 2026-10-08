@@ -65,7 +65,7 @@ export default function ProductRange({ onAddToCart }) {
             </h2>
             <div className="w-16 2xl:w-20 4xl:w-24 h-1 2xl:h-1.5 bg-[#EC2024] mt-4 mb-3" />
             <p className="text-[#555555] text-sm sm:text-[15px] 2xl:text-base 4xl:text-lg leading-relaxed font-normal">
-              Featuring exclusive 1060nm — unavailable from any competitor globally.
+              Featuring exclusive 1060nm — unavailable from any competitor in Global.
             </p>
           </div>
 
