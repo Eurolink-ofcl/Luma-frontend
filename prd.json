@@ -153,6 +153,20 @@
       "priority": 11,
       "passes": true,
       "notes": "Verified via headless Chromium across 8 viewports: 0 overflows, 100% centered containers, and zero section gaps."
+    },
+    {
+      "id": "US-012",
+      "title": "Post-Hero Section-by-Section PSD Layer-to-Code Alignment",
+      "description": "Perform comprehensive comparison of every section after hero against Luma-Homepage-Design.psd layers (Group 2, 17, 18, 19, 26, 27, FAQs, 31, 32, 30, Lets Connect), aligning copy, badge tags, and buttons.",
+      "acceptanceCriteria": [
+        "Product Range copy aligned to PSD ('unavailable from any competitor in Global')",
+        "Before/After tags calibrated to 'BEFORE' and 'AFTER' matching PSD Group 27",
+        "Section font weights, colors and unboxed backdrops verified against PSD layer tree",
+        "npm run build passes"
+      ],
+      "priority": 12,
+      "passes": true,
+      "notes": "All 10 post-hero sections verified against PSD canvas text layers and visual groups."
     }
   ]
 }
