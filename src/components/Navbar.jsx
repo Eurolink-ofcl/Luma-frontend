@@ -49,7 +49,7 @@ export default function Navbar({ onOpenCart, onOpenMobile }) {
             <li>
               <a
                 href="#about"
-                className="relative py-2 text-[12.5px] xl:text-[13px] 2xl:text-[14px] 3xl:text-[15px] 4xl:text-[17px] font-medium tracking-[0.05em] uppercase text-white hover:text-white transition-colors group whitespace-nowrap"
+                className="relative py-2 text-[12.5px] xl:text-[13px] 2xl:text-[14px] 3xl:text-[15px] 4xl:text-[17px] font-semibold tracking-[0.06em] uppercase text-white hover:text-white transition-colors group whitespace-nowrap"
               >
                 ABOUT LUMA
                 <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-[#EC2024] transition-all duration-300 group-hover:w-full rounded" />
@@ -59,7 +59,7 @@ export default function Navbar({ onOpenCart, onOpenMobile }) {
             <li className="relative group">
               <a
                 href="#products"
-                className="relative py-2 text-[12.5px] xl:text-[13px] 2xl:text-[14px] 3xl:text-[15px] 4xl:text-[17px] font-medium tracking-[0.05em] uppercase text-white hover:text-white transition-colors flex items-center gap-1 group whitespace-nowrap"
+                className="relative py-2 text-[12.5px] xl:text-[13px] 2xl:text-[14px] 3xl:text-[15px] 4xl:text-[17px] font-semibold tracking-[0.06em] uppercase text-white hover:text-white transition-colors flex items-center gap-1 group whitespace-nowrap"
               >
                 OUR PRODUCTS
                 <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-[#EC2024] transition-all duration-300 group-hover:w-full rounded" />
@@ -106,7 +106,7 @@ export default function Navbar({ onOpenCart, onOpenMobile }) {
             <li>
               <a
                 href="#reviews"
-                className="relative py-2 text-[12.5px] xl:text-[13px] 2xl:text-[14px] 3xl:text-[15px] 4xl:text-[17px] font-medium tracking-[0.05em] uppercase text-white hover:text-white transition-colors group whitespace-nowrap"
+                className="relative py-2 text-[12.5px] xl:text-[13px] 2xl:text-[14px] 3xl:text-[15px] 4xl:text-[17px] font-semibold tracking-[0.06em] uppercase text-white hover:text-white transition-colors group whitespace-nowrap"
               >
                 REVIEWS
                 <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-[#EC2024] transition-all duration-300 group-hover:w-full rounded" />
@@ -116,7 +116,7 @@ export default function Navbar({ onOpenCart, onOpenMobile }) {
             <li>
               <a
                 href="#community"
-                className="relative py-2 text-[12.5px] xl:text-[13px] 2xl:text-[14px] 3xl:text-[15px] 4xl:text-[17px] font-medium tracking-[0.05em] uppercase text-white hover:text-white transition-colors group whitespace-nowrap"
+                className="relative py-2 text-[12.5px] xl:text-[13px] 2xl:text-[14px] 3xl:text-[15px] 4xl:text-[17px] font-semibold tracking-[0.06em] uppercase text-white hover:text-white transition-colors group whitespace-nowrap"
               >
                 COMMUNITY
                 <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-[#EC2024] transition-all duration-300 group-hover:w-full rounded" />
@@ -126,7 +126,7 @@ export default function Navbar({ onOpenCart, onOpenMobile }) {
             <li>
               <a
                 href="#contact"
-                className="relative py-2 text-[12.5px] xl:text-[13px] 2xl:text-[14px] 3xl:text-[15px] 4xl:text-[17px] font-medium tracking-[0.05em] uppercase text-white hover:text-white transition-colors group whitespace-nowrap"
+                className="relative py-2 text-[12.5px] xl:text-[13px] 2xl:text-[14px] 3xl:text-[15px] 4xl:text-[17px] font-semibold tracking-[0.06em] uppercase text-white hover:text-white transition-colors group whitespace-nowrap"
               >
                 CONTACT US
                 <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-[#EC2024] transition-all duration-300 group-hover:w-full rounded" />

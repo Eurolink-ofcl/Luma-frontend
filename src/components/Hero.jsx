@@ -21,12 +21,12 @@ export default function Hero() {
 
       {/* Content */}
       <div className="relative z-10 max-w-[1300px] 2xl:max-w-[1600px] 4xl:max-w-[2000px] w-full mx-auto flex flex-col items-center pt-5">
-        <h1 className="font-manrope text-[clamp(28px,3.8vw,66px)] 2xl:text-[76px] 4xl:text-[96px] font-bold leading-[1.15] 2xl:leading-[1.1] tracking-[-0.015em] uppercase text-white mb-5 2xl:mb-7 drop-shadow-[0_4px_28px_rgba(0,0,0,0.7)] break-words">
+        <h1 className="font-manrope text-[clamp(28px,3.8vw,66px)] 2xl:text-[76px] 4xl:text-[96px] font-extrabold leading-[1.12] 2xl:leading-[1.08] tracking-[-0.015em] uppercase text-white mb-5 2xl:mb-7 drop-shadow-[0_4px_28px_rgba(0,0,0,0.7)] break-words">
           <span className="block">THE SCIENCE OF LIGHT.</span>
           <span className="block">THE POWER TO HEAL.</span>
         </h1>
 
-        <p className="font-manrope text-[11.5px] sm:text-[13px] 2xl:text-[16px] 4xl:text-[19px] font-normal italic tracking-[0.16em] sm:tracking-[0.2em] 2xl:tracking-[0.24em] uppercase text-white/90 mb-9 sm:mb-10 2xl:mb-12 4xl:mb-14 max-w-[90vw]">
+        <p className="font-manrope text-[11.5px] sm:text-[13px] 2xl:text-[16px] 4xl:text-[19px] font-medium tracking-[0.2em] sm:tracking-[0.24em] 2xl:tracking-[0.28em] uppercase text-white/95 mb-9 sm:mb-10 2xl:mb-12 4xl:mb-14 max-w-[90vw]">
           THE WORLD'S MOST ADVANCED RED LIGHT THERAPY PANEL
         </p>
 
