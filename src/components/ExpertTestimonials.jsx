@@ -26,11 +26,11 @@ export default function ExpertTestimonials() {
       <div className="max-w-[1200px] 2xl:max-w-[1600px] 3xl:max-w-[1850px] 4xl:max-w-[2150px] mx-auto px-6 lg:px-8 2xl:px-12 4xl:px-16">
         {/* Section Header */}
         <div className="text-center max-w-3xl 2xl:max-w-4xl 4xl:max-w-5xl mx-auto mb-14 md:mb-16 2xl:mb-20">
-          <p className="text-xs sm:text-sm 2xl:text-base 4xl:text-lg uppercase tracking-[0.28em] font-normal text-white/90 mb-3">
+          <p className="text-xs sm:text-sm 2xl:text-base 4xl:text-lg uppercase tracking-[0.24em] font-semibold text-white/80 mb-3">
             KNOW MORE ABOUT LUMA
           </p>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl 2xl:text-6xl 4xl:text-7xl font-extralight tracking-tight uppercase leading-tight text-[#EC2024]">
-            WHAT EXPERTS SAYS
+          <h2 className="text-3xl sm:text-4xl md:text-5xl 2xl:text-6xl 4xl:text-7xl font-bold tracking-tight uppercase leading-tight text-[#EC2024]">
+            WHAT EXPERTS SAY
           </h2>
         </div>
 
