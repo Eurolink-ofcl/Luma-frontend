@@ -236,6 +236,21 @@
       "priority": 16,
       "passes": true,
       "notes": "Verified via Playwright test suite and image comparison matrices across 13 sections and 5 viewport breakpoints."
+    },
+    {
+      "id": "US-017",
+      "title": "Multi-Monitor Display Matrix & 4K UHD Precision Responsiveness (9 Form Factors)",
+      "description": "Validate complete responsive alignment and container centering across 9 specific desktop, laptop, and ultra-high-definition monitor resolutions: HD 1280x720 (16:9), Laptop 1366x768, Laptop 1440x900 (16:10), Full HD 1920x1080 (16:9), WUXGA 1920x1200 (16:10), 2K QHD 2560x1440 (16:9), WQXGA 2560x1600 (16:10), 3K 2880x1800 (16:10), and 4K UHD 3840x2160 (16:9 - matching full PSD canvas width).",
+      "acceptanceCriteria": [
+        "Zero horizontal overflow across all 9 monitor form factors (scrollWidth === clientWidth)",
+        "Container centering verified with <=2.5px margin variance across all 9 displays",
+        "Fluid typography scales from 50px up to 108px in 4K UHD",
+        "Full-page screenshots captured and archived in monitor_tests/",
+        "npm run build passes cleanly with zero errors"
+      ],
+      "priority": 17,
+      "passes": true,
+      "notes": "Verified via Playwright across all 9 monitor configurations in monitor_tests/ralph_monitor_report.json."
     }
   ]
 }
