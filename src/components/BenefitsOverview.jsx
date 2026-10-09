@@ -68,14 +68,14 @@ export default function BenefitsOverview() {
       <div className="benefits-container max-w-[1400px] 2xl:max-w-[1750px] 3xl:max-w-[1950px] 4xl:max-w-[2300px] mx-auto px-6 lg:px-12 2xl:px-16 4xl:px-20">
         {/* Section Header */}
         <div className="text-center max-w-3xl 2xl:max-w-4xl 4xl:max-w-5xl mx-auto mb-16 md:mb-20 2xl:mb-24">
-          <p className="text-xs sm:text-sm 2xl:text-base 4xl:text-lg uppercase tracking-[0.24em] font-semibold mb-3">
+          <p className="text-xs sm:text-sm 2xl:text-[15.2px] 4xl:text-[22.8px] uppercase tracking-[0.2em] font-medium mb-3">
             <span className="text-[#131313]">WHY </span>
             <span className="text-[#EC2024]">LUMA</span>
           </p>
-          <h2 className="text-[#131313] font-bold text-2xl sm:text-3xl md:text-4xl lg:text-[44px] 2xl:text-[54px] 4xl:text-[64px] tracking-tight uppercase leading-tight mt-2">
+          <h2 className="text-[#131313] font-extralight text-2xl sm:text-3xl md:text-4xl lg:text-[40px] 2xl:text-[30.4px] 4xl:text-[45.5px] tracking-tight uppercase leading-tight mt-2">
             BENEFITS OVERVIEW
           </h2>
-          <p className="text-[#444444] text-sm sm:text-base 2xl:text-lg 4xl:text-xl leading-relaxed mt-4 font-normal">
+          <p className="text-[#444444] text-sm sm:text-base 2xl:text-[20px] 4xl:text-[30px] leading-relaxed mt-4 font-normal">
             Evidence-based protocols calibrated for specific wellness outcomes.
           </p>
         </div>
@@ -99,20 +99,20 @@ export default function BenefitsOverview() {
               {/* Card Meta Content directly on section background (Unboxed per PSD Group 18) */}
               <div className="pt-5 2xl:pt-6 flex flex-col">
                 <div className="flex items-start justify-between gap-3 mb-2 2xl:mb-3">
-                  <h3 className="text-lg sm:text-xl 2xl:text-2xl 4xl:text-[26px] font-bold text-[#131313] leading-snug">
+                  <h3 className="text-lg sm:text-xl 2xl:text-[21.6px] 4xl:text-[32.4px] font-semibold text-[#131313] leading-snug">
                     {item.title}
                   </h3>
                   {/* Duration Circular Badge matching PSD Ellipse 5 (Red outline, stacked text) */}
                   <div className="w-11 h-11 2xl:w-13 2xl:h-13 4xl:w-15 4xl:h-15 rounded-full border-2 border-[#EC2024] bg-white flex flex-col items-center justify-center shrink-0 shadow-xs select-none">
-                    <span className="text-sm 2xl:text-base 4xl:text-lg font-bold text-[#131313] leading-none">
+                    <span className="text-sm 2xl:text-[16px] 4xl:text-[24px] font-medium text-[#131313] leading-none">
                       {item.duration.replace(/[^0-9]/g, '')}
                     </span>
-                    <span className="text-[10px] 2xl:text-[11px] 4xl:text-xs font-semibold text-[#555555] leading-none mt-0.5">
+                    <span className="text-[10px] 2xl:text-[11px] 4xl:text-xs font-medium text-[#555555] leading-none mt-0.5">
                       Min
                     </span>
                   </div>
                 </div>
-                <p className="text-[#555555] text-xs sm:text-[14px] 2xl:text-[15.5px] 4xl:text-[17px] leading-relaxed">
+                <p className="text-[#555555] text-xs sm:text-[14px] 2xl:text-[20px] 4xl:text-[30px] font-normal leading-relaxed">
                   {item.description}
                 </p>
               </div>
@@ -139,20 +139,20 @@ export default function BenefitsOverview() {
               {/* Card Meta Content directly on section background */}
               <div className="pt-5 2xl:pt-6 flex flex-col">
                 <div className="flex items-start justify-between gap-3 mb-2 2xl:mb-3">
-                  <h3 className="text-lg sm:text-xl 2xl:text-2xl 4xl:text-[26px] font-bold text-[#131313] leading-snug">
+                  <h3 className="text-lg sm:text-xl 2xl:text-[21.6px] 4xl:text-[32.4px] font-semibold text-[#131313] leading-snug">
                     {item.title}
                   </h3>
                   {/* Duration Circular Badge matching PSD Ellipse 5 */}
                   <div className="w-11 h-11 2xl:w-13 2xl:h-13 4xl:w-15 4xl:h-15 rounded-full border-2 border-[#EC2024] bg-white flex flex-col items-center justify-center shrink-0 shadow-xs select-none">
-                    <span className="text-sm 2xl:text-base 4xl:text-lg font-bold text-[#131313] leading-none">
+                    <span className="text-sm 2xl:text-[16px] 4xl:text-[24px] font-medium text-[#131313] leading-none">
                       {item.duration.replace(/[^0-9]/g, '')}
                     </span>
-                    <span className="text-[10px] 2xl:text-[11px] 4xl:text-xs font-semibold text-[#555555] leading-none mt-0.5">
+                    <span className="text-[10px] 2xl:text-[11px] 4xl:text-xs font-medium text-[#555555] leading-none mt-0.5">
                       Min
                     </span>
                   </div>
                 </div>
-                <p className="text-[#555555] text-xs sm:text-[14px] 2xl:text-[15.5px] 4xl:text-[17px] leading-relaxed">
+                <p className="text-[#555555] text-xs sm:text-[14px] 2xl:text-[20px] 4xl:text-[30px] font-normal leading-relaxed">
                   {item.description}
                 </p>
               </div>

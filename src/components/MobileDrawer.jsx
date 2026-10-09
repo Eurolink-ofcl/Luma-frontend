@@ -29,7 +29,7 @@ export default function MobileDrawer({ isOpen, onClose }) {
         onClick={onClose}
       />
 
-      <div className="fixed inset-y-0 right-0 max-w-full flex">
+      <div className="fixed inset-y-0 right-0 max-w-full flex font-['Manrope']">
         <div className="w-[320px] max-w-[85vw] bg-[#0e0e0e]/98 backdrop-blur-2xl border-l border-white/10 shadow-2xl p-7 flex flex-col justify-between">
           <div>
             {/* Header */}
@@ -62,7 +62,7 @@ export default function MobileDrawer({ isOpen, onClose }) {
                   <a
                     href={item.href}
                     onClick={onClose}
-                    className="text-sm font-semibold tracking-wider text-white hover:text-[#EC2024] transition-colors block uppercase"
+                    className="text-sm font-medium tracking-[0.05em] text-white hover:text-[#EC2024] transition-colors block uppercase"
                   >
                     {item.label}
                   </a>
@@ -76,7 +76,7 @@ export default function MobileDrawer({ isOpen, onClose }) {
             <a
               href="#get-panel"
               onClick={onClose}
-              className="w-full text-center py-2.5 px-5 border border-white/90 rounded text-xs font-semibold tracking-wider uppercase text-white hover:bg-white hover:text-black transition-all"
+              className="w-full text-center py-2.5 px-5 border border-white/90 rounded text-xs font-medium tracking-[0.05em] uppercase text-white hover:bg-white hover:text-black transition-all"
             >
               GET YOUR PANEL
             </a>

@@ -27,14 +27,14 @@ export default function BeforeAfter() {
       <div className="max-w-[1200px] 2xl:max-w-[1600px] 3xl:max-w-[1850px] 4xl:max-w-[2150px] mx-auto px-6 lg:px-8 2xl:px-12 4xl:px-16">
         {/* Header */}
         <div className="text-center max-w-3xl 2xl:max-w-4xl 4xl:max-w-5xl mx-auto mb-12 2xl:mb-16">
-          <p className="text-xs sm:text-sm 2xl:text-base 4xl:text-lg uppercase tracking-[0.24em] font-semibold mb-3">
+          <p className="text-xs sm:text-sm 2xl:text-[15.2px] 4xl:text-[22.8px] uppercase tracking-[0.2em] font-medium mb-3">
             <span className="text-[#131313]">Real </span>
             <span className="text-[#EC2024]">Sessions</span>
           </p>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[44px] 2xl:text-[54px] 4xl:text-[64px] font-bold tracking-tight uppercase leading-tight text-[#131313]">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] 2xl:text-[30.4px] 4xl:text-[45.5px] font-extralight tracking-tight uppercase leading-tight text-[#131313]">
             BEFORE &amp; AFTER
           </h2>
-          <p className="text-[#555555] text-sm sm:text-base 2xl:text-lg 4xl:text-xl leading-relaxed font-normal mt-3">
+          <p className="text-[#555555] text-sm sm:text-base 2xl:text-[20px] 4xl:text-[30px] leading-relaxed font-normal mt-3">
             Discover How the LUMA Mask Transformed Skincare Routines and Rejuvenated Complexions.
           </p>
         </div>
@@ -47,7 +47,7 @@ export default function BeforeAfter() {
                 key={cat}
                 type="button"
                 onClick={() => setActiveTab(cat)}
-                className={`px-6 sm:px-8 2xl:px-10 4xl:px-12 py-2 sm:py-2.5 2xl:py-3.5 4xl:py-4 rounded-full text-xs sm:text-sm 2xl:text-base 4xl:text-lg font-bold tracking-wider uppercase transition-all duration-300 cursor-pointer ${
+                className={`px-6 sm:px-8 2xl:px-10 4xl:px-12 py-2 sm:py-2.5 2xl:py-3.5 4xl:py-4 rounded-full text-xs sm:text-sm 2xl:text-[15.2px] 4xl:text-[22.8px] font-extrabold tracking-[0.1em] uppercase transition-all duration-300 cursor-pointer ${
                   activeTab === cat
                     ? 'bg-[#EC2024] text-white shadow-md'
                     : 'text-[#555555] hover:text-[#131313] bg-transparent'
@@ -84,11 +84,11 @@ export default function BeforeAfter() {
               </div>
             </div>
 
-            {/* Before / After Floating Badges */}
-            <span className="absolute bottom-6 left-6 px-4 py-1.5 rounded-full bg-black/70 backdrop-blur-md text-white font-mono text-xs uppercase tracking-widest border border-white/20 z-10">
+            {/* Before / After Floating Badges matching PSD Manrope-Bold */}
+            <span className="absolute bottom-6 left-6 px-4 py-1.5 rounded-full bg-black/70 backdrop-blur-md text-white font-['Manrope'] font-bold text-xs sm:text-sm 2xl:text-[29.6px] 4xl:text-[59.3px] uppercase tracking-wide border border-white/20 z-10 leading-none">
               BEFORE
             </span>
-            <span className="absolute bottom-6 right-6 px-4 py-1.5 rounded-full bg-black/70 backdrop-blur-md text-white font-mono text-xs uppercase tracking-widest border border-white/20 z-10">
+            <span className="absolute bottom-6 right-6 px-4 py-1.5 rounded-full bg-black/70 backdrop-blur-md text-white font-['Manrope'] font-bold text-xs sm:text-sm 2xl:text-[29.6px] 4xl:text-[59.3px] uppercase tracking-wide border border-white/20 z-10 leading-none">
               AFTER
             </span>
           </div>

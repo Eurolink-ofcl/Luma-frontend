@@ -172,13 +172,13 @@ export default function ClinicalTech() {
       <div className="clinical-container relative z-10 max-w-[1400px] 2xl:max-w-[1750px] 3xl:max-w-[1950px] 4xl:max-w-[2300px] mx-auto px-6 lg:px-12 2xl:px-16 4xl:px-20">
         {/* Section Header */}
         <div className="max-w-3xl 2xl:max-w-4xl 4xl:max-w-5xl">
-          <p className="text-xs sm:text-sm 2xl:text-base 4xl:text-lg uppercase tracking-[0.24em] text-[#EC2024] font-semibold mb-3">
+          <p className="text-xs sm:text-sm 2xl:text-[15.2px] 4xl:text-[22.8px] uppercase tracking-[0.2em] text-[#EC2024] font-medium mb-3">
             CLINICAL TECHNOLOGY
           </p>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[46px] 2xl:text-[56px] 4xl:text-[68px] font-bold tracking-tight uppercase leading-tight text-white">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] 2xl:text-[30.4px] 4xl:text-[45.5px] font-extralight tracking-tight uppercase leading-tight text-white">
             HOW FAR DOES EACH <span className="text-[#EC2024]">LIGHT</span> REACH?
           </h2>
-          <p className="mt-4 text-white/70 text-sm sm:text-[15px] 2xl:text-base 4xl:text-lg leading-relaxed font-normal">
+          <p className="mt-4 text-white/70 text-sm sm:text-[15px] 2xl:text-[20px] 4xl:text-[30px] leading-relaxed font-normal">
             Red stays near the surface. Near-infrared travels deeper.
             <br className="hidden sm:inline" />
             Hover over a wavelength to see how far it goes.
@@ -192,14 +192,14 @@ export default function ClinicalTech() {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-6 lg:gap-8 2xl:gap-12 4xl:gap-16 items-start mb-14 2xl:mb-20 min-h-[90px] 2xl:min-h-[110px] transition-all duration-300">
           {/* Active Wavelength & Target */}
           <div className="col-span-2 sm:col-span-1">
-            <p className="text-xs sm:text-sm 2xl:text-base text-[#EC2024] font-semibold tracking-wide mb-1">
+            <p className="text-xs sm:text-sm 2xl:text-[15px] text-[#EC2024] font-normal tracking-wide mb-1">
               {active.label}
             </p>
             <div className="flex items-baseline gap-1">
-              <span className="text-4xl sm:text-5xl lg:text-[54px] 2xl:text-[68px] 4xl:text-[80px] font-semibold text-white tracking-tight leading-none">
+              <span className="text-4xl sm:text-5xl lg:text-[54px] 2xl:text-[56.9px] 4xl:text-[85.4px] font-extralight text-white tracking-tight leading-none">
                 {active.value}
               </span>
-              <span className="text-sm sm:text-base 2xl:text-xl 4xl:text-2xl text-white/60 font-medium">
+              <span className="text-sm sm:text-base 2xl:text-[22.8px] 4xl:text-[34.2px] text-white/70 font-extralight">
                 {active.unit}
               </span>
             </div>
@@ -207,40 +207,40 @@ export default function ClinicalTech() {
 
           {/* Primary Use */}
           <div>
-            <p className="text-xs 2xl:text-sm 4xl:text-base uppercase tracking-wider text-[#EC2024] font-medium mb-1.5">
+            <p className="text-xs 2xl:text-[11.4px] 4xl:text-[17.1px] uppercase tracking-wider text-[#EC2024] font-extralight mb-1.5">
               {active.primaryTitle}
             </p>
-            <p className="text-xs sm:text-[13px] 2xl:text-[15px] 4xl:text-[17px] text-white/75 leading-snug">
+            <p className="text-xs sm:text-[13px] 2xl:text-[16px] 4xl:text-[21.3px] text-white/75 font-normal leading-snug">
               {active.primaryDesc}
             </p>
           </div>
 
           {/* Secondary Use */}
           <div>
-            <p className="text-xs 2xl:text-sm 4xl:text-base uppercase tracking-wider text-white/45 font-medium mb-1.5">
+            <p className="text-xs 2xl:text-[11.4px] 4xl:text-[17.1px] uppercase tracking-wider text-white/45 font-extralight mb-1.5">
               {active.secondaryTitle}
             </p>
-            <p className="text-xs sm:text-[13px] 2xl:text-[15px] 4xl:text-[17px] text-white/75 leading-snug">
+            <p className="text-xs sm:text-[13px] 2xl:text-[16px] 4xl:text-[21.3px] text-white/75 font-normal leading-snug">
               {active.secondaryDesc}
             </p>
           </div>
 
           {/* Approximate Depth */}
           <div>
-            <p className="text-xs 2xl:text-sm 4xl:text-base uppercase tracking-wider text-white/45 font-medium mb-1.5">
+            <p className="text-xs 2xl:text-[11.4px] 4xl:text-[17.1px] uppercase tracking-wider text-white/45 font-extralight mb-1.5">
               Approximate depth
             </p>
-            <p className="text-lg sm:text-2xl 2xl:text-3xl 4xl:text-4xl font-light text-white tracking-tight">
+            <p className="text-lg sm:text-2xl 2xl:text-[40px] 4xl:text-[60px] font-normal text-white tracking-tight">
               {active.depth}
             </p>
           </div>
 
           {/* Research behind it */}
           <div>
-            <p className="text-xs 2xl:text-sm 4xl:text-base uppercase tracking-wider text-white/45 font-medium mb-1.5">
+            <p className="text-xs 2xl:text-[11.4px] 4xl:text-[17.1px] uppercase tracking-wider text-white/45 font-extralight mb-1.5">
               Research behind it
             </p>
-            <p className="text-xs sm:text-[13px] 2xl:text-[15px] 4xl:text-[17px] text-white/75 leading-snug">
+            <p className="text-xs sm:text-[13px] 2xl:text-[16px] 4xl:text-[21.3px] text-white/75 font-normal leading-snug">
               {active.research}
             </p>
           </div>

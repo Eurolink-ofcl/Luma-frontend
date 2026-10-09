@@ -34,4 +34,24 @@ Started: Thu Oct 8 2026
 - **Verification:** `npm run build` passed with 0 errors. Verified rendered circular badge with ASCII pixel analysis confirming exact circular geometry and stacked typography matching PSD composite.
 ---
 
+## 2026-10-09 - US-015: Complete Typography System Calibration (Local Fonts Exclusively & Layer-by-Layer PSD Font Alignment)
+- **Implemented:**
+  1. **Exclusive Local Fonts Configuration:** Removed external Google Fonts preconnect/links in `index.html` and `@import` in `src/index.css`. Configured local `@font-face` rules for `Manrope` for all 7 weights (200 ExtraLight, 300 Light, 400 Regular, 500 Medium, 600 SemiBold, 700 Bold, 800 ExtraBold) using exclusively `/public/assets/FONT/Manrope-*.ttf`.
+  2. **Layer-by-Layer Typography Analysis:** Extracted and analyzed all 225 text layers from `Luma-Homepage-Design.psd` to establish exact font families, weights, and responsive sizes across 4K (3840px), 2K (2560px), Full HD (1920px), and Laptop (1440px).
+  3. **Section Eyebrows / Kickers:** Calibrated all section eyebrows (`ABOUT LUMA`, `CLINICAL TECHNOLOGY`, `WHY LUMA`, `PRODUCT RANGE`, `The LUMA 1-Minute Assessment`, `Real Sessions`, `LUMA RED LIGHT THERAPY`, `KNOW MORE ABOUT LUMA`) to `Manrope-Medium` (font-medium, 500) with `tracking-[0.2em]`.
+  4. **Section Headings:** Calibrated all major section headings to authentic `Manrope-ExtraLight` (font-extralight, 200) with `tracking-tight` matching PSD canvas specs (45.5px on 4K, 30.4px on 2K/FHD).
+  5. **Trust Strip:** Calibrated ticker text to authentic `Manrope-Light` (font-light, 300) with `tracking-normal` (28.7px on 4K, 19.1px on 2K/FHD).
+  6. **Product Range & Community:** Calibrated product names and giant community title to authentic `Manrope-ExtraBold` (font-extrabold, 800) and product categories to `Manrope-Medium` italic (`Face mask`, `Red light panel`).
+  7. **Buttons & CTAs:** Calibrated all action buttons (`KNOW MORE`, `Buy Now`, `Contact LUMA`, `Join Us`, `Ask a question`, `Explore SURGE`, `GET YOUR PANEL`) to `Manrope-SemiBold` (font-semibold, 600) with `tracking-[0.05em]`.
+  8. **Tailwind v4 Ascending Breakpoints Cascade:** Corrected `@theme` breakpoint definitions so that `sm` through `5xl` cascade in strict ascending order, ensuring large viewport utility classes take precedence without specificity conflicts.
+- **Verification:**
+  1. Headless Chromium Playwright test confirmed:
+     - 7/7 local font faces loaded and verified with HTTP 200 OK.
+     - 0 network requests to external font CDNs.
+     - Computed font family resolves to `'Manrope'` across 100% of text elements.
+     - Font weights confirmed: 200 (ExtraLight), 300 (Light), 400 (Regular), 500 (Medium), 600 (SemiBold), 700 (Bold), 800 (ExtraBold).
+  2. `npm run build` passed with zero errors in 1.61s.
+---
+
+
 

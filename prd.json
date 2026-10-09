@@ -201,6 +201,26 @@
       "priority": 14,
       "passes": true,
       "notes": "All minute visual design details verified against actual PSD raster layers and composite crops."
+    },
+    {
+      "id": "US-015",
+      "title": "Complete Typography System Calibration: Exclusively Use Local Font Assets & Align All PSD Text Layers and Weights",
+      "description": "Configure the web app to exclusively use the local Manrope font files from public/assets/FONT/ (weights 200, 300, 400, 500, 600, 700, 800) removing all Google Fonts CDN links. Compare every section against Luma-Homepage-Design.psd text layers and calibrate typography hierarchy, font weights (font-extralight 200 headings, font-medium 500 kickers, font-semibold 600 CTAs, font-light 300 ticker, font-extrabold 800 titles), tracking, and responsive text sizing across all viewports.",
+      "acceptanceCriteria": [
+        "External Google Fonts links completely removed from index.html and src/index.css",
+        "Local @font-face rules defined for Manrope for weights 200 to 800 pointing to /assets/FONT/Manrope-*.ttf",
+        "All section eyebrows use Manrope-Medium (font-medium, 500) tracking-[0.2em]",
+        "All section headings (About, Clinical Tech, Benefits, Products, Quiz, Before/After, FAQs, Experts) use Manrope-ExtraLight (font-extralight, 200) tracking-tight",
+        "Trust Strip uses Manrope-Light (font-light, 300)",
+        "Product Range titles use Manrope-ExtraBold (800) and categories use Manrope-Medium italic",
+        "Community Title uses Manrope-ExtraBold (800) and subtitle uses Manrope-Medium (500)",
+        "CTAs use Manrope-SemiBold (600)",
+        "Zero network requests to external font CDNs; 100% local fonts served with HTTP 200",
+        "npm run build passes with zero errors"
+      ],
+      "priority": 15,
+      "passes": true,
+      "notes": "Verified via Playwright in headless Chromium across 1440px, 1920px, 2560px, and 3840px. All 7 font weights loaded locally and 100% matched to PSD specifications."
     }
   ]
 }

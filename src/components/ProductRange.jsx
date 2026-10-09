@@ -56,14 +56,14 @@ export default function ProductRange({ onAddToCart }) {
         {/* Section Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-16 2xl:mb-20">
           <div>
-            <p className="text-xs sm:text-sm 2xl:text-base 4xl:text-lg uppercase tracking-[0.24em] font-semibold mb-3">
+            <p className="text-xs sm:text-sm 2xl:text-[15.2px] 4xl:text-[22.8px] uppercase tracking-[0.2em] font-medium mb-3">
               <span className="text-[#131313]">PRODUCT </span>
               <span className="text-[#EC2024]">RANGE</span>
             </p>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[44px] 2xl:text-[54px] 4xl:text-[64px] font-bold tracking-tight uppercase leading-tight text-[#131313]">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] 2xl:text-[30.4px] 4xl:text-[45.5px] font-extralight tracking-tight uppercase leading-tight text-[#131313]">
               LUMA RED LIGHT PANELS
             </h2>
-            <p className="text-[#555555] text-sm sm:text-[15px] 2xl:text-base 4xl:text-lg leading-relaxed font-normal mt-3">
+            <p className="text-[#555555] text-sm sm:text-[15px] 2xl:text-[20px] 4xl:text-[30px] leading-relaxed font-normal mt-3">
               Featuring exclusive 1060nm — unavailable from any competitor in Global.
             </p>
           </div>
@@ -72,7 +72,7 @@ export default function ProductRange({ onAddToCart }) {
           <div className="flex items-center gap-6 shrink-0">
             <a
               href="#all-products"
-              className="text-xs sm:text-sm 2xl:text-base font-bold uppercase tracking-[0.14em] text-[#131313] hover:text-[#EC2024] flex items-center gap-1.5 transition-colors group"
+              className="text-xs sm:text-sm 2xl:text-[20px] 4xl:text-[30px] font-medium uppercase tracking-[0.1em] text-[#131313] hover:text-[#EC2024] flex items-center gap-1.5 transition-colors group"
             >
               VIEW ALL
               <span className="text-[#EC2024] group-hover:translate-x-1 transition-transform">
@@ -121,13 +121,13 @@ export default function ProductRange({ onAddToCart }) {
 
                 {/* Typography matching PSD Group 19 */}
                 <div className="mb-5 2xl:mb-6">
-                  <h3 className="text-xl sm:text-2xl 2xl:text-3xl 4xl:text-4xl font-extrabold tracking-tight uppercase text-[#131313] mb-1">
+                  <h3 className="text-xl sm:text-2xl 2xl:text-[19px] 4xl:text-[28.5px] font-extrabold tracking-tight uppercase text-[#131313] mb-1">
                     {product.name}
                   </h3>
-                  <p className="text-xs sm:text-sm 2xl:text-base italic uppercase tracking-wider text-[#777777] font-medium mb-3">
+                  <p className="text-xs sm:text-sm 2xl:text-[11.4px] 4xl:text-[17.1px] italic uppercase tracking-wider text-[#777777] font-medium mb-3">
                     {product.category}
                   </p>
-                  <p className="text-[#555555] text-xs sm:text-[14px] 2xl:text-[15.5px] 4xl:text-[17px] leading-relaxed line-clamp-3">
+                  <p className="text-[#555555] text-xs sm:text-[14px] 2xl:text-[20px] 4xl:text-[30px] font-normal leading-relaxed line-clamp-3">
                     {product.description}
                   </p>
                 </div>
@@ -138,7 +138,7 @@ export default function ProductRange({ onAddToCart }) {
                 <button
                   type="button"
                   onClick={() => onAddToCart && onAddToCart(product)}
-                  className="w-full sm:w-auto min-w-[150px] 2xl:min-w-[180px] 4xl:min-w-[210px] inline-flex items-center justify-center py-3.5 2xl:py-4.5 4xl:py-5 px-8 2xl:px-10 rounded-[6px] 2xl:rounded-[8px] bg-[#EC2024] hover:bg-[#c9181b] text-white font-bold text-xs sm:text-sm 2xl:text-base 4xl:text-lg uppercase tracking-wider transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer"
+                  className="w-full sm:w-auto min-w-[150px] 2xl:min-w-[180px] 4xl:min-w-[210px] inline-flex items-center justify-center py-3.5 2xl:py-4.5 4xl:py-5 px-8 2xl:px-10 rounded-[6px] 2xl:rounded-[8px] bg-[#EC2024] hover:bg-[#c9181b] text-white font-semibold text-xs sm:text-sm 2xl:text-[21.3px] 4xl:text-[32px] uppercase tracking-[0.05em] transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer"
                 >
                   Buy Now
                 </button>

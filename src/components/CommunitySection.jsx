@@ -22,14 +22,14 @@ export default function CommunitySection() {
           {/* Content Container */}
           <div className="relative z-10 max-w-4xl 2xl:max-w-5xl 4xl:max-w-6xl mx-auto px-6 py-12 2xl:py-16 flex flex-col items-center">
             {/* Title */}
-            <h2 className="text-3xl sm:text-5xl md:text-6xl lg:text-[68px] 2xl:text-[80px] 4xl:text-[96px] font-bold tracking-tight text-white uppercase leading-[1.08] mb-5 2xl:mb-7 select-none">
+            <h2 className="text-3xl sm:text-5xl md:text-6xl lg:text-[68px] 2xl:text-[80px] 4xl:text-[96px] font-extrabold tracking-tight text-white uppercase leading-[1.08] mb-5 2xl:mb-7 select-none">
               JOIN<br />
               THE <span className="font-extrabold text-[#EC2024] tracking-normal">LUMA</span><br />
               COMMUNITY
             </h2>
 
             {/* Subtitle */}
-            <p className="text-xs sm:text-sm md:text-base 2xl:text-lg 4xl:text-xl text-white/85 tracking-[0.08em] uppercase max-w-2xl 2xl:max-w-3xl mx-auto mb-9 2xl:mb-12 font-normal leading-relaxed">
+            <p className="text-xs sm:text-sm md:text-base 2xl:text-[20px] 4xl:text-[30px] text-white/85 tracking-[0.05em] uppercase max-w-2xl 2xl:max-w-3xl mx-auto mb-9 2xl:mb-12 font-medium leading-relaxed">
               LEARN FROM DOCTORS, JOIN FREE CLASSES AND ASK
               <br className="hidden sm:inline" />
               {' '}ANYTHING ABOUT RED LIGHT THERAPY.
@@ -40,7 +40,7 @@ export default function CommunitySection() {
               {/* Join Us CTA (PSD CTA 1 width 290px) */}
               <a
                 href="#join"
-                className="w-full sm:w-auto min-w-[160px] 2xl:min-w-[190px] 4xl:min-w-[220px] px-8 2xl:px-10 4xl:px-12 py-3.5 2xl:py-4.5 4xl:py-5 rounded-[6px] 2xl:rounded-[8px] bg-[#EC2024] hover:bg-[#d6191d] text-white font-bold text-xs sm:text-sm 2xl:text-base 4xl:text-lg tracking-wider transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-center cursor-pointer"
+                className="w-full sm:w-auto min-w-[160px] 2xl:min-w-[190px] 4xl:min-w-[220px] px-8 2xl:px-10 4xl:px-12 py-3.5 2xl:py-4.5 4xl:py-5 rounded-[6px] 2xl:rounded-[8px] bg-[#EC2024] hover:bg-[#d6191d] text-white font-semibold text-xs sm:text-sm 2xl:text-[21.3px] 4xl:text-[32px] tracking-[0.05em] transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-center cursor-pointer"
               >
                 Join Us
               </a>
@@ -48,7 +48,7 @@ export default function CommunitySection() {
               {/* Ask a question CTA (PSD CTA 2 width 420px) */}
               <a
                 href="#contact"
-                className="w-full sm:w-auto min-w-[180px] 2xl:min-w-[220px] 4xl:min-w-[260px] px-8 2xl:px-10 4xl:px-12 py-3.5 2xl:py-4.5 4xl:py-5 rounded-[6px] 2xl:rounded-[8px] bg-black/85 hover:bg-black text-white font-bold text-xs sm:text-sm 2xl:text-base 4xl:text-lg tracking-wider transition-all duration-200 border border-white/25 hover:border-white/50 text-center cursor-pointer"
+                className="w-full sm:w-auto min-w-[180px] 2xl:min-w-[220px] 4xl:min-w-[260px] px-8 2xl:px-10 4xl:px-12 py-3.5 2xl:py-4.5 4xl:py-5 rounded-[6px] 2xl:rounded-[8px] bg-black/85 hover:bg-black text-white font-semibold text-xs sm:text-sm 2xl:text-[21.3px] 4xl:text-[32px] tracking-[0.05em] transition-all duration-200 border border-white/25 hover:border-white/50 text-center cursor-pointer"
               >
                 Ask a question
               </a>

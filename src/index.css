@@ -1,19 +1,81 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@400;500;600;700&family=Tajawal:wght@500;700&display=swap');
+/* LUMA Local Font System: Exclusively using public/assets/FONT */
+@font-face {
+  font-family: 'Manrope';
+  src: url('/assets/FONT/Manrope-ExtraLight.ttf') format('truetype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Manrope';
+  src: url('/assets/FONT/Manrope-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Manrope';
+  src: url('/assets/FONT/Manrope-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Manrope';
+  src: url('/assets/FONT/Manrope-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Manrope';
+  src: url('/assets/FONT/Manrope-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Manrope';
+  src: url('/assets/FONT/Manrope-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Manrope';
+  src: url('/assets/FONT/Manrope-ExtraBold.ttf') format('truetype');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
 @import "tailwindcss";
 
 @theme {
   --font-sans: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-manrope: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-arabic: 'Tajawal', 'Manrope', sans-serif;
+  --font-inter: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-arabic: 'Manrope', sans-serif;
   --color-brand-red: #EC2024;
   --color-brand-red-hover: #ff3337;
   --color-dark-bg: #0a0a0a;
 
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
   --breakpoint-laptop: 1366px;
   --breakpoint-mac: 1440px;
+  --breakpoint-2xl: 1536px;
   --breakpoint-3xl: 1920px;
   --breakpoint-4xl: 2560px;
+  --breakpoint-5xl: 3840px;
 }
 
 @import "./styles/screens.css";

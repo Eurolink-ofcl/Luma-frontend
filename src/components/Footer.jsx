@@ -19,7 +19,7 @@ export default function Footer({ onOpenCart }) {
         {/* Row 1: LET'S CONNECT (Layer 19) */}
         <div className="py-10 sm:py-14 2xl:py-16 4xl:py-20 flex flex-col lg:flex-row lg:items-center justify-between gap-8 border-b border-gray-200">
           <div>
-            <h3 className="text-2xl sm:text-3xl lg:text-4xl 2xl:text-5xl 4xl:text-[54px] font-bold text-[#EC2024] tracking-tight uppercase leading-none mb-2 2xl:mb-3">
+            <h3 className="text-2xl sm:text-3xl lg:text-4xl 2xl:text-5xl 4xl:text-[54px] font-extralight text-[#EC2024] tracking-tight uppercase leading-none mb-2 2xl:mb-3">
               LET'S CONNECT
             </h3>
             <p className="text-xs sm:text-sm 2xl:text-base 4xl:text-lg text-[#333333] font-normal">
@@ -29,7 +29,7 @@ export default function Footer({ onOpenCart }) {
 
           {/* Newsletter Subscription */}
           <div className="w-full lg:w-auto lg:min-w-[480px] 2xl:min-w-[560px] 4xl:min-w-[640px]">
-            <p className="text-xs 2xl:text-sm 4xl:text-base text-[#222222] font-medium mb-2 2xl:mb-3">
+            <p className="text-xs 2xl:text-sm 4xl:text-base text-[#222222] font-normal mb-2 2xl:mb-3">
               You will get monthly newsletter
             </p>
             <form onSubmit={handleSubscribe} className="relative flex items-center">
@@ -40,11 +40,11 @@ export default function Footer({ onOpenCart }) {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email ID"
                   required
-                  className="w-full px-4 2xl:px-6 py-2.5 2xl:py-3.5 4xl:py-4 text-xs sm:text-sm 2xl:text-base 4xl:text-lg text-black placeholder:text-gray-400 bg-transparent outline-none"
+                  className="w-full px-4 2xl:px-6 py-2.5 2xl:py-3.5 4xl:py-4 text-xs sm:text-sm 2xl:text-base 4xl:text-lg text-black placeholder:text-gray-400 bg-transparent outline-none font-normal"
                 />
                 <button
                   type="submit"
-                  className="bg-black hover:bg-[#EC2024] text-white text-xs sm:text-sm 2xl:text-base font-bold uppercase tracking-wider px-6 2xl:px-8 py-2.5 2xl:py-3.5 4xl:py-4 rounded-[6px] 2xl:rounded-[8px] transition-colors cursor-pointer shrink-0"
+                  className="bg-black hover:bg-[#EC2024] text-white text-xs sm:text-sm 2xl:text-base font-semibold uppercase tracking-wider px-6 2xl:px-8 py-2.5 2xl:py-3.5 4xl:py-4 rounded-[6px] 2xl:rounded-[8px] transition-colors cursor-pointer shrink-0"
                 >
                   {subscribed ? 'SENT ✓' : 'SEND'}
                 </button>
@@ -117,12 +117,12 @@ export default function Footer({ onOpenCart }) {
         {/* Row 3: Useful Links (Layer 25) */}
         <div className="py-8 sm:py-10 2xl:py-12 4xl:py-14 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8 border-b border-gray-200">
           <div className="flex flex-col sm:flex-row sm:items-center gap-8 lg:gap-14 2xl:gap-20 4xl:gap-24 w-full lg:w-auto">
-            <h4 className="text-sm 2xl:text-base 4xl:text-lg font-bold text-[#EC2024] uppercase tracking-wider shrink-0">
+            <h4 className="text-sm 2xl:text-[11.4px] 4xl:text-[17.1px] font-medium text-[#EC2024] uppercase tracking-wider shrink-0">
               USEFUL LINKS
             </h4>
 
             {/* 4-column product links */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-10 2xl:gap-14 4xl:gap-16 text-xs sm:text-sm 2xl:text-base 4xl:text-lg text-[#222222] font-medium">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-10 2xl:gap-14 4xl:gap-16 text-xs sm:text-sm 2xl:text-[14px] 4xl:text-[16px] text-[#222222] font-normal">
               <div className="space-y-2 2xl:space-y-3">
                 <a href="#products" className="block hover:text-[#EC2024] transition-colors">LUMA GLOW</a>
                 <a href="#products" className="block hover:text-[#EC2024] transition-colors">LUMA GO</a>
@@ -146,7 +146,7 @@ export default function Footer({ onOpenCart }) {
           <button
             type="button"
             onClick={onOpenCart}
-            className="w-full sm:w-auto px-7 py-3 2xl:px-10 2xl:py-4 4xl:px-12 4xl:py-5 rounded-[8px] 2xl:rounded-[10px] bg-black hover:bg-[#EC2024] text-white font-bold text-xs 2xl:text-sm 4xl:text-base uppercase tracking-wider transition-colors cursor-pointer shrink-0 shadow-sm"
+            className="w-full sm:w-auto px-7 py-3 2xl:px-10 2xl:py-4 4xl:px-12 4xl:py-5 rounded-[8px] 2xl:rounded-[10px] bg-black hover:bg-[#EC2024] text-white font-semibold text-xs 2xl:text-[10.8px] 4xl:text-[16.2px] uppercase tracking-wider transition-colors cursor-pointer shrink-0 shadow-sm"
           >
             GET YOUR PANEL
           </button>
@@ -155,14 +155,14 @@ export default function Footer({ onOpenCart }) {
         {/* Row 4: Hashtag & Socials (Layer 26) */}
         <div className="py-12 sm:py-16 2xl:py-20 4xl:py-24 flex flex-col items-center justify-center text-center border-b border-gray-200">
           {/* #LUMAREDLIGHTs */}
-          <h2 className="text-3xl sm:text-4xl md:text-5xl 2xl:text-6xl 4xl:text-7xl font-extrabold tracking-tight italic uppercase mb-6 2xl:mb-8">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl 2xl:text-[73.3px] 4xl:text-[110px] font-semibold tracking-tight italic uppercase mb-6 2xl:mb-8">
             <span className="text-[#EC2024]">#</span>
             <span className="text-[#131313]">LUMAREDLIGHTS</span>
           </h2>
 
           {/* Follow Us with authentic PSD social icons */}
           <div className="flex items-center gap-4 2xl:gap-6">
-            <span className="text-xs sm:text-sm 2xl:text-base 4xl:text-lg font-semibold tracking-wider uppercase text-[#131313]">
+            <span className="text-xs sm:text-sm 2xl:text-[11.4px] 4xl:text-[17.1px] font-medium tracking-wider uppercase text-[#131313]">
               FOLLOW US
             </span>
             <div className="flex items-center gap-3 2xl:gap-4">

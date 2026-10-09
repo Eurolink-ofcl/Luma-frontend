@@ -6,11 +6,11 @@ export default function AboutSection() {
       <div className="about-container max-w-[1360px] 2xl:max-w-[1680px] 3xl:max-w-[1850px] 4xl:max-w-[2150px] mx-auto px-6 lg:px-12 2xl:px-16 4xl:px-20">
         {/* Section Header */}
         <div className="text-center max-w-5xl lg:max-w-6xl 2xl:max-w-7xl mx-auto mb-14 md:mb-18 2xl:mb-24">
-          <p className="text-xs sm:text-sm md:text-[15px] 2xl:text-[17px] 4xl:text-[19px] uppercase tracking-[0.24em] font-semibold mb-3">
+          <p className="text-xs sm:text-sm md:text-[15px] 2xl:text-[15.2px] 4xl:text-[22.8px] uppercase tracking-[0.2em] font-medium mb-3">
             <span className="text-[#131313]">ABOUT </span>
             <span className="text-[#EC2024]">LUMA</span>
           </p>
-          <h2 className="text-[#131313] font-bold text-2xl sm:text-3xl md:text-4xl lg:text-[42px] 2xl:text-[52px] 4xl:text-[62px] tracking-[0.02em] uppercase leading-tight mt-2 whitespace-normal xl:whitespace-nowrap">
+          <h2 className="text-[#131313] font-extralight text-2xl sm:text-3xl md:text-4xl lg:text-[34px] 2xl:text-[30.4px] 4xl:text-[45.5px] tracking-tight uppercase leading-tight mt-2 whitespace-normal xl:whitespace-nowrap">
             THE SCIENCE OF LIGHT. THE ART OF LIVING WELL.
           </h2>
           {/* Centered red accent bar matching PSD Rectangle 15 */}
@@ -29,7 +29,7 @@ export default function AboutSection() {
           </div>
 
           {/* Right Column: Editorial Narrative & CTA */}
-          <div className="about-text flex flex-col justify-center space-y-6 2xl:space-y-8 text-[#333333] text-[15px] sm:text-[16px] lg:text-[17px] 2xl:text-[20px] 4xl:text-[23px] font-normal leading-[1.75] 2xl:leading-[1.8]">
+          <div className="about-text flex flex-col justify-center space-y-6 2xl:space-y-8 text-[#333333] text-[15px] sm:text-[16px] 2xl:text-[20px] 4xl:text-[30px] font-normal leading-[1.6] 2xl:leading-[1.6]">
             <p>
               Founded in 2023 in Dubai, UAE, LUMA was created to bring the benefits of red light therapy — once reserved for dermatology offices and recovery clinics — into homes and daily routines everywhere. We design devices that combine advanced light technology with simple, intuitive experiences, so that skin care, recovery, and relaxation fit naturally into your day. Backed by research in photobiomodulation and driven by a passion for accessible wellness, our team works to make science-backed care simple, beautiful, and part of everyday life.
             </p>
@@ -44,7 +44,7 @@ export default function AboutSection() {
             <div className="pt-2 2xl:pt-4">
               <a
                 href="#products"
-                className="inline-flex items-center justify-center px-10 2xl:px-12 4xl:px-14 py-3.5 2xl:py-4.5 4xl:py-5 bg-[#EC2024] hover:bg-[#c9181b] text-white font-semibold text-[13px] sm:text-[14px] 2xl:text-[16px] 4xl:text-[18px] uppercase tracking-[0.08em] rounded-[4px] 2xl:rounded-[6px] transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer"
+                className="inline-flex items-center justify-center px-10 2xl:px-12 4xl:px-14 py-3.5 2xl:py-4.5 4xl:py-5 bg-[#EC2024] hover:bg-[#c9181b] text-white font-semibold text-[13px] sm:text-[14px] xl:text-[16px] 2xl:text-[21.3px] 4xl:text-[32px] uppercase tracking-[0.05em] rounded-[4px] 2xl:rounded-[6px] transition-all duration-300 shadow-md hover:shadow-lg cursor-pointer"
               >
                 KNOW MORE
               </a>

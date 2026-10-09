@@ -51,7 +51,7 @@ export default function TopBanner() {
         {announcements.map((item, idx) => (
           <div
             key={item.id}
-            className={`transition-all duration-500 flex items-center justify-center gap-2.5 2xl:gap-3.5 text-[12.5px] sm:text-[13.5px] 2xl:text-[15px] 4xl:text-[17px] font-medium tracking-[0.04em] ${
+            className={`transition-all duration-500 flex items-center justify-center gap-2.5 2xl:gap-3.5 text-[11.7px] sm:text-[13px] xl:text-[14px] 2xl:text-[20.8px] 4xl:text-[31.2px] font-normal tracking-normal ${
               idx === activeIdx
                 ? 'opacity-100 translate-y-0 inline-flex'
                 : 'opacity-0 translate-y-1 hidden'

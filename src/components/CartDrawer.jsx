@@ -29,7 +29,7 @@ export default function CartDrawer({ isOpen, onClose }) {
         onClick={onClose}
       />
 
-      <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
+      <div className="fixed inset-y-0 right-0 max-w-full flex pl-10 font-['Manrope']">
         <div className="w-screen max-w-[420px] bg-[#121212] border-l border-white/10 shadow-2xl p-7 flex flex-col justify-between">
           {/* Header */}
           <div>

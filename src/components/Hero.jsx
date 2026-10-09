@@ -21,12 +21,12 @@ export default function Hero() {
 
       {/* Content */}
       <div className="relative z-10 max-w-[1300px] 2xl:max-w-[1600px] 4xl:max-w-[2000px] w-full mx-auto flex flex-col items-center pt-5">
-        <h1 className="font-manrope text-[clamp(28px,3.8vw,66px)] 2xl:text-[76px] 4xl:text-[96px] font-extrabold leading-[1.12] 2xl:leading-[1.08] tracking-[-0.015em] uppercase text-white mb-5 2xl:mb-7 drop-shadow-[0_4px_28px_rgba(0,0,0,0.7)] break-words">
+        <h1 className="font-manrope text-[clamp(28px,3.8vw,66px)] 2xl:text-[76px] 4xl:text-[96px] font-bold leading-[1.12] 2xl:leading-[1.08] tracking-[-0.015em] uppercase text-white mb-5 2xl:mb-7 drop-shadow-[0_4px_28px_rgba(0,0,0,0.7)] break-words">
           <span className="block">THE SCIENCE OF LIGHT.</span>
           <span className="block">THE POWER TO HEAL.</span>
         </h1>
 
-        <p className="font-manrope text-[11.5px] sm:text-[13px] 2xl:text-[16px] 4xl:text-[19px] font-medium tracking-[0.2em] sm:tracking-[0.24em] 2xl:tracking-[0.28em] uppercase text-white/95 mb-9 sm:mb-10 2xl:mb-12 4xl:mb-14 max-w-[90vw]">
+        <p className="font-manrope text-[11.5px] sm:text-[13px] 2xl:text-[16px] 4xl:text-[19px] font-normal italic tracking-[0.2em] sm:tracking-[0.22em] 2xl:tracking-[0.25em] uppercase text-white/95 mb-9 sm:mb-10 2xl:mb-12 4xl:mb-14 max-w-[90vw]">
           THE WORLD'S MOST ADVANCED RED LIGHT THERAPY PANEL
         </p>
 
@@ -34,13 +34,13 @@ export default function Hero() {
         <div className="luma-hero-buttons flex flex-col sm:flex-row items-center justify-center gap-3.5 sm:gap-4 2xl:gap-6 mb-12 sm:mb-14 2xl:mb-18 w-full max-w-[280px] sm:max-w-none">
           <a
             href="#about"
-            className="w-full sm:w-auto inline-flex items-center justify-center py-3 2xl:py-4 4xl:py-5 px-7 2xl:px-9 4xl:px-11 rounded-[5px] 2xl:rounded-[8px] text-[12.5px] 2xl:text-[14.5px] 4xl:text-[17px] font-semibold tracking-[0.08em] uppercase border border-white/90 bg-black/40 text-white backdrop-blur-md hover:bg-white hover:text-black hover:border-white hover:shadow-[0_0_24px_rgba(255,255,255,0.35)] transition-all min-w-[175px] 2xl:min-w-[210px] 4xl:min-w-[250px]"
+            className="w-full sm:w-auto inline-flex items-center justify-center py-3 2xl:py-4 4xl:py-5 px-7 2xl:px-9 4xl:px-11 rounded-[5px] 2xl:rounded-[8px] text-[12.5px] 2xl:text-[15.1px] 4xl:text-[22.7px] font-semibold tracking-[0.1em] uppercase border border-white/90 bg-black/40 text-white backdrop-blur-md hover:bg-white hover:text-black hover:border-white hover:shadow-[0_0_24px_rgba(255,255,255,0.35)] transition-all min-w-[175px] 2xl:min-w-[210px] 4xl:min-w-[250px]"
           >
             EXPLORE LUMA
           </a>
           <a
             href="#get-panel"
-            className="w-full sm:w-auto inline-flex items-center justify-center py-3 2xl:py-4 4xl:py-5 px-7 2xl:px-9 4xl:px-11 rounded-[5px] 2xl:rounded-[8px] text-[12.5px] 2xl:text-[14.5px] 4xl:text-[17px] font-semibold tracking-[0.08em] uppercase border border-white/90 bg-black/40 text-white backdrop-blur-md hover:bg-[#EC2024] hover:border-[#EC2024] hover:text-white hover:shadow-[0_0_24px_rgba(236,32,36,0.45)] transition-all min-w-[175px] 2xl:min-w-[210px] 4xl:min-w-[250px]"
+            className="w-full sm:w-auto inline-flex items-center justify-center py-3 2xl:py-4 4xl:py-5 px-7 2xl:px-9 4xl:px-11 rounded-[5px] 2xl:rounded-[8px] text-[12.5px] 2xl:text-[15.1px] 4xl:text-[22.7px] font-semibold tracking-[0.1em] uppercase border border-white/90 bg-black/40 text-white backdrop-blur-md hover:bg-[#EC2024] hover:border-[#EC2024] hover:text-white hover:shadow-[0_0_24px_rgba(236,32,36,0.45)] transition-all min-w-[175px] 2xl:min-w-[210px] 4xl:min-w-[250px]"
           >
             FIND YOUR PANEL
           </a>

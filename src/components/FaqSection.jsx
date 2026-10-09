@@ -46,10 +46,10 @@ export default function FaqSection() {
       <div className="max-w-[1400px] 2xl:max-w-[1750px] 3xl:max-w-[1950px] 4xl:max-w-[2300px] mx-auto px-6 lg:px-12 2xl:px-16 4xl:px-20">
         {/* Centered Section Header matching PSD FAQs */}
         <div className="text-center max-w-3xl 2xl:max-w-4xl 4xl:max-w-5xl mx-auto mb-14 md:mb-18 2xl:mb-20">
-          <p className="text-xs sm:text-sm 2xl:text-base 4xl:text-lg uppercase tracking-[0.24em] font-semibold text-[#EC2024] mb-3">
+          <p className="text-xs sm:text-sm 2xl:text-[15.2px] 4xl:text-[22.8px] uppercase tracking-[0.2em] font-medium text-[#EC2024] mb-3">
             LUMA RED LIGHT THERAPY
           </p>
-          <h2 className="text-3xl sm:text-4xl lg:text-[46px] 2xl:text-[56px] 4xl:text-[68px] font-bold uppercase tracking-tight text-[#131313] leading-none">
+          <h2 className="text-3xl sm:text-4xl lg:text-[40px] 2xl:text-[30.4px] 4xl:text-[45.5px] font-extralight uppercase tracking-tight text-[#131313] leading-none">
             FAQs
           </h2>
         </div>
@@ -58,20 +58,20 @@ export default function FaqSection() {
           {/* Left Column: Support Info Card matching PSD Group 28 */}
           <div className="lg:col-span-4">
             <div className="bg-[#F6F6F6] rounded-[18px] 2xl:rounded-[24px] 4xl:rounded-[30px] p-7 2xl:p-9 4xl:p-11 border border-gray-200/80 space-y-4 2xl:space-y-6">
-              <h3 className="text-base 2xl:text-lg 4xl:text-xl font-bold text-[#131313]">
+              <h3 className="text-base 2xl:text-[24px] 4xl:text-[36px] font-bold text-[#131313]">
                 Our customer support is available
               </h3>
-              <p className="text-xs 2xl:text-sm font-semibold text-[#EC2024]">
+              <p className="text-xs 2xl:text-[20px] 4xl:text-[30px] font-semibold text-[#EC2024]">
                 Average answer time: 30 mins
               </p>
-              <div className="text-xs sm:text-sm 2xl:text-base text-[#666666] space-y-1.5 leading-relaxed pt-2 border-t border-gray-200">
-                <p className="font-semibold text-[#333333]">Monday – Saturday: 8am – 6pm</p>
-                <p>Abu Dhabi • Dubai • Australia • United Kingdom</p>
+              <div className="text-xs sm:text-sm 2xl:text-[11.8px] 4xl:text-[17.7px] text-[#666666] space-y-1.5 leading-relaxed pt-2 border-t border-gray-200">
+                <p className="font-medium text-[#333333]">Monday – Saturday: 8am – 6pm</p>
+                <p className="font-medium">Abu Dhabi • Dubai • Australia • United Kingdom</p>
               </div>
               <div className="pt-3 2xl:pt-4">
                 <a
                   href="#contact"
-                  className="inline-flex items-center justify-center w-full py-3.5 2xl:py-4 px-6 rounded-[6px] 2xl:rounded-[8px] bg-[#EC2024] hover:bg-[#c9181b] text-white font-bold text-xs sm:text-sm 2xl:text-base uppercase tracking-wider transition-all shadow-md hover:shadow-lg cursor-pointer"
+                  className="inline-flex items-center justify-center w-full py-3.5 2xl:py-4 px-6 rounded-[6px] 2xl:rounded-[8px] bg-[#EC2024] hover:bg-[#c9181b] text-white font-semibold text-xs sm:text-sm 2xl:text-[21.3px] 4xl:text-[32px] uppercase tracking-[0.05em] transition-all shadow-md hover:shadow-lg cursor-pointer"
                 >
                   Contact LUMA
                 </a>
@@ -104,7 +104,7 @@ export default function FaqSection() {
                           isOpen ? 'bg-[#EC2024]' : 'bg-gray-300 group-hover:bg-[#EC2024]'
                         }`}
                       />
-                      <span className="text-base sm:text-lg 2xl:text-xl 4xl:text-2xl font-semibold text-[#131313] group-hover:text-[#EC2024] transition-colors leading-snug">
+                      <span className="text-base sm:text-lg 2xl:text-[25.3px] 4xl:text-[38px] font-medium text-[#131313] group-hover:text-[#EC2024] transition-colors leading-snug">
                         {faq.q}
                       </span>
                     </div>
@@ -120,7 +120,7 @@ export default function FaqSection() {
                   </button>
 
                   {isOpen && (
-                    <div className="px-5 sm:px-6 2xl:px-7 4xl:px-8 pb-5 sm:pb-6 2xl:pb-7 4xl:pb-8 pt-1 text-[#555555] text-sm sm:text-[15px] 2xl:text-base 4xl:text-lg leading-relaxed border-t border-gray-100 animate-fadeIn">
+                    <div className="px-5 sm:px-6 2xl:px-7 4xl:px-8 pb-5 sm:pb-6 2xl:pb-7 4xl:pb-8 pt-1 text-[#555555] text-sm sm:text-[15px] 2xl:text-[20px] 4xl:text-[30px] font-normal leading-relaxed border-t border-gray-100 animate-fadeIn">
                       <p>{faq.a}</p>
                     </div>
                   )}

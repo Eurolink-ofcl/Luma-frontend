@@ -6,7 +6,7 @@ const trustItems = [
     iconAlt: 'Energy icon',
     iconSize: 'h-4 2xl:h-5 4xl:h-6 w-auto',
     content: (
-      <span className="text-white font-medium tracking-[0.1em] text-[12px] lg:text-[13px] 2xl:text-[15px] 4xl:text-[17px] uppercase">
+      <span className="text-white font-light tracking-normal text-[12px] lg:text-[13px] xl:text-[14.3px] 2xl:text-[19.1px] 4xl:text-[28.7px] uppercase">
         ONE &amp; ONLY 8-WAVELENGTH PANEL
       </span>
     ),
@@ -14,9 +14,9 @@ const trustItems = [
   {
     icon: null,
     content: (
-      <div className="flex items-center gap-1.5 text-[12px] lg:text-[13px] 2xl:text-[15px] 4xl:text-[17px] uppercase tracking-[0.1em]">
-        <span className="text-[#EC2024] font-semibold">CERTIFIED:</span>
-        <span className="text-white/95 font-medium">BSCI - ISO9001 - ISO14001 - ISO45001</span>
+      <div className="flex items-center gap-1.5 text-[12px] lg:text-[13px] xl:text-[14.3px] 2xl:text-[19.1px] 4xl:text-[28.7px] uppercase tracking-normal">
+        <span className="text-[#EC2024] font-medium">CERTIFIED:</span>
+        <span className="text-white/95 font-light">BSCI - ISO9001 - ISO14001 - ISO45001</span>
       </div>
     ),
   },
@@ -25,7 +25,7 @@ const trustItems = [
     iconAlt: 'MDSAP Badge',
     iconSize: 'h-3.5 2xl:h-4.5 4xl:h-5.5 w-auto',
     content: (
-      <span className="text-white font-medium tracking-[0.1em] text-[12px] lg:text-[13px] 2xl:text-[15px] 4xl:text-[17px] uppercase">
+      <span className="text-white font-light tracking-normal text-[12px] lg:text-[13px] xl:text-[14.3px] 2xl:text-[19.1px] 4xl:text-[28.7px] uppercase">
         MDSAP CERTIFIED
       </span>
     ),
@@ -35,7 +35,7 @@ const trustItems = [
     iconAlt: 'CE Shield',
     iconSize: 'h-3.5 2xl:h-4.5 4xl:h-5.5 w-auto',
     content: (
-      <span className="text-white font-medium tracking-[0.1em] text-[12px] lg:text-[13px] 2xl:text-[15px] 4xl:text-[17px] uppercase">
+      <span className="text-white font-light tracking-normal text-[12px] lg:text-[13px] xl:text-[14.3px] 2xl:text-[19.1px] 4xl:text-[28.7px] uppercase">
         CE CERTIFIED
       </span>
     ),
@@ -45,7 +45,7 @@ const trustItems = [
     iconAlt: 'Delivery Truck',
     iconSize: 'h-3 2xl:h-4 4xl:h-5 w-auto',
     content: (
-      <span className="text-white font-medium tracking-[0.1em] text-[12px] lg:text-[13px] 2xl:text-[15px] 4xl:text-[17px] uppercase">
+      <span className="text-white font-light tracking-normal text-[12px] lg:text-[13px] xl:text-[14.3px] 2xl:text-[19.1px] 4xl:text-[28.7px] uppercase">
         FREE GLOBAL DELIVERY
       </span>
     ),

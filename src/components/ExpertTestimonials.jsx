@@ -26,10 +26,10 @@ export default function ExpertTestimonials() {
       <div className="max-w-[1200px] 2xl:max-w-[1600px] 3xl:max-w-[1850px] 4xl:max-w-[2150px] mx-auto px-6 lg:px-8 2xl:px-12 4xl:px-16">
         {/* Section Header matching PSD Group 32 */}
         <div className="text-center max-w-3xl 2xl:max-w-4xl 4xl:max-w-5xl mx-auto mb-14 md:mb-16 2xl:mb-20">
-          <p className="text-xs sm:text-sm 2xl:text-base 4xl:text-lg uppercase tracking-[0.24em] font-semibold text-[#131313] mb-3">
+          <p className="text-xs sm:text-sm 2xl:text-[15.2px] 4xl:text-[22.8px] uppercase tracking-[0.2em] font-medium text-[#131313] mb-3">
             KNOW MORE ABOUT LUMA
           </p>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl 2xl:text-6xl 4xl:text-7xl font-extrabold tracking-tight uppercase leading-tight text-[#EC2024]">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[40px] 2xl:text-[30.4px] 4xl:text-[45.5px] font-extralight tracking-tight uppercase leading-tight text-[#EC2024]">
             WHAT EXPERTS SAY
           </h2>
         </div>
@@ -55,10 +55,10 @@ export default function ExpertTestimonials() {
 
                 {/* Expert Information matching PSD Group 32 */}
                 <div className="absolute top-8 sm:top-10 2xl:top-12 inset-x-6 sm:inset-x-8 text-center pointer-events-none">
-                  <h3 className="text-xl sm:text-2xl 2xl:text-3xl 4xl:text-4xl font-extrabold text-white tracking-wide uppercase drop-shadow-md mb-1.5">
+                  <h3 className="text-xl sm:text-2xl 2xl:text-[30.4px] 4xl:text-[45.5px] font-medium text-white tracking-wide uppercase drop-shadow-md mb-1.5">
                     {expert.name}
                   </h3>
-                  <p className="text-xs sm:text-sm 2xl:text-base 4xl:text-lg text-white/85 font-medium tracking-wider uppercase drop-shadow-sm">
+                  <p className="text-xs sm:text-sm 2xl:text-[16.7px] 4xl:text-[25px] text-white/85 font-medium tracking-wider uppercase drop-shadow-sm">
                     {expert.role}
                   </p>
                 </div>

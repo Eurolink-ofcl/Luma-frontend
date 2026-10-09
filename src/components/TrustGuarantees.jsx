@@ -43,12 +43,12 @@ export default function TrustGuarantees() {
               </div>
 
               {/* Title */}
-              <h3 className="text-base sm:text-lg 2xl:text-xl 4xl:text-2xl font-bold tracking-wider uppercase text-white mb-3 2xl:mb-4">
+              <h3 className="text-base sm:text-lg 2xl:text-[28.7px] 4xl:text-[43px] font-bold tracking-wide uppercase text-white mb-3 2xl:mb-4">
                 {item.title}
               </h3>
 
               {/* Description */}
-              <p className="text-xs sm:text-sm 2xl:text-base 4xl:text-lg text-gray-300 font-normal leading-relaxed max-w-[260px] 2xl:max-w-[320px] 4xl:max-w-[380px] mx-auto">
+              <p className="text-xs sm:text-sm 2xl:text-[20px] 4xl:text-[30px] text-gray-300 font-normal leading-relaxed max-w-[260px] 2xl:max-w-[340px] 4xl:max-w-[420px] mx-auto">
                 {item.description}
               </p>
             </div>
