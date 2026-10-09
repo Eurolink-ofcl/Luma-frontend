@@ -23,17 +23,15 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col font-['Manrope'] selection:bg-[#EC2024] selection:text-white antialiased">
-      {/* Top Banner Announcement (Layer 2) */}
-      <TopBanner />
-
-      {/* Main Navigation Bar (Layer 3) */}
-      <Navbar
-        onOpenCart={() => setIsCartOpen(true)}
-        onOpenMobile={() => setIsMobileOpen(true)}
-      />
-
-      {/* Hero Section (Layer 1) */}
-      <Hero />
+      {/* Hero Section with TopBanner and Navbar (Layer 1, 2, 3) */}
+      <div id="hero-wrapper" className="relative w-full">
+        <TopBanner />
+        <Navbar
+          onOpenCart={() => setIsCartOpen(true)}
+          onOpenMobile={() => setIsMobileOpen(true)}
+        />
+        <Hero />
+      </div>
 
       {/* Running Trust & Certification Strip (Layer 6) */}
       <TrustStrip />

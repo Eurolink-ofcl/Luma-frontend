@@ -14,7 +14,7 @@ export default function Footer({ onOpenCart }) {
   };
 
   return (
-    <footer className="relative w-full bg-[#FFFFFF] text-[#131313] font-['Manrope'] select-none">
+    <footer id="footer" className="relative w-full bg-[#FFFFFF] text-[#131313] font-['Manrope'] select-none">
       <div className="footer-container max-w-[1400px] 2xl:max-w-[1720px] 3xl:max-w-[1950px] 4xl:max-w-[2300px] mx-auto px-6 sm:px-8 lg:px-12 2xl:px-16 4xl:px-20">
         {/* Row 1: LET'S CONNECT (Layer 19) */}
         <div className="py-10 sm:py-14 2xl:py-16 4xl:py-20 flex flex-col lg:flex-row lg:items-center justify-between gap-8 border-b border-gray-200">
