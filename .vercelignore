@@ -1,0 +1,34 @@
+# Exclude massive local files and test artifacts
+*.psd
+*.zip
+*.py
+*.jsonl
+*.log
+
+# Exclude local scratch scripts and visual test suites
+monitor_tests
+psd_crops
+react_crops
+compare_crops
+slices
+responsive_tests
+
+# Exclude root screenshots while preserving assets in public/
+/test_*.png
+/screen_*.png
+/react_*.png
+/final_*.png
+/verified-*.png
+/macbook-*.png
+/about_comparison_final.jpg
+/clinical_tech_comparison_final.jpg
+/comparison_*.jpg
+/final_sections_comparison.jpg
+/psd_section_hero.jpg
+/react_comparison_final.jpg
+/top_preview*.png
+/user_*.png
+
+# Node modules & Git
+node_modules
+.git
