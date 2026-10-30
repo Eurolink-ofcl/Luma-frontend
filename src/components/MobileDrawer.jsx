@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-export default function MobileDrawer({ isOpen, onClose }) {
+export default function MobileDrawer({ isOpen, onClose, onNavigate }) {
   useEffect(() => {
     function handleKeyDown(e) {
       if (e.key === 'Escape' && isOpen) {
@@ -21,6 +21,14 @@ export default function MobileDrawer({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
+  const handleItemClick = (e, page, hash = '') => {
+    onClose();
+    if (onNavigate) {
+      e.preventDefault();
+      onNavigate(page, hash);
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 overflow-hidden lg:hidden">
       {/* Backdrop */}
@@ -34,11 +42,17 @@ export default function MobileDrawer({ isOpen, onClose }) {
           <div>
             {/* Header */}
             <div className="flex items-center justify-between pb-6 border-b border-white/10">
-              <img
-                src="/assets/luma-logo.png"
-                alt="LUMA"
-                className="h-8 w-auto object-contain"
-              />
+              <a
+                href="/"
+                onClick={(e) => handleItemClick(e, 'home')}
+                className="inline-flex items-center"
+              >
+                <img
+                  src="/assets/luma-logo.png"
+                  alt="LUMA"
+                  className="h-8 w-auto object-contain"
+                />
+              </a>
               <button
                 type="button"
                 onClick={onClose}
@@ -52,16 +66,16 @@ export default function MobileDrawer({ isOpen, onClose }) {
             {/* Nav list */}
             <ul className="flex flex-col gap-5 mt-8">
               {[
-                { label: 'ABOUT LUMA', href: '#about' },
-                { label: 'OUR PRODUCTS', href: '#products' },
-                { label: 'REVIEWS', href: '#reviews' },
-                { label: 'COMMUNITY', href: '#community' },
-                { label: 'CONTACT US', href: '#contact' },
+                { label: 'ABOUT LUMA', href: '/about', page: 'about', hash: '' },
+                { label: 'OUR PRODUCTS', href: '/products', page: 'products', hash: '' },
+                { label: 'REVIEWS', href: '/#reviews', page: 'home', hash: '#reviews' },
+                { label: 'COMMUNITY', href: '/#community', page: 'home', hash: '#community' },
+                { label: 'CONTACT US', href: '/#contact', page: 'home', hash: '#contact' },
               ].map((item) => (
                 <li key={item.label}>
                   <a
                     href={item.href}
-                    onClick={onClose}
+                    onClick={(e) => handleItemClick(e, item.page, item.hash)}
                     className="text-sm font-medium tracking-[0.05em] text-white hover:text-[#EC2024] transition-colors block uppercase"
                   >
                     {item.label}
@@ -74,8 +88,8 @@ export default function MobileDrawer({ isOpen, onClose }) {
           {/* Footer actions */}
           <div className="pt-6 border-t border-white/10 flex flex-col gap-4">
             <a
-              href="#get-panel"
-              onClick={onClose}
+              href="/#get-panel"
+              onClick={(e) => handleItemClick(e, 'home', '#get-panel')}
               className="w-full text-center py-2.5 px-5 border border-white/90 rounded text-xs font-medium tracking-[0.05em] uppercase text-white hover:bg-white hover:text-black transition-all"
             >
               GET YOUR PANEL

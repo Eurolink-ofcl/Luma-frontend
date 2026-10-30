@@ -50,11 +50,15 @@ export default function CurrencyDropdown() {
   }, []);
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div
+      className="relative"
+      style={{ '--u': 'calc(100vw / 3840)' }}
+      ref={dropdownRef}
+    >
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="inline-flex items-center gap-2 py-1.5 px-1 text-white font-medium text-[13.5px] cursor-pointer hover:opacity-90 transition-opacity"
+        className="inline-flex items-center gap-1.5 lg:gap-[calc(10*var(--u))] py-1 text-[#FFFFFF] font-medium text-[11px] lg:text-[calc(26*var(--u))] tracking-normal cursor-pointer hover:opacity-90 transition-opacity leading-none"
         aria-haspopup="true"
         aria-expanded={isOpen}
         aria-label="Select Currency"
@@ -63,7 +67,7 @@ export default function CurrencyDropdown() {
           <img
             src={selected.flag}
             alt={selected.code}
-            className="w-[22px] h-[22px] rounded-full object-cover shrink-0 border border-white/20"
+            className="w-[18px] h-[18px] lg:w-[calc(51*var(--u))] lg:h-[calc(51*var(--u))] rounded-full object-cover shrink-0 border border-white/20"
           />
         ) : (
           <span className="text-base leading-none">{selected.flagChar}</span>
@@ -71,14 +75,14 @@ export default function CurrencyDropdown() {
         <span className="inline-flex items-center gap-1 whitespace-nowrap">
           {selected.code === 'AED' ? (
             <>
-              AED <span className="font-['Tajawal'] text-[14.5px]">د.إ</span>
+              AED <span className="font-['Manrope'] lg:text-[calc(30*var(--u))]">د.إ</span>
             </>
           ) : (
             selected.label
           )}
         </span>
         <svg
-          className={`w-[9px] h-[6px] text-white/80 transition-transform duration-200 ${
+          className={`w-[8px] h-[5px] lg:w-[calc(24*var(--u))] lg:h-[calc(20*var(--u))] text-white transition-transform duration-200 ${
             isOpen ? 'rotate-180' : ''
           }`}
           viewBox="0 0 10 6"

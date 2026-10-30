@@ -3,52 +3,101 @@ import React from 'react';
 const guarantees = [
   {
     icon: '/assets/guarantees/truck.png',
+    iconW: 141,
+    iconH: 77,
+    colW: 522,
     title: 'FREE SHIPPING',
-    description: 'Premium delivery at no extra cost, with fast 1-4 day shipping worldwide.',
+    description: (
+      <>
+        Premium delivery at no extra cost,
+        <br />
+        with fast 1-4 day shipping worldwide.
+      </>
+    ),
   },
   {
     icon: '/assets/guarantees/trial.png',
+    iconW: 86,
+    iconH: 80,
+    colW: 567,
     title: '90 DAY TRIAL',
-    description: 'Experience real results or get 100% of your money back, guaranteed.',
+    description: (
+      <>
+        Experience real results or get
+        <br />
+        <span className="font-bold text-[#555555]">100% of your money back</span>, guaranteed.
+      </>
+    ),
   },
   {
     icon: '/assets/guarantees/warranty.png',
+    iconW: 75,
+    iconH: 81,
+    colW: 421,
     title: '3 YEAR WARRANTY',
-    description: 'Three full years of protection, unbeaten by any competitor.',
+    description: (
+      <>
+        Three full years of protection,
+        <br />
+        unbeaten by any competitor.
+      </>
+    ),
   },
   {
     icon: '/assets/guarantees/rating.png',
+    iconW: 79,
+    iconH: 80,
+    colW: 514,
     title: 'RATED 4.8/5',
-    description: "Join thousands of satisfied users with our 'Excellent' Trustpilot rating.",
+    description: (
+      <>
+        Join thousands of satisfied users
+        <br />
+        with our &lsquo;Excellent&rsquo; Trustpilot rating.
+      </>
+    ),
   },
 ];
 
 export default function TrustGuarantees() {
   return (
-    <section id="guarantees" className="relative w-full bg-[#080808] text-white py-16 lg:py-20 2xl:py-28 4xl:py-36 overflow-hidden font-['Manrope']">
-      <div className="max-w-[1400px] 2xl:max-w-[1750px] 3xl:max-w-[1950px] 4xl:max-w-[2300px] mx-auto px-6 lg:px-12 2xl:px-16 4xl:px-20">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 2xl:gap-12 4xl:gap-16 text-center">
+    <section
+      id="guarantees"
+      style={{
+        '--u': 'calc(100vw / 3840)',
+        '--m': 'calc(var(--u) * 2.2)',
+      }}
+      className="relative w-full bg-[#0A0A0B] text-[#FFFFFF] py-14 sm:py-16 lg:pt-[calc(119*var(--u))] lg:pb-[calc(155*var(--u))] overflow-hidden font-['Manrope']"
+    >
+      <div className="w-full max-w-[1440px] lg:max-w-none mx-auto px-6 sm:px-10 lg:pl-[calc(518*var(--u))] lg:pr-[calc(513*var(--u))]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-row lg:items-start lg:justify-between gap-10 sm:gap-12 lg:gap-0 text-center">
           {guarantees.map((item, idx) => (
             <div
               key={idx}
-              className="flex flex-col items-center group transition-transform duration-300 hover:-translate-y-1"
+              style={{
+                '--col-w': `${item.colW}`,
+                '--icon-w': `${item.iconW}`,
+                '--icon-h': `${item.iconH}`,
+              }}
+              className="flex flex-col items-center lg:w-[calc(var(--col-w)*var(--u))] shrink-0"
             >
-              {/* Authentic PSD Red Icon */}
-              <div className="h-14 2xl:h-20 4xl:h-24 flex items-center justify-center mb-5 2xl:mb-7">
+              {/* PSD Red Icon container: aligned to 81px height at 3840w (y = 19384..19465) */}
+              <div className="h-[42px] sm:h-[48px] lg:h-[calc(81*var(--u))] flex items-center justify-center">
                 <img
                   src={item.icon}
                   alt={item.title}
-                  className="max-h-12 2xl:max-h-16 4xl:max-h-20 w-auto object-contain filter drop-shadow-[0_2px_8px_rgba(236,32,36,0.25)] transition-transform duration-300 group-hover:scale-110"
+                  className="w-auto h-full lg:w-[calc(var(--icon-w)*var(--u))] lg:h-[calc(var(--icon-h)*var(--u))] object-contain block select-none"
+                  draggable={false}
                 />
               </div>
 
-              {/* Title */}
-              <h3 className="text-base sm:text-lg 2xl:text-[28.7px] 4xl:text-[43px] font-bold tracking-wide uppercase text-white mb-3 2xl:mb-4">
+              {/* Title: 40px at 3840w, Manrope-Bold (700), tracking 20 (0.02em), uppercase, #FFFFFF (y = 19501..19532, 36px below icon box) */}
+              <h3 className="mt-4 sm:mt-5 lg:mt-[calc(36*var(--u))] text-[16px] sm:text-[18px] lg:text-[calc(40*var(--u))] font-bold uppercase tracking-[0.02em] text-[#FFFFFF] leading-none">
                 {item.title}
               </h3>
 
-              {/* Description */}
-              <p className="text-xs sm:text-sm 2xl:text-[20px] 4xl:text-[30px] text-gray-300 font-normal leading-relaxed max-w-[260px] 2xl:max-w-[340px] 4xl:max-w-[420px] mx-auto">
+              {/* Description: 30px at 3840w, Manrope-Regular (400), leading 48px (1.6), tracking 20 (0.02em), #555555 (y = 19569..19647) */}
+              <p className="mt-2.5 sm:mt-3 lg:mt-[calc(30*var(--u))] text-[13px] sm:text-[14px] lg:text-[calc(30*var(--u))] font-normal tracking-[0.02em] text-[#555555] leading-[1.6] lg:leading-[calc(48*var(--u))]">
                 {item.description}
               </p>
             </div>

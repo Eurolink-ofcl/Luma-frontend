@@ -108,10 +108,15 @@ const questions = [
 
 export default function AssessmentQuiz() {
   const [currentStep, setCurrentStep] = useState(0); // 0 to 4 = questions, 5 = results
-  const [answers, setAnswers] = useState({});
+  const [answers, setAnswers] = useState({ 0: 0 });
+  const [hoveredIdx, setHoveredIdx] = useState(null);
 
   const handleSelectOption = (index) => {
     setAnswers((prev) => ({ ...prev, [currentStep]: index }));
+  };
+
+  const handleNext = () => {
+    setHoveredIdx(null);
     if (currentStep < questions.length - 1) {
       setCurrentStep((prev) => prev + 1);
     } else {
@@ -120,84 +125,103 @@ export default function AssessmentQuiz() {
   };
 
   const handlePrev = () => {
+    setHoveredIdx(null);
     if (currentStep > 0) {
       setCurrentStep((prev) => prev - 1);
     }
   };
 
   const handleRetake = () => {
-    setAnswers({});
+    setHoveredIdx(null);
+    setAnswers({ 0: 0 });
     setCurrentStep(0);
   };
 
   const currentQ = questions[currentStep];
+  const activeOptionIdx =
+    hoveredIdx !== null ? hoveredIdx : answers[currentStep];
 
   return (
     <section
       id="assessment"
-      className="relative w-full bg-[#0a0a0a] text-white py-20 lg:py-28 2xl:py-36 4xl:py-44 overflow-hidden font-['Manrope']"
+      style={{ '--u': 'calc(100vw / 3840)' }}
+      className="relative w-full bg-[#0A0A0B] text-white py-16 lg:pt-[calc(167*var(--u))] lg:pb-[calc(147*var(--u))] overflow-hidden font-['Manrope']"
     >
-      {/* Full-bleed unboxed subtle ambient glow matching PSD Group 26 */}
-      <div className="absolute inset-0 w-full h-full pointer-events-none bg-[radial-gradient(ellipse_70%_45%_at_50%_45%,rgba(236,32,36,0.08),transparent_70%)] z-0" />
-
-      <div className="relative z-10 max-w-[1200px] 2xl:max-w-[1600px] 3xl:max-w-[1850px] 4xl:max-w-[2150px] mx-auto px-6 lg:px-8 2xl:px-12 4xl:px-16">
-        {/* Header */}
-        <div className="text-center max-w-3xl 2xl:max-w-4xl 4xl:max-w-5xl mx-auto mb-14 md:mb-18 2xl:mb-24">
-          <p className="text-xs sm:text-sm 2xl:text-[15.2px] 4xl:text-[22.8px] uppercase tracking-[0.2em] font-medium text-[#EC2024] mb-3">
-            The LUMA 1-Minute Assessment
+      <div className="relative z-10 w-full max-w-[1400px] lg:max-w-none mx-auto px-6 lg:px-0">
+        {/* Section Header (PSD Group 26: y=10905..11145 on 3840w canvas) */}
+        <div className="text-center mx-auto">
+          {/* 'THE LUMA 1-MINUTE ASSESSMENT': Manrope-Medium (500), 40px at 3840w, tracking 20 (0.02em), #FFFFFF */}
+          <p className="text-xs sm:text-sm lg:text-[calc(40*var(--u))] uppercase tracking-[0.02em] font-medium text-[#FFFFFF] leading-none">
+            THE LUMA 1-MINUTE ASSESSMENT
           </p>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[40px] 2xl:text-[30.4px] 4xl:text-[45.5px] font-extralight tracking-tight uppercase leading-tight text-white">
-            Find the light that fits you
+
+          {/* 'FIND THE LIGHT THAT FITS YOU': Manrope-ExtraLight (200), 80px at 3840w, tracking 20 (0.02em), #FFFFFF & #ED2024, gap 47px */}
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[calc(80*var(--u))] font-extralight tracking-[0.02em] uppercase leading-none mt-3 lg:mt-[calc(47*var(--u))]">
+            <span className="text-[#FFFFFF]">FIND THE </span>
+            <span className="text-[#ED2024]">LIGHT</span>
+            <span className="text-[#FFFFFF]"> THAT </span>
+            <span className="text-[#ED2024]">FITS YOU</span>
           </h2>
-          <p className="text-white/70 text-sm sm:text-base 2xl:text-[20px] 4xl:text-[30px] leading-relaxed font-normal mt-3">
+
+          {/* Subtitle: Manrope-Regular (400), 30px at 3840w, tracking 20 (0.02em), #555555, gap 71px */}
+          <p className="text-[#555555] text-xs sm:text-sm lg:text-[calc(30*var(--u))] leading-relaxed lg:leading-none font-normal tracking-[0.02em] mt-4 lg:mt-[calc(71*var(--u))]">
             Five questions. One panel, matched to your body, your space and your ritual.
           </p>
         </div>
 
-        {/* Step Content matching PSD Group 26 Rectangle 53 copy */}
+        {/* Step Content matching PSD Group 26 Rectangle 53 copy (x=1171..2670, w=1500, y=11256..12662, gap 111px) */}
         {currentStep < 5 ? (
-          <div className="max-w-2xl 2xl:max-w-3xl 4xl:max-w-4xl mx-auto bg-[#0E0E10] border border-white/15 rounded-[24px] 2xl:rounded-[36px] 4xl:rounded-[44px] p-6 sm:p-10 2xl:p-14 4xl:p-18 shadow-2xl">
-            {/* Discrete 5-Bar Progress Indicator matching PSD Group 26 Nav (Rectangle 54) */}
-            <div className="grid grid-cols-5 gap-2.5 sm:gap-3.5 2xl:gap-4 mb-8 2xl:mb-10">
+          <div className="max-w-2xl lg:max-w-none lg:w-[calc(1500*var(--u))] mx-auto mt-10 lg:mt-[calc(111*var(--u))] bg-[#000000] border lg:border-[calc(2*var(--u))] border-[#555555] rounded-[24px] lg:rounded-[calc(60*var(--u))] px-6 sm:px-10 lg:px-[calc(50*var(--u))] pt-8 sm:pt-10 lg:pt-[calc(80*var(--u))] pb-8 sm:pb-10 lg:pb-[calc(79*var(--u))]">
+            {/* Discrete 5-Bar Progress Indicator matching PSD Group 26 Nav (Rectangle 54, x=1221..2621, y=11336..11341, h=5px) */}
+            <div className="grid grid-cols-5 gap-2.5 sm:gap-3.5 lg:gap-[calc(18.4*var(--u))]">
               {questions.map((_, i) => (
                 <div
                   key={i}
-                  className={`h-1.5 2xl:h-2 rounded-full transition-all duration-300 ${
-                    i <= currentStep ? 'bg-[#EC2024]' : 'bg-[#333333]'
+                  className={`h-1 lg:h-[calc(5*var(--u))] rounded-full transition-colors duration-300 ${
+                    i <= currentStep ? 'bg-[#ED2024]' : 'bg-[#555555]'
                   }`}
                 />
               ))}
             </div>
 
-            {/* Question Header Centered matching PSD */}
-            <div className="text-center mb-8 2xl:mb-10">
-              <span className="text-xs sm:text-sm 2xl:text-[20px] 4xl:text-[30px] uppercase tracking-[0.1em] font-normal text-gray-400 block mb-2">
-                Question {currentStep + 1} of 5
+            {/* Question Header Centered matching PSD (y=11432..11565) */}
+            <div className="text-center mt-7 lg:mt-[calc(91*var(--u))]">
+              {/* 'QUESTION 1 OF 5': Manrope-Regular (400), 30px at 3840w, tracking 100 (0.1em), #555555 */}
+              <span className="text-xs sm:text-sm lg:text-[calc(30*var(--u))] uppercase tracking-[0.1em] font-normal text-[#555555] block leading-none lg:whitespace-pre">
+                {`QUESTION  ${currentStep + 1}  OF  5`}
               </span>
-              <h3 className="text-2xl sm:text-3xl 2xl:text-[25.6px] 4xl:text-[38.3px] font-extralight text-white tracking-tight leading-snug">
+
+              {/* Question Title: Manrope-ExtraLight (200), 60px at 3840w, tracking 20 (0.02em), #FFFFFF, gap 50px */}
+              <h3 className="text-xl sm:text-2xl md:text-3xl lg:text-[calc(60*var(--u))] font-extralight text-[#FFFFFF] tracking-[0.02em] leading-snug lg:leading-none mt-3 lg:mt-[calc(50*var(--u))]">
                 {currentQ.question}
               </h3>
             </div>
 
-            {/* Options List matching PSD Rectangle 53 copy */}
-            <div className="space-y-3.5 2xl:space-y-4.5 mb-10 2xl:mb-12">
+            {/* Options List matching PSD Subgroup 1..5 (x=1221..2621, w=1400, h=189 each, gap 33px, top offset 89px) */}
+            <div
+              className="flex flex-col gap-3.5 lg:gap-[calc(33*var(--u))] mt-7 lg:mt-[calc(89*var(--u))]"
+              onMouseLeave={() => setHoveredIdx(null)}
+            >
               {currentQ.options.map((option, idx) => {
-                const isSelected = answers[currentStep] === idx;
+                const isHighlighted = activeOptionIdx === idx;
                 return (
                   <button
                     key={idx}
                     type="button"
+                    onMouseEnter={() => setHoveredIdx(idx)}
                     onClick={() => handleSelectOption(idx)}
-                    className={`w-full text-left p-5 sm:p-6 2xl:p-7 rounded-[14px] 2xl:rounded-[18px] border transition-all duration-200 cursor-pointer flex flex-col justify-center ${
-                      isSelected
-                        ? 'border-[#EC2024] bg-[#EC2024]/15 shadow-[0_0_20px_rgba(236,32,36,0.25)] ring-1 ring-[#EC2024]'
-                        : 'border-white/10 bg-[#161618] hover:border-white/30 hover:bg-[#1D1D20]'
+                    className={`w-full text-left px-5 sm:px-6 lg:px-[calc(57*var(--u))] py-4 sm:py-5 lg:py-0 lg:h-[calc(189*var(--u))] rounded-[12px] lg:rounded-[calc(20*var(--u))] bg-[#000000] border lg:border-[calc(2*var(--u))] transition-all duration-200 cursor-pointer flex flex-col justify-center ${
+                      isHighlighted
+                        ? 'border-[#8A1517] shadow-[0_0_20px_2px_rgba(237,32,36,0.32)] lg:shadow-[0_0_calc(40*var(--u))_calc(4*var(--u))_rgba(237,32,36,0.32),0_0_calc(16*var(--u))_rgba(237,32,36,0.22)]'
+                        : 'border-[#555555] shadow-none'
                     }`}
                   >
-                    <span className="text-base sm:text-lg 2xl:text-[17.9px] 4xl:text-[26.8px] font-semibold text-white mb-1">
+                    {/* Option Title: Manrope-SemiBold (600), 42px at 3840w, tracking 20 (0.02em), #FFFFFF */}
+                    <span className="text-base sm:text-lg lg:text-[calc(42*var(--u))] font-semibold text-[#FFFFFF] tracking-[0.02em] leading-none">
                       {option.title}
                     </span>
-                    <span className="text-xs sm:text-sm 2xl:text-[20px] 4xl:text-[30px] font-normal text-gray-400">
+                    {/* Option Subtitle: Manrope-Regular (400), 30px at 3840w, tracking 20 (0.02em), #555555 */}
+                    <span className="text-xs sm:text-sm lg:text-[calc(30*var(--u))] font-normal text-[#555555] tracking-[0.02em] leading-none mt-2 lg:mt-[calc(24*var(--u))]">
                       {option.subtitle}
                     </span>
                   </button>
@@ -205,15 +229,28 @@ export default function AssessmentQuiz() {
               })}
             </div>
 
-            {/* Footer Navigation matching PSD Back-Btn & Next-Btn */}
-            <div className="flex items-center justify-between pt-4 border-t border-white/10">
+            {/* Footer Navigation matching PSD Back-Btn & Next-Btn (y=12557..12583, gap 47px, no top border) */}
+            <div className="flex items-center justify-between mt-6 lg:mt-[calc(47*var(--u))] lg:px-[calc(9*var(--u))]">
               {currentStep > 0 ? (
                 <button
                   type="button"
                   onClick={handlePrev}
-                  className="text-xs sm:text-sm 2xl:text-[20px] 4xl:text-[30px] text-gray-400 hover:text-white flex items-center gap-2 uppercase tracking-wider font-medium transition-colors cursor-pointer"
+                  className="text-xs sm:text-sm lg:text-[calc(30*var(--u))] text-[#555555] hover:text-[#FFFFFF] inline-flex items-center gap-1.5 lg:gap-[calc(12*var(--u))] tracking-[0.02em] font-medium leading-none transition-colors cursor-pointer group"
                 >
-                  &larr; Back
+                  <svg
+                    viewBox="0 0 16 26"
+                    fill="none"
+                    className="w-2.5 h-3.5 lg:w-[calc(16*var(--u))] lg:h-[calc(26*var(--u))] text-[#ED2024] group-hover:-translate-x-0.5 transition-transform"
+                  >
+                    <path
+                      d="M14 2L3 13L14 24"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  <span>Back</span>
                 </button>
               ) : (
                 <div />
@@ -223,78 +260,124 @@ export default function AssessmentQuiz() {
                 <button
                   type="button"
                   onClick={handleNext}
-                  className="text-xs sm:text-sm 2xl:text-[20px] 4xl:text-[30px] text-[#EC2024] hover:text-[#ff3b3e] flex items-center gap-2 uppercase tracking-wider font-medium transition-colors cursor-pointer"
+                  className="text-xs sm:text-sm lg:text-[calc(30*var(--u))] text-[#555555] hover:text-[#FFFFFF] inline-flex items-center gap-1.5 lg:gap-[calc(11*var(--u))] tracking-[0.02em] font-medium leading-none transition-colors cursor-pointer group"
                 >
-                  Next &rarr;
+                  <span>Next</span>
+                  <svg
+                    viewBox="0 0 16 26"
+                    fill="none"
+                    className="w-2.5 h-3.5 lg:w-[calc(16*var(--u))] lg:h-[calc(26*var(--u))] text-[#ED2024] group-hover:translate-x-0.5 transition-transform"
+                  >
+                    <path
+                      d="M2 2L13 13L2 24"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
                 </button>
               )}
             </div>
           </div>
         ) : (
-          /* Recommendation Result Screen (Matching PSD) */
-          <div className="max-w-4xl mx-auto bg-white/3 border border-white/10 rounded-[24px] p-8 sm:p-14 shadow-2xl backdrop-blur-md">
-            <div className="text-center mb-8">
-              <span className="inline-block px-3.5 py-1 rounded-full text-xs 2xl:text-[20px] 4xl:text-[30px] font-normal uppercase tracking-[0.1em] bg-red-500/20 text-[#EC2024] border border-red-500/30 mb-3">
-                Your Match
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-              {/* Product Visual */}
-              <div className="flex justify-center p-6 bg-white/2 rounded-[16px] border border-white/5">
+          /* Recommendation Result Screen matching PSD Subgroup 6 (x=1171..2670, y=11256..12645) */
+          <div className="max-w-2xl lg:max-w-none lg:w-[calc(1500*var(--u))] mx-auto mt-10 lg:mt-[calc(111*var(--u))] bg-[#000000] border lg:border-[calc(2*var(--u))] border-[#555555] rounded-[24px] lg:rounded-[calc(60*var(--u))] px-6 sm:px-10 lg:px-[calc(50*var(--u))] pt-8 sm:pt-10 lg:pt-[calc(71*var(--u))] pb-8 sm:pb-10 lg:pb-[calc(89*var(--u))]">
+            {/* Top Product Visual & Match Title (PSD Layer 10 + Your Match + LUMA Surge) */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 lg:gap-[calc(36*var(--u))]">
+              <div className="flex justify-center shrink-0">
                 <img
                   src="/assets/products/luma-surge.png"
                   alt="LUMA Surge Panel"
-                  className="max-h-[380px] w-auto object-contain drop-shadow-[0_10px_30px_rgba(236,32,36,0.3)]"
+                  className="h-48 sm:h-60 lg:w-[calc(363*var(--u))] lg:h-[calc(528*var(--u))] object-contain block"
                 />
               </div>
 
-              {/* Product Match Details */}
-              <div className="space-y-5">
-                <div>
-                  <h3 className="text-3xl sm:text-4xl 2xl:text-[63.9px] 4xl:text-[95.8px] font-normal text-white uppercase tracking-tight">
-                    LUMA <span className="font-semibold text-[#EC2024]">Surge</span>
-                  </h3>
-                  <p className="text-sm sm:text-base 2xl:text-[20px] 4xl:text-[30px] text-white/70 font-normal mt-1">
-                    Balanced power for the body in motion.
+              <div className="text-center sm:text-left">
+                {/* 'YOUR MATCH': Manrope-Regular (400), 30px at 3840w, tracking 100 (0.1em), #ED2024 */}
+                <span className="block text-xs sm:text-sm lg:text-[calc(30*var(--u))] font-normal uppercase tracking-[0.1em] text-[#ED2024] leading-none">
+                  YOUR MATCH
+                </span>
+
+                {/* 'LUMA Surge': Manrope-Regular (400), 150px at 3840w, leading 130px (0.87), tracking 20 (0.02em) */}
+                <h3 className="text-4xl sm:text-5xl lg:text-[calc(150*var(--u))] font-normal tracking-[0.02em] leading-[0.9] lg:leading-[0.87] mt-3 lg:mt-[calc(40*var(--u))]">
+                  <span className="block text-[#FFFFFF]">LUMA</span>
+                  <span className="block text-[#ED2024]">Surge</span>
+                </h3>
+
+                {/* 'Balanced power for the body in motion.': Manrope-Regular (400), 30px at 3840w, #555555 */}
+                <p className="text-xs sm:text-sm lg:text-[calc(30*var(--u))] text-[#555555] font-normal tracking-[0.02em] leading-none mt-4 lg:mt-[calc(36*var(--u))]">
+                  Balanced power for the body in motion.
+                </p>
+              </div>
+            </div>
+
+            {/* 3 Feature Rows matching PSD Group 25 (y=11908..12212, 101px each, 18px red dot, 36px font) */}
+            <div className="mt-8 lg:mt-[calc(53*var(--u))] border-t border-[#333333]">
+              {[
+                {
+                  bold: 'Faster recovery.',
+                  rest: ' Broader coverage to support muscles after effort.',
+                },
+                {
+                  bold: 'Calmer evenings.',
+                  rest: ' Wind down with warm, restorative light.',
+                },
+                {
+                  bold: 'Everyday versatility.',
+                  rest: ' Face and upper body in one graceful session.',
+                },
+              ].map((row, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-3 lg:gap-[calc(38*var(--u))] py-3.5 lg:py-0 lg:h-[calc(101*var(--u))] border-b border-[#333333] lg:pl-[calc(10*var(--u))]"
+                >
+                  <span className="w-2.5 h-2.5 lg:w-[calc(18*var(--u))] lg:h-[calc(18*var(--u))] rounded-full bg-[#ED2024] shrink-0" />
+                  <p className="text-xs sm:text-sm lg:text-[calc(36*var(--u))] tracking-[0.02em] leading-snug lg:leading-none">
+                    <span className="font-semibold text-[#FFFFFF]">{row.bold}</span>
+                    <span className="font-normal text-[#555555]">{row.rest}</span>
                   </p>
                 </div>
+              ))}
+            </div>
 
-                <div className="space-y-3 py-2 text-xs sm:text-sm 2xl:text-[13.7px] 4xl:text-[20.5px] text-white/80 leading-relaxed border-y border-white/10">
-                  <div className="flex items-start gap-2.5">
-                    <span className="text-[#EC2024] font-bold mt-0.5">•</span>
-                    <span className="font-semibold">Faster recovery. Broader coverage to support muscles after effort.</span>
-                  </div>
-                  <div className="flex items-start gap-2.5">
-                    <span className="text-[#EC2024] font-bold mt-0.5">•</span>
-                    <span className="font-semibold">Calmer evenings. Wind down with warm, restorative light.</span>
-                  </div>
-                  <div className="flex items-start gap-2.5">
-                    <span className="text-[#EC2024] font-bold mt-0.5">•</span>
-                    <span className="font-semibold">Everyday versatility. Face and upper body in one graceful session.</span>
-                  </div>
-                </div>
+            {/* Summary sentence: Manrope-Regular (400), 30px at 3840w, #555555 */}
+            <p className="text-center text-xs sm:text-sm lg:text-[calc(30*var(--u))] text-[#555555] font-normal tracking-[0.02em] leading-none mt-6 lg:mt-[calc(73*var(--u))]">
+              You want real performance without the full commitment of space.
+            </p>
 
-                <p className="text-xs 2xl:text-[20px] 4xl:text-[30px] text-white/60 font-normal">
-                  You want real performance without the full commitment of space.
-                </p>
+            {/* Full-width CTA Button (PSD Rectangle 11: w=1404, h=86, #ED2024, 32px SemiBold, #F2F1ED) */}
+            <div className="mt-6 lg:mt-[calc(71*var(--u))]">
+              <a
+                href="#products"
+                className="w-full h-11 lg:h-[calc(86*var(--u))] inline-flex items-center justify-center bg-[#ED2024] hover:bg-[#c9181b] text-[#F2F1ED] font-semibold text-xs sm:text-sm lg:text-[calc(32*var(--u))] uppercase tracking-[0.05em] rounded-[6px] lg:rounded-[calc(10*var(--u))] transition-colors cursor-pointer leading-none"
+              >
+                EXPLORE SURGE
+              </a>
+            </div>
 
-                <div className="pt-2 flex flex-col sm:flex-row items-center gap-4">
-                  <a
-                    href="#products"
-                    className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-3.5 bg-[#EC2024] hover:bg-[#c9181b] text-white font-semibold text-xs sm:text-sm 2xl:text-[21.3px] 4xl:text-[32px] uppercase tracking-[0.05em] rounded-[6px] transition-all shadow-lg hover:shadow-red-500/20 cursor-pointer"
-                  >
-                    Explore SURGE
-                  </a>
-                  <button
-                    type="button"
-                    onClick={handleRetake}
-                    className="text-xs sm:text-sm 2xl:text-[20px] 4xl:text-[30px] text-white/60 hover:text-white font-medium transition-colors cursor-pointer underline underline-offset-4"
-                  >
-                    Retake Assessment
-                  </button>
-                </div>
-              </div>
+            {/* Centered '< Retake' Button matching PSD Back-Btn (y=12530..12556, gap 59px) */}
+            <div className="mt-5 lg:mt-[calc(59*var(--u))] flex justify-center">
+              <button
+                type="button"
+                onClick={handleRetake}
+                className="text-xs sm:text-sm lg:text-[calc(30*var(--u))] text-[#555555] hover:text-[#FFFFFF] font-medium tracking-[0.02em] inline-flex items-center gap-1.5 lg:gap-[calc(12*var(--u))] leading-none transition-colors cursor-pointer group"
+              >
+                <svg
+                  viewBox="0 0 16 26"
+                  fill="none"
+                  className="w-2.5 h-3.5 lg:w-[calc(16*var(--u))] lg:h-[calc(26*var(--u))] text-[#ED2024] group-hover:-translate-x-0.5 transition-transform"
+                >
+                  <path
+                    d="M14 2L3 13L14 24"
+                    stroke="currentColor"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <span>Retake</span>
+              </button>
             </div>
           </div>
         )}

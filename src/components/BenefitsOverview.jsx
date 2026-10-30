@@ -3,160 +3,161 @@ import React from 'react';
 const benefits = [
   {
     id: 'cellular',
-    title: 'Cellular Regeneration',
-    duration: '15 Min',
-    description: 'Red & near-infrared light to support cellular energy & natural renewal from within.',
+    titleLines: ['CELLULAR', 'REGENERATION'],
+    duration: '15',
+    descriptionLines: [
+      'Red & near-infrared light to support cellular',
+      'energy & natural renewal from within.',
+    ],
     image: '/assets/benefits/cellular.jpg',
   },
   {
     id: 'wellness',
-    title: 'General Wellness',
-    duration: '15 Min',
-    description: 'A calming full-body session to help you unwind, restore balance, and feel recharged.',
+    titleLines: ['GENERAL', 'WELLNESS'],
+    duration: '15',
+    descriptionLines: [
+      'A calming full-body session to help you',
+      'unwind, restore balance, and feel recharged.',
+    ],
     image: '/assets/benefits/wellness.jpg',
   },
   {
     id: 'clearskin',
-    title: 'Clear Skin',
-    duration: '10 Min',
-    description: 'Targeted light to support a clearer, smoother, more even-looking complexion.',
+    titleLines: ['CLEAR', 'SKIN'],
+    duration: '10',
+    descriptionLines: [
+      'Targeted light to support a clearer, smoother,',
+      'more even-looking complexion.',
+    ],
     image: '/assets/benefits/clearskin.jpg',
   },
   {
     id: 'fatloss',
-    title: 'Fat Loss',
-    duration: '15 Min',
-    description: 'Designed to complement your training & nutrition as you work toward your body goals.',
+    titleLines: ['FAT', 'LOSS'],
+    duration: '15',
+    descriptionLines: [
+      'Designed to complement your training',
+      '&nutrition as you work toward your body goals.',
+    ],
     image: '/assets/benefits/fatloss.jpg',
   },
   {
     id: 'recovery',
-    title: 'Muscle Recovery',
-    duration: '15 Min',
-    description: 'Eases post-workout soreness & supports faster recovery.',
+    titleLines: ['MUSCLE', 'RECOVERY'],
+    duration: '15',
+    descriptionLines: [
+      'Eases post-workout soreness',
+      '& supports faster recovery.',
+    ],
     image: '/assets/benefits/recovery.jpg',
   },
   {
     id: 'scalp',
-    title: 'Scalp Health',
-    duration: '10 Min',
-    description: 'Gentle light to nurture the scalp and support healthier-looking, fuller hair.',
+    titleLines: ['SCALP', 'HEALTH'],
+    duration: '10',
+    descriptionLines: [
+      'Gentle light to nurture the scalp and support',
+      'healthier-looking, fuller hair.',
+    ],
     image: '/assets/benefits/scalp.jpg',
   },
   {
     id: 'scar',
-    title: 'Scar Healing',
-    duration: '15 Min',
-    description: 'Supports skin repair for smoother more even-looking scars.',
+    titleLines: ['SCAR', 'HEALING'],
+    duration: '15',
+    descriptionLines: [
+      'Supports skin repair for smoother',
+      'more even-looking scars.',
+    ],
     image: '/assets/benefits/scar.jpg',
   },
   {
     id: 'brain',
-    title: 'Brain Health',
-    duration: '15 Min',
-    description: 'Supports mental clarity, focus, & everyday cognitive wellness.',
+    titleLines: ['BRAIN', 'HEALTH'],
+    duration: '15',
+    descriptionLines: [
+      'Supports mental clarity, focus, & everyday',
+      'cognitive wellness.',
+    ],
     image: '/assets/benefits/brain.jpg',
   },
 ];
+
+function BenefitCard({ item }) {
+  return (
+    <div className="group flex flex-col w-full lg:w-[calc(800*var(--u))] transition-all duration-300 select-none">
+      {/* Image Container matching PSD Rectangle 51 (800x500, sharp corners in PSD) */}
+      <div className="w-full aspect-[8/5] lg:h-[calc(500*var(--u))] overflow-hidden rounded-none bg-[#EAEAEA] relative">
+        <img
+          src={item.image}
+          alt={item.titleLines.join(' ')}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 block"
+        />
+      </div>
+
+      {/* Card Meta Content matching PSD Group 1..8 (y_offset = 49px below image) */}
+      <div className="pt-4 lg:pt-[calc(49*var(--u))] flex flex-col">
+        <div className="flex items-start justify-between gap-3">
+          <h3 className="text-[16px] sm:text-[18px] lg:text-[calc(36*var(--u))] font-semibold text-[#131313] uppercase leading-[1.15] tracking-[0.02em]">
+            <span className="block">{item.titleLines[0]}</span>
+            <span className="block">{item.titleLines[1]}</span>
+          </h3>
+
+          {/* Duration Circular Badge matching PSD Ellipse 5 (83x83px at 3840w, Red outline, stacked text) */}
+          <div className="w-10 h-10 lg:w-[calc(83*var(--u))] lg:h-[calc(83*var(--u))] rounded-full border lg:border-[calc(3*var(--u))] border-[#ED2024] bg-white flex flex-col items-center justify-center shrink-0 select-none">
+            <span className="text-xs lg:text-[calc(24*var(--u))] font-medium text-[#131313] leading-[1.05]">
+              {item.duration}
+            </span>
+            <span className="text-[10px] lg:text-[calc(22*var(--u))] font-medium text-[#131313] leading-[1.05]">
+              Min
+            </span>
+          </div>
+        </div>
+
+        {/* Description (y=6700..6778, gap 30px below title/badge, 30px font at 3840w, #555555) */}
+        <p className="mt-2.5 lg:mt-[calc(30*var(--u))] text-[#555555] text-xs sm:text-[13px] lg:text-[calc(30*var(--u))] font-normal leading-[1.55] tracking-[0.01em]">
+          <span className="lg:block">{item.descriptionLines[0]} </span>
+          <span className="lg:block">{item.descriptionLines[1]}</span>
+        </p>
+      </div>
+    </div>
+  );
+}
 
 export default function BenefitsOverview() {
   return (
     <section
       id="benefits"
-      className="relative w-full bg-white text-[#131313] py-20 lg:py-28 2xl:py-36 4xl:py-44 overflow-hidden font-['Manrope']"
+      style={{ '--u': 'calc(100vw / 3840)' }}
+      className="relative w-full bg-white text-[#131313] py-16 lg:pt-[calc(167*var(--u))] lg:pb-[calc(167*var(--u))] overflow-hidden font-['Manrope']"
     >
-      <div className="benefits-container max-w-[1400px] 2xl:max-w-[1750px] 3xl:max-w-[1950px] 4xl:max-w-[2300px] mx-auto px-6 lg:px-12 2xl:px-16 4xl:px-20">
-        {/* Section Header */}
-        <div className="text-center max-w-3xl 2xl:max-w-4xl 4xl:max-w-5xl mx-auto mb-16 md:mb-20 2xl:mb-24">
-          <p className="text-xs sm:text-sm 2xl:text-[15.2px] 4xl:text-[22.8px] uppercase tracking-[0.2em] font-medium mb-3">
+      {/* Container aligned to PSD Group 18 (x=519..3322 -> left=519px, right=518px, width=2803px on 3840w) */}
+      <div className="benefits-container max-w-[1400px] lg:max-w-none mx-auto px-6 lg:px-0 lg:pl-[calc(519*var(--u))] lg:pr-[calc(518*var(--u))]">
+        {/* Section Header (y=5700..5940) */}
+        <div className="text-center mx-auto mb-12 lg:mb-[calc(98*var(--u))]">
+          <p className="text-xs sm:text-sm lg:text-[calc(40*var(--u))] uppercase tracking-[0.02em] font-medium leading-none">
             <span className="text-[#131313]">WHY </span>
-            <span className="text-[#EC2024]">LUMA</span>
+            <span className="text-[#ED2024]">LUMA</span>
           </p>
-          <h2 className="text-[#131313] font-extralight text-2xl sm:text-3xl md:text-4xl lg:text-[40px] 2xl:text-[30.4px] 4xl:text-[45.5px] tracking-tight uppercase leading-tight mt-2">
+          <h2 className="text-[#131313] font-extralight text-2xl sm:text-3xl md:text-4xl lg:text-[calc(80*var(--u))] tracking-[0.02em] uppercase leading-none mt-3 lg:mt-[calc(47*var(--u))]">
             BENEFITS OVERVIEW
           </h2>
-          <p className="text-[#444444] text-sm sm:text-base 2xl:text-[20px] 4xl:text-[30px] leading-relaxed mt-4 font-normal">
+          <p className="text-[#555555] text-sm sm:text-base lg:text-[calc(30*var(--u))] leading-none mt-4 lg:mt-[calc(72*var(--u))] font-normal tracking-[0.01em]">
             Evidence-based protocols calibrated for specific wellness outcomes.
           </p>
         </div>
 
-        {/* Benefits Grid (Row 1 & 2: 3 cols, Row 3: 2 centered cols) - Unboxed cards matching PSD Group 18 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10 2xl:gap-14 4xl:gap-16">
+        {/* Rows 1 & 2 (3 columns: 800px each, horizontal gap 201px, vertical gap 124px on 3840w) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-x-[calc(201*var(--u))] lg:gap-y-[calc(124*var(--u))]">
           {benefits.slice(0, 6).map((item) => (
-            <div
-              key={item.id}
-              className="group flex flex-col transition-all duration-300 select-none"
-            >
-              {/* Image Container matching PSD Rectangle 51 (800x500 aspect ratio) */}
-              <div className="w-full aspect-[8/5] overflow-hidden rounded-[18px] 2xl:rounded-[24px] 4xl:rounded-[30px] bg-[#EAEAEA] relative shadow-sm">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-
-              {/* Card Meta Content directly on section background (Unboxed per PSD Group 18) */}
-              <div className="pt-5 2xl:pt-6 flex flex-col">
-                <div className="flex items-start justify-between gap-3 mb-2 2xl:mb-3">
-                  <h3 className="text-lg sm:text-xl 2xl:text-[21.6px] 4xl:text-[32.4px] font-semibold text-[#131313] leading-snug">
-                    {item.title}
-                  </h3>
-                  {/* Duration Circular Badge matching PSD Ellipse 5 (Red outline, stacked text) */}
-                  <div className="w-11 h-11 2xl:w-13 2xl:h-13 4xl:w-15 4xl:h-15 rounded-full border-2 border-[#EC2024] bg-white flex flex-col items-center justify-center shrink-0 shadow-xs select-none">
-                    <span className="text-sm 2xl:text-[16px] 4xl:text-[24px] font-medium text-[#131313] leading-none">
-                      {item.duration.replace(/[^0-9]/g, '')}
-                    </span>
-                    <span className="text-[10px] 2xl:text-[11px] 4xl:text-xs font-medium text-[#555555] leading-none mt-0.5">
-                      Min
-                    </span>
-                  </div>
-                </div>
-                <p className="text-[#555555] text-xs sm:text-[14px] 2xl:text-[20px] 4xl:text-[30px] font-normal leading-relaxed">
-                  {item.description}
-                </p>
-              </div>
-            </div>
+            <BenefitCard key={item.id} item={item} />
           ))}
         </div>
 
-        {/* Row 3 (Bottom 2 Centered Cards) - Unboxed matching PSD Group 18 */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 2xl:gap-14 4xl:gap-16 max-w-[920px] 2xl:max-w-[1180px] 4xl:max-w-[1450px] mx-auto mt-10 lg:mt-12 2xl:mt-16">
+        {/* Row 3 (Bottom 2 Centered Cards: x=1019..2820, width=1801px, gap 201px, top margin 124px on 3840w) */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-x-[calc(201*var(--u))] lg:w-[calc(1801*var(--u))] mx-auto mt-8 lg:mt-[calc(124*var(--u))]">
           {benefits.slice(6, 8).map((item) => (
-            <div
-              key={item.id}
-              className="group flex flex-col transition-all duration-300 select-none"
-            >
-              {/* Image Container matching PSD Rectangle 51 */}
-              <div className="w-full aspect-[8/5] overflow-hidden rounded-[18px] 2xl:rounded-[24px] 4xl:rounded-[30px] bg-[#EAEAEA] relative shadow-sm">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              </div>
-
-              {/* Card Meta Content directly on section background */}
-              <div className="pt-5 2xl:pt-6 flex flex-col">
-                <div className="flex items-start justify-between gap-3 mb-2 2xl:mb-3">
-                  <h3 className="text-lg sm:text-xl 2xl:text-[21.6px] 4xl:text-[32.4px] font-semibold text-[#131313] leading-snug">
-                    {item.title}
-                  </h3>
-                  {/* Duration Circular Badge matching PSD Ellipse 5 */}
-                  <div className="w-11 h-11 2xl:w-13 2xl:h-13 4xl:w-15 4xl:h-15 rounded-full border-2 border-[#EC2024] bg-white flex flex-col items-center justify-center shrink-0 shadow-xs select-none">
-                    <span className="text-sm 2xl:text-[16px] 4xl:text-[24px] font-medium text-[#131313] leading-none">
-                      {item.duration.replace(/[^0-9]/g, '')}
-                    </span>
-                    <span className="text-[10px] 2xl:text-[11px] 4xl:text-xs font-medium text-[#555555] leading-none mt-0.5">
-                      Min
-                    </span>
-                  </div>
-                </div>
-                <p className="text-[#555555] text-xs sm:text-[14px] 2xl:text-[20px] 4xl:text-[30px] font-normal leading-relaxed">
-                  {item.description}
-                </p>
-              </div>
-            </div>
+            <BenefitCard key={item.id} item={item} />
           ))}
         </div>
       </div>

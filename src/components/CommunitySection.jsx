@@ -4,53 +4,58 @@ export default function CommunitySection() {
   return (
     <section
       id="community"
-      className="relative w-full bg-[#FFFFFF] py-16 lg:py-24 2xl:py-32 4xl:py-40 overflow-hidden font-['Manrope']"
+      style={{ '--u': 'calc(100vw / 3840)' }}
+      className="relative w-full bg-[#FFFFFF] -mt-px pt-10 pb-10 sm:pt-14 sm:pb-14 lg:pt-px lg:pb-px -mb-px overflow-hidden font-['Manrope']"
     >
-      <div className="max-w-[1400px] 2xl:max-w-[1750px] 3xl:max-w-[1950px] 4xl:max-w-[2300px] mx-auto px-4 sm:px-6 lg:px-8 2xl:px-16 4xl:px-20">
-        {/* Banner Card with authentic PSD background */}
-        <div className="community-banner relative w-full rounded-[28px] sm:rounded-[36px] 2xl:rounded-[44px] 4xl:rounded-[52px] overflow-hidden bg-black shadow-2xl border border-black/10 min-h-[460px] sm:min-h-[520px] lg:min-h-[560px] 2xl:min-h-[660px] 4xl:min-h-[760px] flex items-center justify-center text-center">
-          {/* Background Image */}
+      <div className="w-full max-w-[1440px] lg:max-w-none mx-auto px-4 sm:px-6 lg:px-0 flex justify-center">
+        {/* Banner Card (PSD Group 31 -> Rectangle 60: x = 520..3324 (2804px), y = 16585..17520 (935px), r = 60px, fill = #000000) */}
+        <div className="community-banner relative w-full lg:w-[calc(2804*var(--u))] min-h-[380px] sm:min-h-[440px] lg:min-h-0 lg:h-[calc(935*var(--u))] rounded-[24px] sm:rounded-[32px] lg:rounded-[calc(60*var(--u))] overflow-hidden bg-[#000000] flex flex-col items-center justify-center lg:justify-start text-center">
+          {/* Background Image (PSD Layer 14: bbox=(517, 16445, 3331, 17651), opacity = 102/255 = 40% over #000000) */}
           <img
             src="/assets/community-bg.jpg"
             alt="LUMA Wellness Community"
-            className="absolute inset-0 w-full h-full object-cover object-center pointer-events-none brightness-95"
+            className="absolute inset-0 lg:inset-auto lg:left-[calc(-3*var(--u))] lg:top-[calc(-140*var(--u))] w-full h-full lg:w-[calc(2814*var(--u))] lg:h-[calc(1206*var(--u))] object-cover object-center opacity-40 pointer-events-none select-none"
+            draggable={false}
           />
 
-          {/* Dark Vignette Overlay for Crisp Readability */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/50 to-black/70 pointer-events-none" />
-
           {/* Content Container */}
-          <div className="relative z-10 max-w-4xl 2xl:max-w-5xl 4xl:max-w-6xl mx-auto px-6 py-12 2xl:py-16 flex flex-col items-center">
-            {/* Title */}
-            <h2 className="text-3xl sm:text-5xl md:text-6xl lg:text-[68px] 2xl:text-[80px] 4xl:text-[96px] font-extrabold tracking-tight text-white uppercase leading-[1.08] mb-5 2xl:mb-7 select-none">
-              JOIN<br />
-              THE <span className="font-extrabold text-[#EC2024] tracking-normal">LUMA</span><br />
+          <div className="relative z-10 w-full px-6 py-10 sm:py-12 lg:p-0 lg:pt-[calc(124*var(--u))] flex flex-col items-center">
+            {/* Title: "JOIN\nTHE LUMA\nCOMMUNITY"
+                PSD: 150px at 3840w, leading 140px (0.9333), tracking 20 (0.02em), uppercase, #FFFFFF
+                "JOIN\nTHE " & "COMMUNITY" -> Manrope-ExtraLight (200)
+                "LUMA" -> Manrope-ExtraBold (800), #FFFFFF */}
+            <h2 className="text-[36px] sm:text-[52px] md:text-[64px] lg:text-[calc(150*var(--u))] font-extralight uppercase tracking-[0.02em] text-[#FFFFFF] leading-[0.95] lg:leading-[calc(140*var(--u))] select-none">
+              JOIN
+              <br />
+              THE <span className="font-extrabold text-[#FFFFFF]">LUMA</span>
+              <br />
               COMMUNITY
             </h2>
 
-            {/* Subtitle */}
-            <p className="text-xs sm:text-sm md:text-base 2xl:text-[20px] 4xl:text-[30px] text-white/85 tracking-[0.05em] uppercase max-w-2xl 2xl:max-w-3xl mx-auto mb-9 2xl:mb-12 font-medium leading-relaxed">
+            {/* Subtitle: "LEARN FROM DOCTORS, JOIN FREE CLASSES AND ASK\nANYTHING ABOUT RED LIGHT THERAPY."
+                PSD: 30px at 3840w, Manrope-Medium (500), leading 48px (1.6), tracking 20 (0.02em), uppercase, #FFFFFF */}
+            <p className="mt-4 sm:mt-5 lg:mt-[calc(46*var(--u))] text-[11px] sm:text-[13px] md:text-[14px] lg:text-[calc(30*var(--u))] font-medium uppercase tracking-[0.02em] text-[#FFFFFF] leading-[1.6] lg:leading-[calc(48*var(--u))]">
               LEARN FROM DOCTORS, JOIN FREE CLASSES AND ASK
-              <br className="hidden sm:inline" />
-              {' '}ANYTHING ABOUT RED LIGHT THERAPY.
+              <br />
+              ANYTHING ABOUT RED LIGHT THERAPY.
             </p>
 
-            {/* Action Buttons matching PSD Group 31 CTAs (Rectangle 11) */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 2xl:gap-6 w-full sm:w-auto">
-              {/* Join Us CTA (PSD CTA 1 width 290px) */}
+            {/* Action Buttons (PSD Group 31 -> CTAs: y = 17298..17385, gap = 11px) */}
+            <div className="mt-6 sm:mt-8 lg:mt-[calc(52*var(--u))] flex flex-row items-center justify-center gap-2.5 sm:gap-3 lg:gap-[calc(11*var(--u))]">
+              {/* CTA 1: "JOIN US" — 290 x 86 at 3840w, r = 10px, fill #ED2024, 32px Manrope-SemiBold (600), tracking 50 (0.05em), uppercase, #FFFFFF */}
               <a
                 href="#join"
-                className="w-full sm:w-auto min-w-[160px] 2xl:min-w-[190px] 4xl:min-w-[220px] px-8 2xl:px-10 4xl:px-12 py-3.5 2xl:py-4.5 4xl:py-5 rounded-[6px] 2xl:rounded-[8px] bg-[#EC2024] hover:bg-[#d6191d] text-white font-semibold text-xs sm:text-sm 2xl:text-[21.3px] 4xl:text-[32px] tracking-[0.05em] transition-all duration-200 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 text-center cursor-pointer"
+                className="inline-flex items-center justify-center w-[125px] sm:w-[145px] lg:w-[calc(290*var(--u))] h-[40px] sm:h-[44px] lg:h-[calc(86*var(--u))] rounded-[6px] lg:rounded-[calc(10*var(--u))] bg-[#ED2024] hover:bg-[#d6191d] text-[#FFFFFF] text-[12px] sm:text-[13px] lg:text-[calc(32*var(--u))] font-semibold uppercase tracking-[0.05em] transition-colors duration-200 cursor-pointer"
               >
-                Join Us
+                JOIN US
               </a>
 
-              {/* Ask a question CTA (PSD CTA 2 width 420px) */}
+              {/* CTA 2: "ASK A QUESTION" — 420 x 86 at 3840w, r = 10px, fill #000000, 2px stroke #555555, 32px Manrope-SemiBold (600), tracking 50 (0.05em), uppercase, #FFFFFF */}
               <a
                 href="#contact"
-                className="w-full sm:w-auto min-w-[180px] 2xl:min-w-[220px] 4xl:min-w-[260px] px-8 2xl:px-10 4xl:px-12 py-3.5 2xl:py-4.5 4xl:py-5 rounded-[6px] 2xl:rounded-[8px] bg-black/85 hover:bg-black text-white font-semibold text-xs sm:text-sm 2xl:text-[21.3px] 4xl:text-[32px] tracking-[0.05em] transition-all duration-200 border border-white/25 hover:border-white/50 text-center cursor-pointer"
+                className="inline-flex items-center justify-center w-[175px] sm:w-[205px] lg:w-[calc(420*var(--u))] h-[40px] sm:h-[44px] lg:h-[calc(86*var(--u))] rounded-[6px] lg:rounded-[calc(10*var(--u))] bg-[#000000] hover:bg-[#141414] border border-[#555555] lg:border-[calc(2*var(--u))] hover:border-[#888888] text-[#FFFFFF] text-[12px] sm:text-[13px] lg:text-[calc(32*var(--u))] font-semibold uppercase tracking-[0.05em] transition-colors duration-200 cursor-pointer"
               >
-                Ask a question
+                ASK A QUESTION
               </a>
             </div>
           </div>
