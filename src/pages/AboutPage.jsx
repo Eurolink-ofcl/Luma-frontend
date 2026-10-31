@@ -19,14 +19,17 @@ export default function AboutPage({ onNavigateHome }) {
       {/* 3rd Section: The Basics / What Is Red Light Therapy? (PSD y=2263..3644) */}
       <AboutBasicsSection />
 
-      {/* 4th Section: The Science / How It Works (PSD y=3810..5296) */}
-      <AboutScienceSection />
+      {/* Continuous Dark Block in PSD (y=3810..8844 on #0A0A0B) — prevents sub-pixel white seam on scaled/tablet viewports */}
+      <div className="w-full bg-[#0A0A0B]">
+        {/* 4th Section: The Science / How It Works (PSD y=3810..5296) */}
+        <AboutScienceSection />
 
-      {/* 5th Section: Six Outcomes, One Habit / Benefits (PSD Group 44, y=5471..6884) */}
-      <AboutBenefitsSection />
+        {/* 5th Section: Six Outcomes, One Habit / Benefits (PSD Group 44, y=5471..6884) */}
+        <AboutBenefitsSection />
 
-      {/* 6th Section: Built To Standard / Safety & Tech + Spec Table (PSD y=6962..8844) */}
-      <AboutSafetyTechSection />
+        {/* 6th Section: Built To Standard / Safety & Tech + Spec Table (PSD y=6962..8844) */}
+        <AboutSafetyTechSection />
+      </div>
 
       {/* 7th Section: Doctor Advisory + Ready When You Are / Find Your Device (PSD y=9021..11024) */}
       <AboutShopSection onNavigateHome={onNavigateHome} />
