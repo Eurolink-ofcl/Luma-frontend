@@ -14,14 +14,6 @@
    Compact 13-14" laptops, 768px height constraints
    -------------------------------------------------------------------------- */
 @media screen and (min-width: 1280px) and (max-width: 1439px) {
-  /* Clinical Technology */
-  #clinical-technology .clinical-container {
-    max-width: 1320px !important;
-  }
-  #clinical-technology .wavelength-chart {
-    height: 440px !important;
-  }
-
   /* Footer */
   footer .footer-container {
     max-width: 72.97% !important;
@@ -35,14 +27,6 @@
    Standard MacBook Air & 14" Pro 16:10 aspect ratio
    -------------------------------------------------------------------------- */
 @media screen and (min-width: 1440px) and (max-width: 1535px) {
-  /* Clinical Technology */
-  #clinical-technology .clinical-container {
-    max-width: 1390px !important;
-  }
-  #clinical-technology .wavelength-chart {
-    height: 480px !important;
-  }
-
   /* Footer */
   footer .footer-container {
     max-width: 72.97% !important;
@@ -56,14 +40,6 @@
    15" Windows Laptops with 125% DPI scale, 864px height
    -------------------------------------------------------------------------- */
 @media screen and (min-width: 1536px) and (max-width: 1799px) {
-  /* Clinical Technology */
-  #clinical-technology .clinical-container {
-    max-width: 1480px !important;
-  }
-  #clinical-technology .wavelength-chart {
-    height: 500px !important;
-  }
-
   /* Footer */
   footer .footer-container {
     max-width: 72.97% !important;
@@ -77,14 +53,6 @@
    Standard Full HD Monitored Desktop & 1080p Full Viewport
    -------------------------------------------------------------------------- */
 @media screen and (min-width: 1800px) and (max-width: 2399px) {
-  /* Clinical Technology */
-  #clinical-technology .clinical-container {
-    max-width: 1700px !important;
-  }
-  #clinical-technology .wavelength-chart {
-    height: 560px !important;
-  }
-
   /* Footer */
   footer .footer-container {
     max-width: 72.97% !important;
@@ -98,14 +66,6 @@
    High-Resolution 2K QHD Gaming & Production Monitors
    -------------------------------------------------------------------------- */
 @media screen and (min-width: 2400px) and (max-width: 3199px) {
-  /* Clinical Technology */
-  #clinical-technology .clinical-container {
-    max-width: 2300px !important;
-  }
-  #clinical-technology .wavelength-chart {
-    height: 720px !important;
-  }
-
   /* Footer */
   footer .footer-container {
     max-width: 72.97% !important;
@@ -119,11 +79,6 @@
    Screen width >= 3200px or Ultra-Wide Displays
    -------------------------------------------------------------------------- */
 @media screen and (min-width: 3200px) {
-  #clinical-technology .clinical-container {
-    max-width: 3200px !important;
-    padding-left: 96px !important;
-    padding-right: 96px !important;
-  }
   footer .footer-container {
     max-width: 72.97% !important;
     padding-left: 0 !important;
