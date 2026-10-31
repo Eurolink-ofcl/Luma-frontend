@@ -19,9 +19,9 @@ export default function Footer({ onOpenCart }) {
       style={{ '--u': 'calc(100vw / 3840)' }}
       className="relative w-full bg-[#FFFFFF] text-[#000000] font-['Manrope'] select-none"
     >
-      {/* Row 1: LET'S CONNECT (PSD Group 'Lets Connect', y=19802..20265) */}
-      <div className="w-full border-b border-[#888888]/60">
-        <div className="footer-container w-[90%] sm:w-[86%] lg:w-[72.97%] mx-auto py-8 sm:py-10 lg:pt-[calc(166*var(--u))] lg:pb-[calc(96*var(--u))] flex flex-col lg:flex-row lg:items-end justify-between gap-6 lg:gap-0">
+      {/* Row 1: LET'S CONNECT (PSD Group 'Lets Connect', Line 1 at top + Line 2 at bottom) */}
+      <div className="w-full border-t border-b border-[#888888]/60">
+        <div className="footer-container w-[90%] sm:w-[86%] lg:w-[72.97%] mx-auto py-8 sm:py-10 lg:pt-[calc(103*var(--u))] lg:pb-[calc(92*var(--u))] flex flex-col lg:flex-row lg:items-end justify-between gap-6 lg:gap-0">
           {/* Left: LET'S CONNECT & Subtitle */}
           <div className="lg:pt-[calc(58*var(--u))]">
             <h3 className="text-[28px] sm:text-[34px] lg:text-[calc(80*var(--u))] font-extralight text-[#ED2024] tracking-normal uppercase leading-[0.85] mb-3 lg:mb-[calc(52*var(--u))]">
