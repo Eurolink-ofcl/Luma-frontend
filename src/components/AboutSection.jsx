@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function AboutSection() {
+export default function AboutSection({ onNavigate }) {
   return (
     <section
       id="about"
@@ -52,7 +52,13 @@ export default function AboutSection() {
           {/* CTA Button matching PSD Rectangle 11 (w=280, h=86, gap 22px, font 32px Manrope-SemiBold, #F2F1ED, tracking 0.05em) */}
           <div className="mt-5 lg:mt-[calc(22*var(--u))]">
             <a
-              href="#products"
+              href="/about"
+              onClick={(e) => {
+                if (onNavigate) {
+                  e.preventDefault();
+                  onNavigate('about');
+                }
+              }}
               className="inline-flex items-center justify-center px-7 py-3 lg:px-0 lg:py-0 lg:w-[calc(280*var(--u))] lg:h-[calc(86*var(--u))] bg-[#ED2024] hover:bg-[#c9181b] text-[#F2F1ED] font-semibold text-[13px] sm:text-[14px] lg:text-[calc(32*var(--u))] uppercase tracking-[0.05em] rounded-[5px] lg:rounded-[calc(10*var(--u))] transition-all duration-300 cursor-pointer leading-none"
             >
               KNOW MORE

@@ -93,7 +93,7 @@ export default function App() {
           <TrustStrip />
 
           {/* About LUMA Section (Layer 7) */}
-          <AboutSection />
+          <AboutSection onNavigate={handleNavigate} />
 
           {/* Clinical Technology & Wavelength Penetration (Layer 8) */}
           <ClinicalTech />
