@@ -20,7 +20,7 @@ import AboutPage from './pages/AboutPage';
 import ProductsPage from './pages/ProductsPage';
 
 // Set to false to keep Products catalog page hidden from public routing, true to show
-export const ENABLE_PRODUCTS_PAGE = false;
+export const ENABLE_PRODUCTS_PAGE = true;
 
 function getPageFromPath(pathname) {
   if (!pathname) return 'home';
