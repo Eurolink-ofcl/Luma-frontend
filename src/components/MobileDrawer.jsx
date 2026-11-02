@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-export default function MobileDrawer({ isOpen, onClose, onNavigate }) {
+export default function MobileDrawer({ isOpen, onClose, onNavigate, enableProductsPage = false }) {
   useEffect(() => {
     function handleKeyDown(e) {
       if (e.key === 'Escape' && isOpen) {
@@ -67,7 +67,12 @@ export default function MobileDrawer({ isOpen, onClose, onNavigate }) {
             <ul className="flex flex-col gap-5 mt-8">
               {[
                 { label: 'ABOUT LUMA', href: '/about', page: 'about', hash: '' },
-                { label: 'OUR PRODUCTS', href: '/products', page: 'products', hash: '' },
+                {
+                  label: 'OUR PRODUCTS',
+                  href: enableProductsPage ? '/products' : '/#products',
+                  page: enableProductsPage ? 'products' : 'home',
+                  hash: enableProductsPage ? '' : '#products',
+                },
                 { label: 'REVIEWS', href: '/#reviews', page: 'home', hash: '#reviews' },
                 { label: 'COMMUNITY', href: '/#community', page: 'home', hash: '#community' },
                 { label: 'CONTACT US', href: '/#contact', page: 'home', hash: '#contact' },

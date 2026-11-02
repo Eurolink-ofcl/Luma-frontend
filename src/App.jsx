@@ -19,13 +19,16 @@ import MobileDrawer from './components/MobileDrawer';
 import AboutPage from './pages/AboutPage';
 import ProductsPage from './pages/ProductsPage';
 
+// Set to false to keep Products catalog page hidden from public routing, true to show
+export const ENABLE_PRODUCTS_PAGE = false;
+
 function getPageFromPath(pathname) {
   if (!pathname) return 'home';
   const lower = pathname.toLowerCase();
   if (lower.startsWith('/about')) {
     return 'about';
   }
-  if (lower.startsWith('/products') || lower.startsWith('/our-products')) {
+  if (ENABLE_PRODUCTS_PAGE && (lower.startsWith('/products') || lower.startsWith('/our-products'))) {
     return 'products';
   }
   return 'home';
@@ -47,6 +50,10 @@ export default function App() {
   }, []);
 
   const handleNavigate = (page, hash = '') => {
+    if (!ENABLE_PRODUCTS_PAGE && page === 'products') {
+      page = 'home';
+      hash = '#products';
+    }
     const targetPath =
       page === 'about' ? '/about' : page === 'products' ? '/products' : '/';
     if (window.location.pathname !== targetPath || window.location.hash !== hash) {
@@ -76,13 +83,14 @@ export default function App() {
           onOpenMobile={() => setIsMobileOpen(true)}
           currentPage={currentPage}
           onNavigate={handleNavigate}
+          enableProductsPage={ENABLE_PRODUCTS_PAGE}
         />
         {currentPage === 'home' && <Hero />}
       </div>
 
       {currentPage === 'about' ? (
         <AboutPage onNavigateHome={(hash = '') => handleNavigate('home', hash)} />
-      ) : currentPage === 'products' ? (
+      ) : currentPage === 'products' && ENABLE_PRODUCTS_PAGE ? (
         <ProductsPage
           onNavigateHome={(hash = '') => handleNavigate('home', hash)}
           onOpenCart={() => setIsCartOpen(true)}
@@ -141,6 +149,7 @@ export default function App() {
         isOpen={isMobileOpen}
         onClose={() => setIsMobileOpen(false)}
         onNavigate={handleNavigate}
+        enableProductsPage={ENABLE_PRODUCTS_PAGE}
       />
     </div>
   );

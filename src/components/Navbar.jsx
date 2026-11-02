@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import CurrencyDropdown from './CurrencyDropdown';
 
-export default function Navbar({ onOpenCart, onOpenMobile, currentPage = 'home', onNavigate }) {
+export default function Navbar({
+  onOpenCart,
+  onOpenMobile,
+  currentPage = 'home',
+  onNavigate,
+  enableProductsPage = false,
+}) {
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -74,8 +80,14 @@ export default function Navbar({ onOpenCart, onOpenMobile, currentPage = 'home',
 
             <li className="relative group">
               <a
-                href="/products"
-                onClick={(e) => handlePageNav(e, 'products')}
+                href={enableProductsPage ? '/products' : '/#products'}
+                onClick={(e) =>
+                  handlePageNav(
+                    e,
+                    enableProductsPage ? 'products' : 'home',
+                    enableProductsPage ? '' : '#products'
+                  )
+                }
                 className={`relative py-2 lg:text-[calc(26*var(--u))] font-medium tracking-[0.05em] uppercase transition-colors flex items-center gap-1 group whitespace-nowrap ${
                   currentPage === 'products' ? 'text-[#ED2024]' : 'text-[#FFFFFF] hover:text-white'
                 }`}
@@ -91,8 +103,14 @@ export default function Navbar({ onOpenCart, onOpenMobile, currentPage = 'home',
               {/* Mega Dropdown Preview */}
               <div className="absolute top-[calc(100%+14px)] left-1/2 -translate-x-1/2 min-w-[300px] bg-[#121212]/95 backdrop-blur-2xl border border-white/10 rounded-xl p-3 shadow-2xl opacity-0 invisible pointer-events-none group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto transition-all duration-200 transform translate-y-2 group-hover:translate-y-0 flex flex-col gap-1 z-50">
                 <a
-                  href="/products"
-                  onClick={(e) => handlePageNav(e, 'products')}
+                  href={enableProductsPage ? '/products' : '/#products'}
+                  onClick={(e) =>
+                    handlePageNav(
+                      e,
+                      enableProductsPage ? 'products' : 'home',
+                      enableProductsPage ? '' : '#products'
+                    )
+                  }
                   className="flex flex-col p-2.5 rounded-lg hover:bg-white/10 transition-colors"
                 >
                   <span className="text-xs font-semibold text-white mb-0.5">
@@ -103,8 +121,14 @@ export default function Navbar({ onOpenCart, onOpenMobile, currentPage = 'home',
                   </span>
                 </a>
                 <a
-                  href="/products"
-                  onClick={(e) => handlePageNav(e, 'products')}
+                  href={enableProductsPage ? '/products' : '/#products'}
+                  onClick={(e) =>
+                    handlePageNav(
+                      e,
+                      enableProductsPage ? 'products' : 'home',
+                      enableProductsPage ? '' : '#products'
+                    )
+                  }
                   className="flex flex-col p-2.5 rounded-lg hover:bg-white/10 transition-colors"
                 >
                   <span className="text-xs font-semibold text-white mb-0.5">
@@ -115,8 +139,14 @@ export default function Navbar({ onOpenCart, onOpenMobile, currentPage = 'home',
                   </span>
                 </a>
                 <a
-                  href="/products"
-                  onClick={(e) => handlePageNav(e, 'products')}
+                  href={enableProductsPage ? '/products' : '/#products'}
+                  onClick={(e) =>
+                    handlePageNav(
+                      e,
+                      enableProductsPage ? 'products' : 'home',
+                      enableProductsPage ? '' : '#products'
+                    )
+                  }
                   className="flex flex-col p-2.5 rounded-lg hover:bg-white/10 transition-colors"
                 >
                   <span className="text-xs font-semibold text-white mb-0.5">
