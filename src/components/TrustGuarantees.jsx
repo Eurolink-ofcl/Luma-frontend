@@ -59,7 +59,7 @@ const guarantees = [
   },
 ];
 
-export default function TrustGuarantees() {
+export default function TrustGuarantees({ hasTopLine = false }) {
   return (
     <section
       id="guarantees"
@@ -69,6 +69,14 @@ export default function TrustGuarantees() {
       }}
       className="relative w-full bg-[#0A0A0B] text-[#FFFFFF] py-14 sm:py-16 lg:pt-[calc(119*var(--u))] lg:pb-[calc(155*var(--u))] overflow-hidden font-['Manrope']"
     >
+      {/* 1px Divider Line matching PSD 'Line copy 5' (y = 9517, bbox 0, 9517, 3840, 9518, color #574739) */}
+      {hasTopLine && (
+        <div
+          className="absolute top-0 left-0 right-0 w-full h-[1px] bg-[#574739]"
+          aria-hidden="true"
+        />
+      )}
+
       <div className="w-full max-w-[1440px] lg:max-w-none mx-auto px-6 sm:px-10 lg:pl-[calc(518*var(--u))] lg:pr-[calc(513*var(--u))]">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-row lg:items-start lg:justify-between gap-10 sm:gap-12 lg:gap-0 text-center">
           {guarantees.map((item, idx) => (

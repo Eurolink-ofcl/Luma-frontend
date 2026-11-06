@@ -37,6 +37,8 @@ export default function Navbar({
       className={`luma-navbar-header fixed left-0 w-full h-[64px] lg:h-[calc(191*var(--u))] z-40 transition-all duration-300 font-['Manrope'] border-b border-[rgba(170,146,146,0.20)] ${
         scrolled
           ? 'top-0 bg-[#0a0a0a]/95 backdrop-blur-xl shadow-2xl border-t-0'
+          : currentPage === 'community' || currentPage === 'reviews'
+          ? 'top-[32px] lg:top-[calc(69*var(--u))] bg-[#0a0a0a] border-t border-t-[rgba(170,146,146,0.46)]'
           : 'top-[32px] lg:top-[calc(69*var(--u))] bg-transparent border-t border-t-[rgba(170,146,146,0.46)]'
       }`}
     >
@@ -161,34 +163,52 @@ export default function Navbar({
 
             <li>
               <a
-                href="/#reviews"
-                onClick={(e) => handlePageNav(e, 'home', '#reviews')}
-                className="relative py-2 lg:text-[calc(26*var(--u))] font-medium tracking-[0.05em] uppercase text-[#FFFFFF] hover:text-white transition-colors group whitespace-nowrap"
+                href="/reviews"
+                onClick={(e) => handlePageNav(e, 'reviews')}
+                className={`relative py-2 lg:text-[calc(26*var(--u))] font-medium tracking-[0.05em] uppercase transition-colors group whitespace-nowrap ${
+                  currentPage === 'reviews' ? 'text-[#ED2024]' : 'text-[#FFFFFF] hover:text-white'
+                }`}
               >
                 REVIEWS
-                <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-[#EC2024] transition-all duration-300 group-hover:w-full rounded" />
+                <span
+                  className={`absolute bottom-0 left-0 h-[2px] bg-[#EC2024] transition-all duration-300 rounded ${
+                    currentPage === 'reviews' ? 'w-full' : 'w-0 group-hover:w-full'
+                  }`}
+                />
               </a>
             </li>
 
             <li>
               <a
-                href="/#community"
-                onClick={(e) => handlePageNav(e, 'home', '#community')}
-                className="relative py-2 lg:text-[calc(26*var(--u))] font-medium tracking-[0.05em] uppercase text-[#FFFFFF] hover:text-white transition-colors group whitespace-nowrap"
+                href="/community"
+                onClick={(e) => handlePageNav(e, 'community')}
+                className={`relative py-2 lg:text-[calc(26*var(--u))] font-medium tracking-[0.05em] uppercase transition-colors group whitespace-nowrap ${
+                  currentPage === 'community' ? 'text-[#ED2024]' : 'text-[#FFFFFF] hover:text-white'
+                }`}
               >
                 COMMUNITY
-                <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-[#EC2024] transition-all duration-300 group-hover:w-full rounded" />
+                <span
+                  className={`absolute bottom-0 left-0 h-[2px] bg-[#EC2024] transition-all duration-300 rounded ${
+                    currentPage === 'community' ? 'w-full' : 'w-0 group-hover:w-full'
+                  }`}
+                />
               </a>
             </li>
 
             <li>
               <a
-                href="/#contact"
-                onClick={(e) => handlePageNav(e, 'home', '#contact')}
-                className="relative py-2 lg:text-[calc(26*var(--u))] font-medium tracking-[0.05em] uppercase text-[#FFFFFF] hover:text-white transition-colors group whitespace-nowrap"
+                href="/contact"
+                onClick={(e) => handlePageNav(e, 'contact')}
+                className={`relative py-2 lg:text-[calc(26*var(--u))] font-medium tracking-[0.05em] uppercase transition-colors group whitespace-nowrap ${
+                  currentPage === 'contact' ? 'text-[#ED2024]' : 'text-[#FFFFFF] hover:text-white'
+                }`}
               >
                 CONTACT US
-                <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-[#EC2024] transition-all duration-300 group-hover:w-full rounded" />
+                <span
+                  className={`absolute bottom-0 left-0 h-[2px] bg-[#EC2024] transition-all duration-300 rounded ${
+                    currentPage === 'contact' ? 'w-full' : 'w-0 group-hover:w-full'
+                  }`}
+                />
               </a>
             </li>
           </ul>

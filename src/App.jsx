@@ -18,6 +18,9 @@ import CartDrawer from './components/CartDrawer';
 import MobileDrawer from './components/MobileDrawer';
 import AboutPage from './pages/AboutPage';
 import ProductsPage from './pages/ProductsPage';
+import CommunityPage from './pages/CommunityPage';
+import ReviewsPage from './pages/ReviewsPage';
+import ContactPage from './pages/ContactPage';
 
 // Set to false to keep Products catalog page hidden from public routing, true to show
 export const ENABLE_PRODUCTS_PAGE = true;
@@ -27,6 +30,15 @@ function getPageFromPath(pathname) {
   const lower = pathname.toLowerCase();
   if (lower.startsWith('/about')) {
     return 'about';
+  }
+  if (lower.startsWith('/community')) {
+    return 'community';
+  }
+  if (lower.startsWith('/reviews') || lower.startsWith('/review')) {
+    return 'reviews';
+  }
+  if (lower.startsWith('/contact')) {
+    return 'contact';
   }
   if (ENABLE_PRODUCTS_PAGE && (lower.startsWith('/products') || lower.startsWith('/our-products'))) {
     return 'products';
@@ -55,7 +67,17 @@ export default function App() {
       hash = '#products';
     }
     const targetPath =
-      page === 'about' ? '/about' : page === 'products' ? '/products' : '/';
+      page === 'about'
+        ? '/about'
+        : page === 'community'
+        ? '/community'
+        : page === 'reviews'
+        ? '/reviews'
+        : page === 'contact'
+        ? '/contact'
+        : page === 'products'
+        ? '/products'
+        : '/';
     if (window.location.pathname !== targetPath || window.location.hash !== hash) {
       window.history.pushState({}, '', `${targetPath}${hash}`);
     }
@@ -90,6 +112,12 @@ export default function App() {
 
       {currentPage === 'about' ? (
         <AboutPage onNavigateHome={(hash = '') => handleNavigate('home', hash)} />
+      ) : currentPage === 'community' ? (
+        <CommunityPage onNavigateHome={(hash = '') => handleNavigate('home', hash)} />
+      ) : currentPage === 'reviews' ? (
+        <ReviewsPage onNavigateHome={(hash = '') => handleNavigate('home', hash)} />
+      ) : currentPage === 'contact' ? (
+        <ContactPage onNavigateHome={(hash = '') => handleNavigate('home', hash)} />
       ) : currentPage === 'products' && ENABLE_PRODUCTS_PAGE ? (
         <ProductsPage
           onNavigateHome={(hash = '') => handleNavigate('home', hash)}

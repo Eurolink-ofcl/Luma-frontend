@@ -73,9 +73,9 @@ export default function MobileDrawer({ isOpen, onClose, onNavigate, enableProduc
                   page: enableProductsPage ? 'products' : 'home',
                   hash: enableProductsPage ? '' : '#products',
                 },
-                { label: 'REVIEWS', href: '/#reviews', page: 'home', hash: '#reviews' },
-                { label: 'COMMUNITY', href: '/#community', page: 'home', hash: '#community' },
-                { label: 'CONTACT US', href: '/#contact', page: 'home', hash: '#contact' },
+                { label: 'REVIEWS', href: '/reviews', page: 'reviews', hash: '' },
+                { label: 'COMMUNITY', href: '/community', page: 'community', hash: '' },
+                { label: 'CONTACT US', href: '/contact', page: 'contact', hash: '' },
               ].map((item) => (
                 <li key={item.label}>
                   <a
