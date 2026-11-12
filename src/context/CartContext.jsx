@@ -1,3 +1,9 @@
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
+    ? 'https://astro.bloodme.in/luma-api/api'
+    : 'http://localhost:5000/api');
+
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useAuth } from './AuthContext';
 
@@ -63,7 +69,7 @@ export function CartProvider({ children }) {
       
       // Optional background sync with backend MongoDB
       if (customerUser?.email) {
-        fetch('http://localhost:5000/api/customer/cart', {
+        fetch(`${API_BASE_URL}/customer/cart`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({

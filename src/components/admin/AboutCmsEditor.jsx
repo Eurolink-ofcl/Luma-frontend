@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react';
 import ImageUploadField from './ImageUploadField';
 import VideoUploadField from './VideoUploadField';
 
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
+    ? 'https://astro.bloodme.in/luma-api/api'
+    : 'http://localhost:5000/api');
 
 export default function AboutCmsEditor({ onOpenLivePage }) {
   const [loading, setLoading] = useState(true);

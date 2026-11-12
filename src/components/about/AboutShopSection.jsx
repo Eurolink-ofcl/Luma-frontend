@@ -1,3 +1,9 @@
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
+    ? 'https://astro.bloodme.in/luma-api/api'
+    : 'http://localhost:5000/api');
+
 import React, { useState, useEffect } from 'react';
 import { useCurrency } from '../../context/CurrencyContext';
 
@@ -74,7 +80,7 @@ export default function AboutShopSection({ onNavigateHome, data }) {
 
   // Attempt to sync full live catalog from API if available
   useEffect(() => {
-    fetch('http://localhost:5000/api/products')
+    fetch(`${API_BASE_URL}/products`)
       .then((res) => {
         if (!res.ok) throw new Error('API unavailable');
         return res.json();

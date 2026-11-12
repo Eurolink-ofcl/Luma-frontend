@@ -1,3 +1,9 @@
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
+    ? 'https://astro.bloodme.in/luma-api/api'
+    : 'http://localhost:5000/api');
+
 import React, { useState, useEffect } from 'react';
 import { useAuth } from './context/AuthContext';
 import TopBanner from './components/TopBanner';
@@ -141,7 +147,7 @@ export default function App() {
   useEffect(() => {
     const fetchHomeContent = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/pages/home');
+        const res = await fetch(`${API_BASE_URL}/pages/home`);
         const data = await res.json();
         if (res.ok && data?.success && data?.data) {
           setHomeContent(data.data);

@@ -1,3 +1,9 @@
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
+    ? 'https://astro.bloodme.in/luma-api/api'
+    : 'http://localhost:5000/api');
+
 import React, { useState, useEffect } from 'react';
 
 const DEFAULT_QUESTIONS = [
@@ -240,7 +246,7 @@ export default function AssessmentQuiz({ data }) {
         recommendedProduct: matchedProd,
       };
 
-      await fetch('http://localhost:5000/api/quiz-assessments', {
+      await fetch(`${API_BASE_URL}/quiz-assessments`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
