@@ -1,6 +1,16 @@
 import React, { useEffect } from 'react';
 
-export default function MobileDrawer({ isOpen, onClose, onNavigate, enableProductsPage = false }) {
+export default function MobileDrawer({
+  isOpen,
+  onClose,
+  onNavigate,
+  enableProductsPage = false,
+  customerUser = null,
+  onOpenCustomerModal,
+  onOpenCustomerAccount,
+  onCustomerLogout,
+  whatsappLink = 'https://wa.me/971501234567',
+}) {
   useEffect(() => {
     function handleKeyDown(e) {
       if (e.key === 'Escape' && isOpen) {
@@ -76,6 +86,7 @@ export default function MobileDrawer({ isOpen, onClose, onNavigate, enableProduc
                 { label: 'REVIEWS', href: '/reviews', page: 'reviews', hash: '' },
                 { label: 'COMMUNITY', href: '/community', page: 'community', hash: '' },
                 { label: 'CONTACT US', href: '/contact', page: 'contact', hash: '' },
+                { label: 'SHOPPING BAG', href: '/cart', page: 'cart', hash: '' },
               ].map((item) => (
                 <li key={item.label}>
                   <a
@@ -100,25 +111,80 @@ export default function MobileDrawer({ isOpen, onClose, onNavigate, enableProduc
               GET YOUR PANEL
             </a>
             <div className="flex flex-col gap-3">
-              <button
-                type="button"
-                onClick={() => {
-                  onClose();
-                  alert(
-                    'Welcome to LUMA. Sign in or register your warranty.'
-                  );
-                }}
-                className="flex items-center gap-3 text-xs text-white/70 hover:text-white transition-colors text-left"
-              >
-                <img
-                  src="/assets/user-icon.png"
-                  alt="Account"
-                  className="w-4 h-auto"
-                />
-                <span>My Account</span>
-              </button>
+              {customerUser ? (
+                <div className="p-3 rounded-xl bg-white/5 border border-white/10 flex flex-col gap-2.5">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onClose();
+                      if (onOpenCustomerAccount) onOpenCustomerAccount('profile');
+                    }}
+                    className="flex items-center justify-between w-full text-left cursor-pointer hover:opacity-90"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <div className="w-8 h-8 rounded-full bg-[#ED2024] text-white font-bold flex items-center justify-center text-xs">
+                        {customerUser.name ? customerUser.name.charAt(0).toUpperCase() : 'M'}
+                      </div>
+                      <div>
+                        <div className="text-xs font-semibold text-white">{customerUser.name}</div>
+                        <div className="text-[10px] text-white/50">{customerUser.email}</div>
+                      </div>
+                    </div>
+                    <span className="text-[11px] text-emerald-400 font-medium">Manage &rarr;</span>
+                  </button>
+
+                  <div className="flex items-center gap-2 pt-2 border-t border-white/5 text-[11px]">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onClose();
+                        if (onOpenCustomerAccount) onOpenCustomerAccount('cart');
+                      }}
+                      className="flex-1 py-1 px-2 rounded bg-white/5 hover:bg-white/10 text-white/70 hover:text-white text-center cursor-pointer"
+                    >
+                      My Cart
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onClose();
+                        if (onOpenCustomerAccount) onOpenCustomerAccount('orders');
+                      }}
+                      className="flex-1 py-1 px-2 rounded bg-white/5 hover:bg-white/10 text-white/70 hover:text-white text-center cursor-pointer"
+                    >
+                      Orders
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onClose();
+                        if (onCustomerLogout) onCustomerLogout();
+                      }}
+                      className="py-1 px-2.5 rounded text-red-400 hover:text-white hover:bg-[#ED2024] text-center cursor-pointer"
+                    >
+                      Sign Out
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    if (onOpenCustomerModal) onOpenCustomerModal();
+                  }}
+                  className="flex items-center gap-3 text-xs text-white/80 hover:text-[#ED2024] transition-colors text-left cursor-pointer"
+                >
+                  <img
+                    src="/assets/user-icon.png"
+                    alt="Account"
+                    className="w-4 h-auto"
+                  />
+                  <span>Customer Sign In / Register</span>
+                </button>
+              )}
               <a
-                href="https://wa.me/971500000000"
+                href={whatsappLink || 'https://wa.me/971501234567'}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-3 text-xs text-white/70 hover:text-white transition-colors"

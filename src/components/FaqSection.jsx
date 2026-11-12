@@ -31,8 +31,25 @@ const faqs = [
   },
 ];
 
-export default function FaqSection() {
+export default function FaqSection({ data }) {
   const [openIndex, setOpenIndex] = useState(0);
+
+  const eyebrow = data?.eyebrow || 'LUMA RED LIGHT THERAPY';
+  const heading = data?.heading || 'FAQs';
+  const supportBox = data?.supportBox || {};
+  const supportTitle = supportBox.title || 'OUR CUSTOMER SUPPORT IS AVAILABLE';
+  const supportTiming = supportBox.timing || 'MONDAY - SATURDAY\n8AM - 6PM';
+  const supportLocations = supportBox.location || 'ABU DHABI, DUBAI,\nAUSTRALIA, UNITED KINGDOME';
+  const supportBtnText = supportBox.btnText || 'CONTACT LUMA';
+  const supportBtnLink = supportBox.btnLink || '#contact';
+  const responseTime = supportBox.responseTime || 'AVERAGE ANSWER TIME: 30MINS';
+
+  const faqList = (Array.isArray(data?.items) && data.items.length > 0)
+    ? data.items.map((it) => ({
+        q: it.question || it.q || '',
+        a: it.answer || it.a || '',
+      }))
+    : faqs;
 
   const toggle = (idx) => {
     setOpenIndex(openIndex === idx ? null : idx);
@@ -49,12 +66,12 @@ export default function FaqSection() {
         <div className="text-center flex flex-col items-center">
           {/* Eyebrow: "LUMA RED LIGHT THERAPY" — 40px at 3840w, Manrope-Medium (500), #000000, tracking 20 (0.02em) */}
           <p className="text-[13px] sm:text-[15px] lg:text-[calc(40*var(--u))] font-medium uppercase tracking-[0.02em] text-[#000000] leading-none">
-            LUMA RED LIGHT THERAPY
+            {eyebrow}
           </p>
 
           {/* Main Heading: "FAQs" — 80px at 3840w, Manrope-ExtraLight (200), #ED2024, tracking 20 (0.02em) */}
           <h2 className="mt-3 sm:mt-4 lg:mt-[calc(47*var(--u))] text-[34px] sm:text-[44px] lg:text-[calc(80*var(--u))] font-extralight tracking-[0.02em] text-[#ED2024] leading-none">
-            FAQs
+            {heading}
           </h2>
         </div>
 
@@ -64,7 +81,7 @@ export default function FaqSection() {
           <div className="w-full lg:w-auto lg:pt-[calc(21*var(--u))] flex flex-col items-start">
             {/* Heading: "OUR CUSTOMER SUPPORT IS AVAILABLE" — 36px at 3840w, Manrope-Bold (700), #000000 */}
             <h3 className="text-[15px] sm:text-[17px] lg:text-[calc(36*var(--u))] font-bold uppercase tracking-[0.02em] text-[#000000] leading-none">
-              OUR CUSTOMER SUPPORT IS AVAILABLE
+              {supportTitle}
             </h3>
 
             {/* Support Avatars (PSD Layer 12: 400 x 126 at 3840w, x = 509, y = 15209) */}
@@ -86,10 +103,8 @@ export default function FaqSection() {
                 className="w-[20px] h-[20px] lg:w-[calc(45*var(--u))] lg:h-[calc(45*var(--u))] object-contain shrink-0 select-none"
                 draggable={false}
               />
-              <p className="lg:pt-[calc(4*var(--u))] text-[13px] sm:text-[15px] lg:text-[calc(36*var(--u))] font-medium uppercase tracking-[0.025em] text-[#000000] leading-[1.39]">
-                MONDAY - SATURDAY
-                <br />
-                8AM - 6PM
+              <p className="lg:pt-[calc(4*var(--u))] text-[13px] sm:text-[15px] lg:text-[calc(36*var(--u))] font-medium uppercase tracking-[0.025em] text-[#000000] leading-[1.39] whitespace-pre-line">
+                {supportTiming}
               </p>
             </div>
 
@@ -102,30 +117,28 @@ export default function FaqSection() {
                 className="w-[18px] h-[25px] lg:w-[calc(39*var(--u))] lg:h-[calc(56*var(--u))] object-contain shrink-0 select-none"
                 draggable={false}
               />
-              <p className="lg:pt-[calc(3*var(--u))] text-[13px] sm:text-[15px] lg:text-[calc(36*var(--u))] font-medium uppercase tracking-[0.025em] text-[#000000] leading-[1.39]">
-                ABU DHABI, DUBAI,
-                <br />
-                AUSTRALIA, UNITED KINGDOME
+              <p className="lg:pt-[calc(3*var(--u))] text-[13px] sm:text-[15px] lg:text-[calc(36*var(--u))] font-medium uppercase tracking-[0.025em] text-[#000000] leading-[1.39] whitespace-pre-line">
+                {supportLocations}
               </p>
             </div>
 
             {/* CTA Button (PSD CTA1: 350 x 86 at 3840w, r = 10px, #0A0A0B) */}
             <a
-              href="#contact"
+              href={supportBtnLink}
               className="mt-6 lg:mt-[calc(66*var(--u))] inline-flex items-center justify-center w-[170px] h-[44px] lg:w-[calc(350*var(--u))] lg:h-[calc(86*var(--u))] rounded-[6px] lg:rounded-[calc(10*var(--u))] bg-[#0A0A0B] hover:bg-[#ED2024] text-[#FFFFFF] text-[13px] sm:text-[14px] lg:text-[calc(32*var(--u))] font-semibold uppercase tracking-[0.05em] transition-colors duration-200 cursor-pointer"
             >
-              CONTACT LUMA
+              {supportBtnText}
             </a>
 
             {/* Average Answer Time (PSD y = 15845..15868: 30px at 3840w, Manrope-SemiBold Italic, #000000) */}
             <p className="mt-5 lg:mt-[calc(78*var(--u))] text-[12px] sm:text-[13px] lg:text-[calc(30*var(--u))] font-semibold italic uppercase tracking-[0.02em] text-[#000000] leading-none">
-              AVERAGE ANSWER TIME: 30MINS
+              {responseTime}
             </p>
           </div>
 
           {/* Right Column: FAQ Accordion Cards (PSD Faq 1..7: x = 1919..3323, width = 1404px, gap = 5px) */}
           <div className="w-full lg:w-[calc(1404*var(--u))] flex flex-col gap-2 lg:gap-[calc(5*var(--u))]">
-            {faqs.map((faq, idx) => {
+            {faqList.map((faq, idx) => {
               const isOpen = openIndex === idx;
               return (
                 <div

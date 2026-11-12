@@ -59,7 +59,18 @@ const guarantees = [
   },
 ];
 
-export default function TrustGuarantees({ hasTopLine = false }) {
+export default function TrustGuarantees({ hasTopLine = false, data }) {
+  const guaranteeList = (Array.isArray(data?.cards) && data.cards.length > 0)
+    ? data.cards.map((c, idx) => ({
+        icon: c.icon || guarantees[idx % guarantees.length]?.icon,
+        iconW: guarantees[idx % guarantees.length]?.iconW || 86,
+        iconH: guarantees[idx % guarantees.length]?.iconH || 80,
+        colW: guarantees[idx % guarantees.length]?.colW || 522,
+        title: c.title || guarantees[idx % guarantees.length]?.title,
+        description: c.description || guarantees[idx % guarantees.length]?.description,
+      }))
+    : guarantees;
+
   return (
     <section
       id="guarantees"
@@ -79,7 +90,7 @@ export default function TrustGuarantees({ hasTopLine = false }) {
 
       <div className="w-full max-w-[1440px] lg:max-w-none mx-auto px-6 sm:px-10 lg:pl-[calc(518*var(--u))] lg:pr-[calc(513*var(--u))]">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:flex-row lg:items-start lg:justify-between gap-10 sm:gap-12 lg:gap-0 text-center">
-          {guarantees.map((item, idx) => (
+          {guaranteeList.map((item, idx) => (
             <div
               key={idx}
               style={{

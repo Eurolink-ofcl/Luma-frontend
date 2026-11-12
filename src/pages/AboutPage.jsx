@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import AboutHero from '../components/about/AboutHero';
 import AboutIntroSection from '../components/about/AboutIntroSection';
 import AboutBasicsSection from '../components/about/AboutBasicsSection';
@@ -7,32 +7,54 @@ import AboutBenefitsSection from '../components/about/AboutBenefitsSection';
 import AboutSafetyTechSection from '../components/about/AboutSafetyTechSection';
 import AboutShopSection from '../components/about/AboutShopSection';
 
+const API_BASE_URL = 'http://localhost:5000/api';
+
 export default function AboutPage({ onNavigateHome }) {
+  const [pageContent, setPageContent] = useState(null);
+
+  // Fetch dynamic CMS content from MongoDB
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/pages/about`)
+      .then((res) => {
+        if (!res.ok) throw new Error('CMS API response not ok');
+        return res.json();
+      })
+      .then((data) => {
+        if (data && data.success && data.data) {
+          setPageContent(data.data);
+        }
+      })
+      .catch((err) => {
+        // Falls back seamlessly to the hardcoded default props inside components
+        console.warn('Notice: Loading default content (backend CMS endpoint not reached yet):', err.message);
+      });
+  }, []);
+
   return (
     <div className="w-full bg-[#FFFFFF] text-[#000000]">
-      {/* 1st Section: About LUMA Banner (PSD 'Images Banner', y=0..850) */}
-      <AboutHero />
+      {/* 1st Section: About LUMA Banner */}
+      <AboutHero data={pageContent?.hero} />
 
-      {/* 2nd Section: Breadcrumb & Story Intro (PSD y=955..2097) */}
-      <AboutIntroSection onNavigateHome={onNavigateHome} />
+      {/* 2nd Section: Breadcrumb & Story Intro */}
+      <AboutIntroSection onNavigateHome={onNavigateHome} data={pageContent?.intro} />
 
-      {/* 3rd Section: The Basics / What Is Red Light Therapy? (PSD y=2263..3644) */}
-      <AboutBasicsSection />
+      {/* 3rd Section: The Basics / What Is Red Light Therapy? */}
+      <AboutBasicsSection data={pageContent?.basics} />
 
-      {/* Continuous Dark Block in PSD (y=3810..8844 on #0A0A0B) — prevents sub-pixel white seam on scaled/tablet viewports */}
+      {/* Continuous Dark Block in PSD (y=3810..8844 on #0A0A0B) */}
       <div className="w-full bg-[#0A0A0B]">
-        {/* 4th Section: The Science / How It Works (PSD y=3810..5296) */}
-        <AboutScienceSection />
+        {/* 4th Section: The Science / How It Works */}
+        <AboutScienceSection data={pageContent?.science} />
 
-        {/* 5th Section: Six Outcomes, One Habit / Benefits (PSD Group 44, y=5471..6884) */}
-        <AboutBenefitsSection />
+        {/* 5th Section: Six Outcomes, One Habit / Benefits */}
+        <AboutBenefitsSection data={pageContent?.benefits} />
 
-        {/* 6th Section: Built To Standard / Safety & Tech + Spec Table (PSD y=6962..8844) */}
-        <AboutSafetyTechSection />
+        {/* 6th Section: Built To Standard / Safety & Tech + Spec Table */}
+        <AboutSafetyTechSection data={pageContent?.safety} />
       </div>
 
-      {/* 7th Section: Doctor Advisory + Ready When You Are / Find Your Device (PSD y=9021..11024) */}
-      <AboutShopSection onNavigateHome={onNavigateHome} />
+      {/* 7th Section: Doctor Advisory + Ready When You Are / Find Your Device */}
+      <AboutShopSection onNavigateHome={onNavigateHome} data={pageContent?.shopCta} />
     </div>
   );
 }

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useCurrency } from '../../context/CurrencyContext';
 
-const aboutProducts = [
+const defaultAboutProducts = [
   {
     id: 'luma-glow-mask',
     eyebrow: 'LUMA GLOW FACE MASK',
@@ -9,10 +10,6 @@ const aboutProducts = [
     priceText: '1,299 AED',
     price: 1299,
     image: '/assets/about/product-glow-mask.png',
-    imgW: 404,
-    imgH: 323,
-    imgLeft: 97,
-    imgTop: 227,
   },
   {
     id: 'luma-nova',
@@ -22,10 +19,6 @@ const aboutProducts = [
     priceText: '2,599 AED',
     price: 2599,
     image: '/assets/about/product-luma-nova.png',
-    imgW: 289,
-    imgH: 435,
-    imgLeft: 119,
-    imgTop: 175,
   },
   {
     id: 'luma-apex',
@@ -35,10 +28,6 @@ const aboutProducts = [
     priceText: '6,599 AED',
     price: 6599,
     image: '/assets/about/product-luma-apex.png',
-    imgW: 170,
-    imgH: 619,
-    imgLeft: 208,
-    imgTop: 65,
   },
   {
     id: 'luma-max',
@@ -48,14 +37,97 @@ const aboutProducts = [
     priceText: '8,599 AED',
     price: 8599,
     image: '/assets/about/product-luma-max.png',
-    imgW: 138,
-    imgH: 639,
-    imgLeft: 227,
-    imgTop: 41,
+  },
+  {
+    id: 'luma-go',
+    eyebrow: 'LUMA GO',
+    titleLine1: 'COMPACT PORTABLE',
+    titleLine2: 'RED LIGHT DEVICE',
+    priceText: '1,890 AED',
+    price: 1890,
+    image: '/assets/products/luma-go.png',
+  },
+  {
+    id: 'luma-surge',
+    eyebrow: 'LUMA SURGE',
+    titleLine1: 'DUAL-CHIP POWERED',
+    titleLine2: 'RED LIGHT PANEL',
+    priceText: '2,890 AED',
+    price: 2890,
+    image: '/assets/products/luma-surge.png',
+  },
+  {
+    id: 'luma-ultra',
+    eyebrow: 'LUMA ULTRA',
+    titleLine1: 'WIDE CLINICAL',
+    titleLine2: 'LIGHT THERAPY PANEL',
+    priceText: '4,890 AED',
+    price: 4890,
+    image: '/assets/products/list-product-6.jpg',
   },
 ];
 
-export default function AboutShopSection({ onNavigateHome }) {
+export default function AboutShopSection({ onNavigateHome, data }) {
+  const { formatPrice } = useCurrency();
+  const [productsList, setProductsList] = useState(defaultAboutProducts);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  // Attempt to sync full live catalog from API if available
+  useEffect(() => {
+    fetch('http://localhost:5000/api/products')
+      .then((res) => {
+        if (!res.ok) throw new Error('API unavailable');
+        return res.json();
+      })
+      .then((data) => {
+        const items = data?.data || (Array.isArray(data) ? data : null);
+        if (items && items.length > 0) {
+          const mapped = items.map((p, idx) => {
+            const words = (p.name || '').split(' ');
+            return {
+              id: p._id || p.id || `api-prod-${idx}`,
+              eyebrow: p.name || 'LUMA DEVICE',
+              titleLine1: words.slice(0, Math.ceil(words.length / 2)).join(' ') || p.name,
+              titleLine2: words.slice(Math.ceil(words.length / 2)).join(' ') || 'RED LIGHT PANEL',
+              price: p.price || 1299,
+              priceText: `${p.price || 1299} AED`,
+              image: p.image || '/assets/about/product-glow-mask.png',
+            };
+          });
+          // Merge API items with default about products for richest display
+          setProductsList((prev) => {
+            const existingNames = new Set(prev.map((x) => x.eyebrow?.toUpperCase()));
+            const newFromApi = mapped.filter((m) => !existingNames.has(m.eyebrow?.toUpperCase()));
+            return [...prev, ...newFromApi];
+          });
+        }
+      })
+      .catch((err) => {
+        console.warn('Using default product showcase list:', err);
+      });
+  }, []);
+
+  const visibleCount = 4;
+  const maxIndex = Math.max(0, productsList.length - visibleCount);
+
+  const handleNext = () => {
+    if (currentIndex < maxIndex) {
+      setCurrentIndex((prev) => Math.min(prev + 1, maxIndex));
+    }
+  };
+
+  const handlePrev = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex((prev) => Math.max(prev - 1, 0));
+    }
+  };
+
+  const visibleProducts = productsList.slice(currentIndex, currentIndex + visibleCount);
+  const eyebrow = data?.eyebrow || 'READY WHEN YOU ARE';
+  const headingText = data?.headingLine1 && data?.headingLine2
+    ? `${data.headingLine1} ${data.headingLine2}`
+    : 'FIND YOUR DEVICE';
+  const subtext = data?.subtext || 'FREE SHIPPING ACROSS THE UAE · 60-NIGHT TRIAL · 3-YEAR WARRANTY';
   return (
     <section
       id="about-shop"
@@ -87,21 +159,18 @@ export default function AboutShopSection({ onNavigateHome }) {
           </div>
         </div>
 
-        {/* Centered Header: "READY WHEN YOU ARE / FIND YOUR DEVICE" (PSD y = 9490..9833, 176px below Group 48) */}
+        {/* Centered Header */}
         <div className="mt-12 sm:mt-16 lg:mt-[calc(176*var(--u))] text-center flex flex-col items-center">
-          {/* Eyebrow: "READY WHEN YOU ARE" — 50px at 3840w, Manrope-Regular (400), tracking 20 (0.02em), uppercase, #000000 */}
           <p className="text-[15px] sm:text-[18px] lg:text-[calc(50*var(--u))] font-normal uppercase tracking-[0.02em] text-[#000000] leading-none">
-            READY WHEN YOU ARE
+            {eyebrow}
           </p>
 
-          {/* Main Heading: "FIND YOUR DEVICE" — 100px at 3840w, Manrope-ExtraBold (800), tracking 20 (0.02em), uppercase, #D61611 */}
           <h2 className="mt-2 sm:mt-3 lg:mt-[calc(37*var(--u))] text-[28px] sm:text-[38px] md:text-[46px] lg:text-[calc(100*var(--u))] font-extrabold uppercase tracking-[0.02em] text-[#D61611] leading-none">
-            FIND YOUR DEVICE
+            {headingText}
           </h2>
 
-          {/* Subtitle: "FREE SHIPPING ACROSS THE UAE · 60-NIGHT TRIAL · 3-YEAR WARRANTY" — 40px at 3840w, Manrope-Regular (400), tracking 20 (0.02em), uppercase, #000000 */}
           <p className="mt-3 sm:mt-4 lg:mt-[calc(37*var(--u))] text-[12px] sm:text-[14px] md:text-[16px] lg:text-[calc(40*var(--u))] font-normal uppercase tracking-[0.02em] text-[#000000] leading-snug lg:leading-none">
-            FREE SHIPPING ACROSS THE UAE &middot; 60-NIGHT TRIAL &middot; 3-YEAR WARRANTY
+            {subtext}
           </p>
 
           {/* CTA Button: "SHOP NOW" (PSD 'Shop Now': 290 x 86 at 3840w, r = 10px, fill #ED2024, 38px below subtitle) */}
@@ -116,60 +185,61 @@ export default function AboutShopSection({ onNavigateHome }) {
           </button>
         </div>
 
-        {/* 4 Product Cards Row + Arrows (PSD 'SHOP ': y = 9934..11024, 101px below Shop Now button) */}
+        {/* 4 Product Cards Row + Arrows */}
         <div className="relative mt-10 sm:mt-12 lg:mt-[calc(101*var(--u))]">
-          {/* Left Arrow (PSD Vector Smart Object copy: bbox=(379, 10259, 429, 10351) -> 50x92, opacity 51/255 = 20%) */}
+          {/* Left Arrow Button */}
           <button
             type="button"
+            onClick={handlePrev}
+            disabled={currentIndex === 0}
             aria-label="Previous products"
-            className="hidden lg:flex absolute left-[calc(379*var(--u))] top-[calc(325*var(--u))] w-[calc(50*var(--u))] h-[calc(92*var(--u))] items-center justify-center opacity-20 hover:opacity-50 transition-opacity cursor-pointer"
+            className={`flex absolute left-0 lg:left-[calc(379*var(--u))] top-[35%] lg:top-[calc(325*var(--u))] -translate-y-1/2 w-[38px] h-[70px] sm:w-[44px] sm:h-[80px] lg:w-[calc(50*var(--u))] lg:h-[calc(92*var(--u))] items-center justify-center transition-all z-10 select-none ${
+              currentIndex === 0
+                ? 'opacity-20 cursor-not-allowed pointer-events-none'
+                : 'opacity-70 hover:opacity-100 hover:scale-110 active:scale-95 cursor-pointer'
+            }`}
+            title="Previous product"
           >
             <img
               src="/assets/about/shop-arrow-left.png"
-              alt=""
+              alt="Previous"
               className="w-full h-full object-contain select-none pointer-events-none"
             />
           </button>
 
-          {/* 4 Product Cards Grid (PSD Group 50 / copy / copy 2 / copy 3: x = 521..1100, 1262..1841, 2002..2581, 2743..3322 -> 579w each, gap ~161.67px) */}
-          <div className="lg:pl-[calc(521*var(--u))] lg:pr-[calc(518*var(--u))] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-8 lg:gap-[calc(161.67*var(--u))]">
-            {aboutProducts.map((product) => (
+          {/* 4 Product Cards Grid */}
+          <div className="lg:pl-[calc(521*var(--u))] lg:pr-[calc(518*var(--u))] grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-8 lg:gap-[calc(161.67*var(--u))] transition-all duration-300">
+            {visibleProducts.map((product, idx) => (
               <div
-                key={product.id}
-                className="w-full lg:w-[calc(579*var(--u))] flex flex-col items-center text-center"
+                key={`${product.id}-${idx}`}
+                className="w-full lg:w-[calc(579*var(--u))] flex flex-col items-center text-center transition-all duration-300"
               >
-                {/* Gray Rounded Product Image Box (PSD Rectangle 23: 579 x 741 at 3840w, r = 53px, fill #F3F3F3) */}
-                <div className="relative w-full aspect-[579/741] lg:w-[calc(579*var(--u))] lg:h-[calc(741*var(--u))] rounded-[24px] sm:rounded-[32px] lg:rounded-[calc(53*var(--u))] bg-[#F3F3F3] flex items-center justify-center overflow-hidden p-6 lg:p-0">
+                {/* Gray Rounded Product Image Box */}
+                <div className="relative w-full aspect-[579/741] lg:w-[calc(579*var(--u))] lg:h-[calc(741*var(--u))] rounded-[24px] sm:rounded-[32px] lg:rounded-[calc(53*var(--u))] bg-[#F3F3F3] flex items-center justify-center overflow-hidden p-6 sm:p-8 lg:p-10 shadow-xs">
                   <img
                     src={product.image}
                     alt={product.eyebrow}
-                    style={{
-                      '--pw': `${product.imgW}`,
-                      '--ph': `${product.imgH}`,
-                      '--pl': `${product.imgLeft}`,
-                      '--pt': `${product.imgTop}`,
-                    }}
-                    className="max-h-[82%] w-auto object-contain lg:max-h-none lg:absolute lg:left-[calc(var(--pl)*var(--u))] lg:top-[calc(var(--pt)*var(--u))] lg:w-[calc(var(--pw)*var(--u))] lg:h-[calc(var(--ph)*var(--u))] select-none transition-transform duration-300 hover:scale-[1.03]"
+                    className="max-h-[82%] max-w-[85%] w-auto h-auto object-contain select-none transition-transform duration-300 hover:scale-105"
                   />
                 </div>
 
-                {/* Product Eyebrow: 30px at 3840w, Manrope-Regular (400), tracking 50-60 (0.055em), uppercase, #000000 (39px below card) */}
+                {/* Product Eyebrow */}
                 <p className="mt-4 sm:mt-5 lg:mt-[calc(39*var(--u))] text-[12px] sm:text-[13px] lg:text-[calc(30*var(--u))] font-normal uppercase tracking-[0.055em] text-[#000000] leading-none">
                   {product.eyebrow}
                 </p>
 
-                {/* Product Title: 40px at 3840w, Manrope-Medium (500), leading 50px (1.25), tracking 50-60 (0.055em), uppercase, #000000 (38px below eyebrow) */}
-                <h3 className="mt-2 sm:mt-2.5 lg:mt-[calc(38*var(--u))] text-[15px] sm:text-[17px] lg:text-[calc(40*var(--u))] font-medium uppercase tracking-[0.055em] text-[#000000] leading-[1.25] lg:leading-[calc(50*var(--u))]">
+                {/* Product Title */}
+                <h3 className="mt-2 sm:mt-2.5 lg:mt-[calc(38*var(--u))] text-[15px] sm:text-[17px] lg:text-[calc(40*var(--u))] font-medium uppercase tracking-[0.055em] text-[#000000] leading-[1.25] lg:leading-[calc(50*var(--u))] min-h-[38px] lg:min-h-0">
                   <span className="block">{product.titleLine1}</span>
                   <span className="block">{product.titleLine2}</span>
                 </h3>
 
-                {/* Product Price: 30px at 3840w, Manrope-SemiBold (600), tracking 50 (0.05em), uppercase, #ED2024 (40px below title) */}
+                {/* Product Price */}
                 <p className="mt-2.5 sm:mt-3 lg:mt-[calc(40*var(--u))] text-[13px] sm:text-[14px] lg:text-[calc(30*var(--u))] font-semibold uppercase tracking-[0.05em] text-[#ED2024] leading-none">
-                  {product.priceText}
+                  {formatPrice(product.price || product.priceText)}
                 </p>
 
-                {/* Add To Bag Button (PSD Group 49 -> Rectangle 24: 261 x 66 at 3840w, r = 10px, fill #010101, 36px below price) */}
+                {/* Add To Bag Button */}
                 <button
                   type="button"
                   onClick={() => {
@@ -183,15 +253,22 @@ export default function AboutShopSection({ onNavigateHome }) {
             ))}
           </div>
 
-          {/* Right Arrow (PSD Vector Smart Object: bbox=(3415, 10259, 3465, 10351) -> 50x92, opacity 100%) */}
+          {/* Right Arrow Button */}
           <button
             type="button"
+            onClick={handleNext}
+            disabled={currentIndex >= maxIndex}
             aria-label="Next products"
-            className="hidden lg:flex absolute left-[calc(3415*var(--u))] top-[calc(325*var(--u))] w-[calc(50*var(--u))] h-[calc(92*var(--u))] items-center justify-center hover:opacity-70 transition-opacity cursor-pointer"
+            className={`flex absolute right-0 lg:left-[calc(3415*var(--u))] top-[35%] lg:top-[calc(325*var(--u))] -translate-y-1/2 w-[38px] h-[70px] sm:w-[44px] sm:h-[80px] lg:w-[calc(50*var(--u))] lg:h-[calc(92*var(--u))] items-center justify-center transition-all z-10 select-none ${
+              currentIndex >= maxIndex
+                ? 'opacity-20 cursor-not-allowed pointer-events-none'
+                : 'opacity-80 hover:opacity-100 hover:scale-110 active:scale-95 cursor-pointer'
+            }`}
+            title="Next product"
           >
             <img
               src="/assets/about/shop-arrow-right.png"
-              alt=""
+              alt="Next"
               className="w-full h-full object-contain select-none pointer-events-none"
             />
           </button>

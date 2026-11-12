@@ -47,12 +47,40 @@ const expertCards = [
   },
 ];
 
-export default function CommunityExpertsSection() {
+export default function CommunityExpertsSection({ data }) {
   const [activeCategory, setActiveCategory] = useState('all');
 
-  const filteredCards = expertCards.filter((card) =>
-    card.category.includes(activeCategory)
-  );
+  const title = data?.title || 'TALK TO THE EXPERTS';
+
+  // Normalize categories whether array of strings or array of objects
+  const rawCategories =
+    data?.categories ||
+    (data?.filterCategories && data.filterCategories.length > 0 ? data.filterCategories : null) ||
+    ['ALL', 'SKIN', 'RECOVERY', 'SLEEP', 'BEGINNERS'];
+
+  const normalizedCategories = rawCategories.map((c) => {
+    if (typeof c === 'string') {
+      const label = c.toUpperCase();
+      const id = c.toLowerCase();
+      const pillW = id === 'all' ? 151 : id === 'skin' ? 191 : 242;
+      return { id, label, pillW };
+    }
+    return {
+      id: c.id || c.label?.toLowerCase(),
+      label: c.label || c.id?.toUpperCase(),
+      pillW: c.pillW || 200,
+    };
+  });
+
+  const cards = data?.cards && data.cards.length > 0 ? data.cards : expertCards;
+
+  const filteredCards = cards.filter((card) => {
+    if (activeCategory === 'all') return true;
+    const cardCats = (card.categories || card.category || []).map((c) =>
+      typeof c === 'string' ? c.toLowerCase() : String(c)
+    );
+    return cardCats.includes(activeCategory.toLowerCase());
+  });
 
   return (
     <section
@@ -64,14 +92,14 @@ export default function CommunityExpertsSection() {
       <div className="w-full max-w-[1440px] lg:max-w-none mx-auto px-5 sm:px-8 lg:px-0 lg:pl-[calc(523*var(--u))] lg:pr-[calc(519*var(--u))]">
         {/* Section Header Row: Title & Filter Pills (PSD y=1384..1464, h=80px) */}
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-5 sm:gap-6 lg:gap-0">
-          {/* Main Title: "TALK TO THE EXPERTS" (PSD x=515..1340, y=1391..1452, 80px font at 3840w, Manrope-Medium matching design JPG, #131313, tracking 20 / 0.02em, uppercase) */}
+          {/* Main Title: "TALK TO THE EXPERTS" */}
           <h2 className="text-[24px] sm:text-[30px] md:text-[36px] lg:text-[calc(80*var(--u))] font-medium tracking-[0.02em] uppercase text-[#131313] leading-none shrink-0 lg:-ml-[calc(8*var(--u))]">
-            TALK TO THE EXPERTS
+            {title}
           </h2>
 
           {/* Filter Pills (PSD x=2052..3317, 80px height at 3840w, gap ~48px) */}
           <div className="flex items-center gap-2 sm:gap-3 lg:gap-[calc(48*var(--u))] overflow-x-auto no-scrollbar py-1 max-w-full">
-            {filterCategories.map((cat) => {
+            {normalizedCategories.map((cat) => {
               const isActive = activeCategory === cat.id;
               return (
                 <button

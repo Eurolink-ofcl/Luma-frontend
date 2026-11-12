@@ -1,8 +1,21 @@
 import React, { useState } from 'react';
 
-export default function Footer({ onOpenCart }) {
+export default function Footer({ onOpenCart, onNavigate, data }) {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
+
+  const newsletterHeading = data?.newsletterHeading || "LET'S CONNECT";
+  const newsletterSubtitle = data?.newsletterSubtitle || 'Stay updated with upcoming LUMA products and news or simply get in touch.';
+  const newsletterOverline = data?.newsletterOverline || 'You will get monthly newsletter';
+  const address = data?.address || 'Office Number M-090A, Fashion Parking,\nDubai Mall, United Arab Emirates.';
+  const emailContact = data?.email || 'info@lumaredlight.com';
+  const phone = data?.phone || '+971 50 123 4567';
+  const phoneSecondary = data?.phoneSecondary || '+971 4 123 4567';
+  const cleanPhone = phone.replace(/[^0-9]/g, '');
+  const socialWhatsapp =
+    data?.socialWhatsapp || (cleanPhone ? `https://wa.me/${cleanPhone}` : 'https://wa.me/971501234567');
+  const socialInstagram = data?.socialInstagram || 'https://instagram.com/lumaredlight';
+  const socialTiktok = data?.socialTiktok || 'https://tiktok.com/@lumaredlight';
 
   const handleSubscribe = (e) => {
     e.preventDefault();
@@ -25,17 +38,17 @@ export default function Footer({ onOpenCart }) {
           {/* Left: LET'S CONNECT & Subtitle */}
           <div className="lg:pt-[calc(58*var(--u))]">
             <h3 className="text-[28px] sm:text-[34px] lg:text-[calc(80*var(--u))] font-extralight text-[#ED2024] tracking-normal uppercase leading-[0.85] mb-3 lg:mb-[calc(52*var(--u))]">
-              LET&apos;S CONNECT
+              {newsletterHeading}
             </h3>
             <p className="text-[12px] sm:text-[13px] lg:text-[calc(30*var(--u))] text-[#000000] font-normal tracking-normal leading-snug lg:leading-none">
-              Stay updated with upcoming LUMA products and news or simply get in touch.
+              {newsletterSubtitle}
             </p>
           </div>
 
           {/* Right: Newsletter Subscription (PSD Group 15, x=2168..3316, w=1148) */}
           <div className="w-full lg:w-[calc(1148*var(--u))] shrink-0">
             <p className="text-[13px] sm:text-[14px] lg:text-[calc(36*var(--u))] text-[#000000] font-normal tracking-normal leading-none mb-2.5 lg:mb-[calc(35*var(--u))]">
-              You will get monthly newsletter
+              {newsletterOverline}
             </p>
             <form onSubmit={handleSubscribe} className="w-full">
               <div className="w-full h-[46px] sm:h-[50px] lg:h-[calc(125*var(--u))] flex items-center border border-[#000000] rounded-[8px] lg:rounded-[calc(20*var(--u))] p-[3px] lg:p-[calc(7*var(--u))] bg-[#FFFFFF]">
@@ -69,10 +82,8 @@ export default function Footer({ onOpenCart }) {
               alt="Location Pin"
               className="w-4 h-5 lg:w-[calc(52*var(--u))] lg:h-[calc(66*var(--u))] object-contain shrink-0"
             />
-            <p className="text-[12px] sm:text-[13px] lg:text-[calc(32*var(--u))] text-[#000000] font-normal tracking-[0.02em] leading-[1.406]">
-              Office Number M-090A, Fashion Parking,
-              <br />
-              Dubai Mall, United Arab Emirates.
+            <p className="text-[12px] sm:text-[13px] lg:text-[calc(32*var(--u))] text-[#000000] font-normal tracking-[0.02em] leading-[1.406] whitespace-pre-line">
+              {address}
             </p>
           </div>
 
@@ -80,7 +91,7 @@ export default function Footer({ onOpenCart }) {
           <div className="flex flex-wrap items-center gap-6 sm:gap-8 lg:gap-0">
             {/* Phone */}
             <a
-              href="tel:+97141234567"
+              href={`tel:${phoneSecondary.replace(/[^0-9+]/g, '')}`}
               className="flex items-center gap-2 lg:gap-[calc(15*var(--u))] lg:mr-[calc(87*var(--u))] text-[#000000] hover:text-[#ED2024] transition-colors"
             >
               <img
@@ -89,13 +100,13 @@ export default function Footer({ onOpenCart }) {
                 className="w-4 h-4 lg:w-[calc(55*var(--u))] lg:h-[calc(63*var(--u))] object-contain shrink-0"
               />
               <span className="text-[12px] sm:text-[13px] lg:text-[calc(32*var(--u))] font-normal tracking-[0.02em] leading-none lg:translate-y-[calc(5*var(--u))]">
-                +971 4 123 4567
+                {phoneSecondary}
               </span>
             </a>
 
             {/* WhatsApp */}
             <a
-              href="https://wa.me/971501234567"
+              href={socialWhatsapp}
               target="_blank"
               rel="noreferrer"
               className="flex items-center gap-2 lg:gap-[calc(18*var(--u))] lg:mr-[calc(76*var(--u))] text-[#000000] hover:text-[#ED2024] transition-colors"
@@ -106,13 +117,13 @@ export default function Footer({ onOpenCart }) {
                 className="w-4 h-4 lg:w-[calc(60*var(--u))] lg:h-[calc(60*var(--u))] object-contain shrink-0"
               />
               <span className="text-[12px] sm:text-[13px] lg:text-[calc(32*var(--u))] font-normal tracking-[0.02em] leading-none">
-                +971 50 123 4567
+                {phone}
               </span>
             </a>
 
             {/* Email */}
             <a
-              href="mailto:info@lumaredlight.com"
+              href={`mailto:${emailContact}`}
               className="flex items-center gap-2 lg:gap-[calc(20*var(--u))] text-[#000000] hover:text-[#ED2024] transition-colors"
             >
               <img
@@ -121,7 +132,7 @@ export default function Footer({ onOpenCart }) {
                 className="w-4 h-3.5 lg:w-[calc(54*var(--u))] lg:h-[calc(40*var(--u))] object-contain shrink-0"
               />
               <span className="text-[12px] sm:text-[13px] lg:text-[calc(32*var(--u))] font-normal tracking-[0.02em] leading-none">
-                info@lumaredlight.com
+                {emailContact}
               </span>
             </a>
           </div>
@@ -140,7 +151,16 @@ export default function Footer({ onOpenCart }) {
             {/* 4-column product links (x=968, 1422, 1906, 2356) */}
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:flex lg:items-start gap-6 sm:gap-10 lg:gap-0 text-[12px] sm:text-[13px] lg:text-[calc(32*var(--u))] text-[#000000] font-normal tracking-[0.02em] leading-none lg:pt-[calc(4*var(--u))]">
               <div className="flex flex-col gap-3.5 lg:gap-[calc(45*var(--u))] lg:w-[calc(454*var(--u))]">
-                <a href="#products" className="block hover:text-[#ED2024] transition-colors">LUMA GLOW</a>
+                <a
+                  href="/products/luma-glow"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (onNavigate) onNavigate('luma-glow');
+                  }}
+                  className="block hover:text-[#ED2024] transition-colors"
+                >
+                  LUMA GLOW
+                </a>
                 <a href="#products" className="block hover:text-[#ED2024] transition-colors">LUMA GO</a>
               </div>
               <div className="flex flex-col gap-3.5 lg:gap-[calc(45*var(--u))] lg:w-[calc(484*var(--u))]">

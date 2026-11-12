@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const wavelengths = [
+const baseWavelengths = [
   {
     id: 480,
     value: '480',
@@ -201,8 +201,33 @@ const depthTicks = [
   { label: '0 mm', top: '100%', padded: false },
 ];
 
-export default function ClinicalTech() {
+export default function ClinicalTech({ data }) {
   const [selectedWavelength, setSelectedWavelength] = useState(660);
+
+  const eyebrow = data?.eyebrow || 'CLINICAL TECHNOLOGY';
+  const heading = data?.heading || 'HOW FAR DOES EACH LIGHT REACH?';
+  const highlightText = data?.highlightText || 'LIGHT REACH';
+  const subtitleLine1 = data?.subtitleLine1 !== undefined ? data.subtitleLine1 : 'Red stays near the surface. Near-infrared travels deeper.';
+  const subtitleLine2 = data?.subtitleLine2 !== undefined ? data.subtitleLine2 : 'Hover over a wavelength to see how far it goes.';
+
+  // Merge customizable text attributes with base layout and canvas gradient definitions
+  const wavelengths = Array.isArray(data?.wavelengths) && data.wavelengths.length > 0
+    ? baseWavelengths.map((base) => {
+        const custom = data.wavelengths.find((w) => String(w.id || w.value) === String(base.id || base.value));
+        if (!custom) return base;
+        return {
+          ...base,
+          label: custom.label !== undefined ? custom.label : base.label,
+          primaryTitle: custom.primaryTitle !== undefined ? custom.primaryTitle : base.primaryTitle,
+          primaryDesc: custom.primaryDesc !== undefined ? custom.primaryDesc : base.primaryDesc,
+          secondaryTitle: custom.secondaryTitle !== undefined ? custom.secondaryTitle : base.secondaryTitle,
+          secondaryDesc: custom.secondaryDesc !== undefined ? custom.secondaryDesc : base.secondaryDesc,
+          depth: custom.depth !== undefined ? custom.depth : base.depth,
+          research: custom.research !== undefined ? custom.research : base.research,
+          callout: custom.callout !== undefined ? custom.callout : base.callout,
+        };
+      })
+    : baseWavelengths;
 
   const active = wavelengths.find((w) => w.id === selectedWavelength) || wavelengths[3];
 
@@ -217,17 +242,25 @@ export default function ClinicalTech() {
         {/* Section Header */}
         <div>
           <p className="text-xs sm:text-sm lg:text-[calc(40*var(--u))] uppercase tracking-[0.02em] text-white font-medium leading-none mb-2.5 sm:mb-3 lg:mb-[calc(47*var(--u))]">
-            CLINICAL TECHNOLOGY
+            {eyebrow}
           </p>
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-[calc(80*var(--u))] font-extralight tracking-[0.02em] uppercase leading-tight lg:leading-none text-white">
-            HOW FAR DOES EACH <span className="text-[#ED2024] font-medium">LIGHT REACH</span>?
+            {highlightText && heading.includes(highlightText) ? (
+              <>
+                {heading.split(highlightText)[0]}
+                <span className="text-[#ED2024] font-medium">{highlightText}</span>
+                {heading.split(highlightText)[1]}
+              </>
+            ) : (
+              heading
+            )}
           </h2>
 
           {/* Subtitle & PSD Line 1 */}
           <div className="mt-3 sm:mt-4 lg:mt-[calc(68*var(--u))] text-[#555555] text-xs sm:text-[15px] lg:text-[calc(41*var(--u))] leading-relaxed lg:leading-[calc(60*var(--u))] tracking-[0.02em] font-normal">
-            <p>Red stays near the surface. Near-infrared travels deeper.</p>
+            {subtitleLine1 && <p>{subtitleLine1}</p>}
             <div className="w-full h-px lg:h-[calc(2*var(--u))] bg-white/25 my-3 sm:my-4 lg:my-[calc(6*var(--u))]" />
-            <p>Hover over a wavelength to see how far it goes.</p>
+            {subtitleLine2 && <p>{subtitleLine2}</p>}
           </div>
         </div>
 

@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
+const API_BASE_URL = 'http://localhost:5000/api';
 
 const REVIEWS_DATA = [
   // Page 1 (matches PSD Layer 1: REAL STORIES)
@@ -98,20 +100,20 @@ const REVIEWS_DATA = [
     },
     {
       id: 11,
-      badgeName: 'CHLOE P.',
-      badgeProduct: 'GO USER',
+      badgeName: 'JESSICA L.',
+      badgeProduct: 'NOVA USER',
       badgeWidth: 314,
       quote:
-        '“Compact enough to travel with everywhere. Kept my jetlag at bay and gave me instant energy during business trips.”',
+        '“The warmth is gentle and deeply relaxing. It helped reduce chronic tension in my neck and upper back within just 10 days.”',
       stars: 5,
     },
     {
       id: 12,
-      badgeName: 'JAMES W.',
+      badgeName: 'NATHAN B.',
       badgeProduct: 'SURGE USER',
       badgeWidth: 314,
       quote:
-        '“My lower back tightness noticeably reduced after just 7 sessions. I can push harder during deadlifts and squat sessions without dread.”',
+        '“Compact yet powerful. I travel with it for recovery between cycling stages. Unbelievable durability and battery efficiency.”',
       stars: 5,
     },
   ],
@@ -119,56 +121,56 @@ const REVIEWS_DATA = [
   [
     {
       id: 13,
-      badgeName: 'LUCAS B.',
-      badgeProduct: 'NOVA USER',
+      badgeName: 'LUCAS V.',
+      badgeProduct: 'GLOW USER',
       badgeWidth: 314,
       quote:
-        '“Remarkable craftsmanship and intuitive controls. It replaced my old red light device completely and delivers twice the power.”',
+        '“My skin texture noticeably refined after a month. Acne scars are fading and overall complexion is much brighter.”',
       stars: 5,
     },
     {
       id: 14,
-      badgeName: 'PRIYA N.',
-      badgeProduct: 'GLOW USER',
+      badgeName: 'CHLOE D.',
+      badgeProduct: 'APEX USER',
       badgeWidth: 314,
       quote:
-        '“My dermatologist was impressed with how healthy my skin barrier looked. LUMA has earned a permanent place in my vanity.”',
+        '“We mounted it on the wall in our home gym. The whole family uses it daily for circulation and joint mobility.”',
       stars: 5,
     },
     {
       id: 15,
-      badgeName: 'THOMAS E.',
-      badgeProduct: 'SURGE USER',
+      badgeName: 'DANIEL P.',
+      badgeProduct: 'MAX USER',
       badgeWidth: 314,
       quote:
-        '“Recovery time between marathon training runs cut nearly in half. Less calf fatigue and morning stiffness across the board.”',
+        '“The dual wavelength 660nm/850nm penetrates deep into muscle tissue. Noticeably lower DOMS after heavy leg days.”',
       stars: 5,
     },
     {
       id: 16,
-      badgeName: 'NINA S.',
-      badgeProduct: 'APEX USER',
+      badgeName: 'SOPHIA W.',
+      badgeProduct: 'SURGE USER',
       badgeWidth: 314,
       quote:
-        '“Clean aesthetic, quiet operation, and incredibly soothing light. It sets the perfect circadian rhythm tone every evening.”',
+        '“High quality finish, ultra quiet operation, and sleek modern aesthetic. Looks like high-end Scandinavian wellness tech.”',
       stars: 5,
     },
     {
       id: 17,
-      badgeName: 'DANIEL H.',
-      badgeProduct: 'MAX USER',
+      badgeName: 'AARON K.',
+      badgeProduct: 'NOVA USER',
       badgeWidth: 314,
       quote:
-        '“The investment is 100% worth it. Entire family uses it daily for different benefits ranging from skin clarity to joint relief.”',
+        '“Clinical irradiance verified with our spectrometer. True medical grade device at a competitive consumer price point.”',
       stars: 5,
     },
     {
       id: 18,
-      badgeName: 'RACHEL F.',
-      badgeProduct: 'GO USER',
+      badgeName: 'MAYA H.',
+      badgeProduct: 'GLOW USER',
       badgeWidth: 314,
       quote:
-        '“Perfect targeted panel for my desk. Whenever my neck feels tight from typing, 5 minutes under LUMA relieves the tension.”',
+        '“Lightweight, comfortable strap, zero eye pressure. My 10-minute evening session is my favorite self-care ritual.”',
       stars: 5,
     },
   ],
@@ -176,25 +178,25 @@ const REVIEWS_DATA = [
   [
     {
       id: 19,
-      badgeName: 'CARLOS G.',
-      badgeProduct: 'SURGE USER',
+      badgeName: 'LIAM C.',
+      badgeProduct: 'MAX USER',
       badgeWidth: 314,
       quote:
-        '“Ten minutes after training has become my reset. My shoulders feel looser the next morning and my warm-ups go faster.”',
+        '“Worth every dollar. Having clinical red light recovery at home has elevated my athletic performance and daily vitality.”',
       stars: 5,
     },
     {
       id: 20,
-      badgeName: 'AMANDA L.',
+      badgeName: 'HANNAH T.',
       badgeProduct: 'NOVA USER',
       badgeWidth: 314,
       quote:
-        '“Setup took minutes, and the handle makes it easy to move between rooms. It sits in my office and I use it every afternoon.”',
+        '“Reduced redness and inflammation within two weeks. My dermatologist was genuinely impressed by the results.”',
       stars: 5,
     },
     {
       id: 21,
-      badgeName: 'KAVITA D.',
+      badgeName: 'JULIA S.',
       badgeProduct: 'GLOW USER',
       badgeWidth: 314,
       quote:
@@ -231,10 +233,65 @@ const REVIEWS_DATA = [
   ],
 ];
 
-export default function RealStoriesSection() {
+export default function RealStoriesSection({ data }) {
   const [currentPage, setCurrentPage] = useState(0);
   const [touchStartX, setTouchStartX] = useState(null);
-  const totalPages = REVIEWS_DATA.length; // 4 pages matching 4 PSD dots
+  const [liveApprovedStories, setLiveApprovedStories] = useState([]);
+  const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/stories`)
+      .then((res) => res.json())
+      .then((json) => {
+        if (json && json.success && Array.isArray(json.data) && json.data.length > 0) {
+          const formatted = json.data.map((s) => {
+            const rawProd = s.badgeProduct || s.product || 'Glow';
+            const prodClean = rawProd.replace(/^luma\s+/i, '').replace(/\s+user$/i, '').trim().toUpperCase();
+            return {
+              id: s._id,
+              badgeName: s.badgeName || s.name.toUpperCase(),
+              badgeProduct: `${prodClean} USER`,
+              badgeWidth: 314,
+              quote: `“${s.story}”`,
+              stars: s.stars || 5,
+              isLiveUserStory: true,
+            };
+          });
+          setLiveApprovedStories(formatted);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const title = data?.title || 'REAL STORIES';
+
+  // Page 1 is strictly the exact PSD design reviews (matches PSD Layer 'REAL STORIES')
+  // Page 2 contains the real stories approved by admin from MongoDB (Marcus Vance, etc.)
+  const allPages = (() => {
+    const page1 = (data?.reviews && Array.isArray(data.reviews) && data.reviews.length >= 6)
+      ? data.reviews.slice(0, 6)
+      : REVIEWS_DATA[0];
+
+    const page2 = liveApprovedStories.length > 0
+      ? [...liveApprovedStories, ...REVIEWS_DATA[1].slice(liveApprovedStories.length)]
+      : (data?.reviews && data.reviews.length >= 12 ? data.reviews.slice(6, 12) : REVIEWS_DATA[1]);
+
+    const page3 = REVIEWS_DATA[2];
+    const page4 = REVIEWS_DATA[3];
+
+    return [page1, page2, page3, page4];
+  })();
+
+  const totalPages = allPages.length;
+
+  // Auto-advance carousel smoothly every 6 seconds when not hovered until last page
+  useEffect(() => {
+    if (totalPages <= 1 || isHovered) return;
+    const interval = setInterval(() => {
+      setCurrentPage((prev) => (prev < totalPages - 1 ? prev + 1 : prev));
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [totalPages, isHovered]);
 
   const handlePrev = () => {
     if (currentPage > 0) {
@@ -268,19 +325,19 @@ export default function RealStoriesSection() {
     setTouchStartX(null);
   };
 
-  const currentReviews = REVIEWS_DATA[currentPage];
-
   return (
     <section
       id="real-stories"
       style={{ '--u': 'calc(100vw / 3840)' }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
       className="relative w-full bg-[#FFFFFF] text-[#000000] overflow-hidden font-['Manrope'] select-none pt-12 sm:pt-16 md:pt-20 lg:pt-[calc(169*var(--u))] pb-12 sm:pb-16 md:pb-20 lg:pb-[calc(111*var(--u))]"
     >
       {/* Section Header: Title + Red Pill Bar (PSD y=1359..1487) */}
       <div className="w-full flex flex-col items-center justify-center text-center px-4">
-        {/* Title: REAL STORIES (PSD: Manrope-ExtraLight 80px at 3840w, tracking 20 / 0.02em, color #131313) */}
+        {/* Title: REAL STORIES */}
         <h2 className="text-[26px] sm:text-[36px] md:text-[46px] lg:text-[calc(80*var(--u))] font-extralight uppercase tracking-[0.02em] text-[#131313] leading-none">
-          REAL STORIES
+          {title}
         </h2>
 
         {/* Red Pill Bar (Rectangle 15: 150x20px, r=10px, fill #ED2124, 47px below title) */}
@@ -302,10 +359,11 @@ export default function RealStoriesSection() {
           onClick={handlePrev}
           disabled={currentPage === 0}
           aria-label="Previous reviews slide"
-          className={`hidden lg:flex items-center justify-center absolute lg:left-[calc(377*var(--u))] top-1/2 -translate-y-1/2 z-20 lg:w-[calc(77*var(--u))] lg:h-[calc(129*var(--u))] transition-all duration-300 cursor-pointer ${
+          style={{ left: 'calc(377 * var(--u))' }}
+          className={`hidden lg:flex items-center justify-center absolute top-1/2 -translate-y-1/2 z-20 w-[calc(77*var(--u))] h-[calc(129*var(--u))] transition-all duration-300 ${
             currentPage === 0
               ? 'opacity-20 cursor-not-allowed pointer-events-none'
-              : 'opacity-90 hover:opacity-100 hover:scale-105 active:scale-95'
+              : 'opacity-90 hover:opacity-100 hover:scale-105 active:scale-95 cursor-pointer'
           }`}
         >
           <img
@@ -322,10 +380,11 @@ export default function RealStoriesSection() {
           onClick={handleNext}
           disabled={currentPage === totalPages - 1}
           aria-label="Next reviews slide"
-          className={`hidden lg:flex items-center justify-center absolute lg:right-[calc(377*var(--u))] top-1/2 -translate-y-1/2 z-20 lg:w-[calc(77*var(--u))] lg:h-[calc(129*var(--u))] transition-all duration-300 cursor-pointer ${
+          style={{ right: 'calc(377 * var(--u))' }}
+          className={`hidden lg:flex items-center justify-center absolute top-1/2 -translate-y-1/2 z-20 w-[calc(77*var(--u))] h-[calc(129*var(--u))] transition-all duration-300 ${
             currentPage === totalPages - 1
               ? 'opacity-20 cursor-not-allowed pointer-events-none'
-              : 'opacity-90 hover:opacity-100 hover:scale-105 active:scale-95'
+              : 'opacity-90 hover:opacity-100 hover:scale-105 active:scale-95 cursor-pointer'
           }`}
         >
           <img
@@ -336,39 +395,51 @@ export default function RealStoriesSection() {
           />
         </button>
 
-        {/* Reviews Cards Grid (PSD: 3 columns x 2 rows = 6 cards, card 817x484px, col-gap 175px, row-gap 158px) */}
-        <div className="w-full max-w-[1440px] lg:max-w-none mx-auto px-2 sm:px-6 lg:px-[calc(142*var(--u))]">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8 lg:gap-x-[calc(175*var(--u))] lg:gap-y-[calc(158*var(--u))] justify-items-center">
-            {currentReviews.map((review) => (
-              <article
-                key={review.id}
-                className="w-full max-w-[420px] md:max-w-none lg:w-[calc(817*var(--u))] min-h-[210px] sm:min-h-[240px] lg:h-[calc(484*var(--u))] bg-[#F3F3F3] rounded-[20px] sm:rounded-[26px] lg:rounded-[calc(45*var(--u))] p-6 sm:p-7 lg:px-[calc(79*var(--u))] lg:pt-[calc(69*var(--u))] lg:pb-[calc(68*var(--u))] flex flex-col justify-between items-start transition-transform duration-300 hover:shadow-lg"
-              >
-                {/* User Product Badge (Rectangle 44: 314x75px, border 2px black, rounded 10px) */}
-                <div className="w-auto min-w-[110px] sm:min-w-[130px] lg:w-[calc(314*var(--u))] h-[28px] sm:h-[34px] lg:h-[calc(75*var(--u))] px-2.5 sm:px-3.5 lg:px-0 rounded-[6px] sm:rounded-[7px] lg:rounded-[calc(10*var(--u))] border border-black sm:border-[1.5px] lg:border-2 border-[#000000] bg-transparent flex items-center justify-center text-center shrink-0">
-                  <span className="text-[9.5px] sm:text-[11px] lg:text-[calc(22.6*var(--u))] font-semibold uppercase tracking-[0.02em] text-[#000000] whitespace-nowrap">
-                    {review.badgeName} <span className="font-normal">{review.badgeProduct}</span>
-                  </span>
-                </div>
+        {/* Reviews Cards Sliding Track (PSD: 3 columns x 2 rows = 6 cards, card 817x484px, col-gap 175px, row-gap 158px) */}
+        <div className="w-full max-w-[1440px] lg:max-w-[calc(2801*var(--u))] mx-auto px-0 overflow-hidden">
+          <div
+            className="flex transition-transform duration-700 ease-out will-change-transform"
+            style={{ transform: `translateX(-${currentPage * 100}%)` }}
+          >
+            {allPages.map((pageReviews, pageIdx) => (
+              <div key={pageIdx} className="w-full min-w-full shrink-0">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 md:gap-8 lg:gap-x-[calc(175*var(--u))] lg:gap-y-[calc(158*var(--u))] justify-items-center">
+                  {pageReviews.map((review) => (
+                    <article
+                      key={review.id}
+                      className="w-full max-w-[420px] md:max-w-none lg:w-[calc(817*var(--u))] min-h-[210px] sm:min-h-[240px] lg:h-[calc(484*var(--u))] bg-[#F3F3F3] rounded-[20px] sm:rounded-[26px] lg:rounded-[calc(45*var(--u))] p-6 sm:p-7 lg:px-[calc(79*var(--u))] lg:pt-[calc(69*var(--u))] lg:pb-[calc(68*var(--u))] flex flex-col justify-between items-start transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+                    >
+                      {/* Top Row: Product Badge */}
+                      <div className="w-full flex items-center justify-start">
+                        {/* User Product Badge (Rectangle 44: min 314x75px, auto-expands with padding for full names) */}
+                        <div className="w-auto min-w-[110px] sm:min-w-[130px] lg:min-w-[calc(314*var(--u))] lg:max-w-[calc(550*var(--u))] h-[28px] sm:h-[34px] lg:h-[calc(75*var(--u))] px-3 sm:px-4 lg:px-[calc(26*var(--u))] rounded-[6px] sm:rounded-[7px] lg:rounded-[calc(10*var(--u))] border border-black sm:border-[1.5px] lg:border-2 border-[#000000] bg-transparent flex items-center justify-center text-center shrink-0">
+                          <span className="text-[9.5px] sm:text-[11px] lg:text-[calc(21*var(--u))] font-semibold uppercase tracking-[0.02em] text-[#000000] whitespace-nowrap overflow-hidden text-ellipsis">
+                            {review.badgeName} <span className="font-normal">{review.badgeProduct}</span>
+                          </span>
+                        </div>
+                      </div>
 
-                {/* Testimonial Quote (PSD: Manrope-Light 30px at 3840w, leading 50px, color #000000, 91px from card left) */}
-                <p className="mt-3.5 sm:mt-5 lg:mt-[calc(70*var(--u))] lg:pl-[calc(12*var(--u))] text-[12px] sm:text-[13.5px] md:text-[14.5px] lg:text-[calc(30*var(--u))] font-light text-[#000000] leading-snug sm:leading-relaxed lg:leading-[calc(50*var(--u))] tracking-[0.02em] line-clamp-4 lg:line-clamp-none">
-                  {review.quote}
-                </p>
+                      {/* Testimonial Quote (PSD: Manrope-Light 30px at 3840w, leading 50px, color #000000, 91px from card left) */}
+                      <p className="mt-3.5 sm:mt-5 lg:mt-[calc(70*var(--u))] lg:pl-[calc(12*var(--u))] text-[12px] sm:text-[13.5px] md:text-[14.5px] lg:text-[calc(30*var(--u))] font-light text-[#000000] leading-snug sm:leading-relaxed lg:leading-[calc(50*var(--u))] tracking-[0.02em] line-clamp-4 lg:line-clamp-none">
+                        {review.quote}
+                      </p>
 
-                {/* 5 Red Stars Rating (PSD: star(2) 42x40px each, gap 3px, fill #ED2124, 91px from card left) */}
-                <div className="mt-3.5 sm:mt-5 lg:mt-[calc(31*var(--u))] lg:pl-[calc(12*var(--u))] flex items-center gap-1 sm:gap-1.5 lg:gap-[calc(3*var(--u))] shrink-0">
-                  {Array.from({ length: review.stars }).map((_, i) => (
-                    <img
-                      key={i}
-                      src="/assets/reviews/star-red.png"
-                      alt="Star rating"
-                      className="w-[13px] sm:w-[16px] lg:w-[calc(42*var(--u))] h-[12px] sm:h-[15px] lg:h-[calc(40*var(--u))] object-contain pointer-events-none select-none"
-                      draggable={false}
-                    />
+                      {/* 5 Red Stars Rating (PSD: star(2) 42x40px each, gap 3px, fill #ED2124, 91px from card left) */}
+                      <div className="mt-3.5 sm:mt-5 lg:mt-[calc(31*var(--u))] lg:pl-[calc(12*var(--u))] flex items-center gap-1 sm:gap-1.5 lg:gap-[calc(3*var(--u))] shrink-0">
+                        {Array.from({ length: review.stars }).map((_, i) => (
+                          <img
+                            key={i}
+                            src="/assets/reviews/star-red.png"
+                            alt="Star rating"
+                            className="w-[13px] sm:w-[16px] lg:w-[calc(42*var(--u))] h-[12px] sm:h-[15px] lg:h-[calc(40*var(--u))] object-contain pointer-events-none select-none"
+                            draggable={false}
+                          />
+                        ))}
+                      </div>
+                    </article>
                   ))}
                 </div>
-              </article>
+              </div>
             ))}
           </div>
         </div>
@@ -382,10 +453,10 @@ export default function RealStoriesSection() {
           onClick={handlePrev}
           disabled={currentPage === 0}
           aria-label="Previous reviews slide"
-          className={`lg:hidden w-7 h-7 flex items-center justify-center rounded-full transition-all duration-200 cursor-pointer ${
+          className={`lg:hidden w-7 h-7 flex items-center justify-center rounded-full transition-all duration-200 ${
             currentPage === 0
               ? 'opacity-20 cursor-not-allowed pointer-events-none'
-              : 'opacity-80 hover:opacity-100 active:scale-90'
+              : 'opacity-80 hover:opacity-100 active:scale-90 cursor-pointer'
           }`}
         >
           <img
@@ -406,8 +477,8 @@ export default function RealStoriesSection() {
               aria-label={`Go to slide ${idx + 1}`}
               className={`w-[8px] sm:w-[10px] lg:w-[calc(20*var(--u))] h-[8px] sm:h-[10px] lg:h-[calc(20*var(--u))] rounded-full transition-all duration-300 cursor-pointer ${
                 currentPage === idx
-                  ? 'bg-[#ED2124] scale-110'
-                  : 'bg-[#C0C0C0] hover:bg-[#a0a0a0]'
+                  ? 'bg-[#ED2124] scale-125 shadow-sm'
+                  : 'bg-[#C0C0C0] hover:bg-[#888888]'
               }`}
             />
           ))}
@@ -419,10 +490,10 @@ export default function RealStoriesSection() {
           onClick={handleNext}
           disabled={currentPage === totalPages - 1}
           aria-label="Next reviews slide"
-          className={`lg:hidden w-7 h-7 flex items-center justify-center rounded-full transition-all duration-200 cursor-pointer ${
+          className={`lg:hidden w-7 h-7 flex items-center justify-center rounded-full transition-all duration-200 ${
             currentPage === totalPages - 1
               ? 'opacity-20 cursor-not-allowed pointer-events-none'
-              : 'opacity-80 hover:opacity-100 active:scale-90'
+              : 'opacity-80 hover:opacity-100 active:scale-90 cursor-pointer'
           }`}
         >
           <img

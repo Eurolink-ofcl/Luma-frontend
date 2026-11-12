@@ -1,6 +1,14 @@
 import React from 'react';
 
-export default function ReviewHero({ onShareStory, onFindPanel }) {
+export default function ReviewHero({ data, onShareStory, onFindPanel }) {
+  const bgImage = data?.bgImage || '/assets/reviews/review-hero-bg-v2.jpg?v=20261106_4';
+  const altText = data?.altText || 'LUMA Real Users Red Light Therapy Session';
+  const titleLine1 = data?.titleLine1 || 'RATED 4.8/5 BY';
+  const titleLine2 = data?.titleLine2 || 'THOUSANDS OF REAL USERS';
+  const subtitle = data?.subtitle || 'REAL ROUTINES, REAL STORIES';
+  const shareStoryBtnText = data?.shareStoryBtnText || 'SHARE YOUR STORY';
+  const findPanelBtnText = data?.findPanelBtnText || 'FIND YOUR PANEL';
+
   return (
     <section
       id="review-hero"
@@ -23,8 +31,8 @@ export default function ReviewHero({ onShareStory, onFindPanel }) {
       {/* On desktop: exact 3840x930 PSD alignment (50% 0%) */}
       <img
         id="review-hero-bg"
-        src="/assets/reviews/review-hero-bg-v2.jpg?v=20261106_4"
-        alt="LUMA Real Users Red Light Therapy Session"
+        src={bgImage}
+        alt={altText}
         className="absolute inset-0 w-full h-full object-cover select-none pointer-events-none"
         draggable={false}
       />
@@ -34,20 +42,20 @@ export default function ReviewHero({ onShareStory, onFindPanel }) {
 
       {/* Hero Content Container aligned with PSD grid margin x=520px (13.54vw), pt=196px below navbar (canvas y=456 - 260) */}
       <div className="relative z-10 w-full max-w-[1440px] lg:max-w-none mx-auto px-5 sm:px-8 lg:px-0 lg:pl-[calc(520*var(--u))] pt-5 sm:pt-7 lg:pt-[calc(196*var(--u))] pb-6 sm:pb-8 lg:pb-0 flex flex-col items-start justify-center">
-        {/* Main Title: "RATED 4.8/5 BY \n THOUSANDS OF REAL USERS" (PSD: Manrope-Bold, 150px at 3840w, leading 140px, color #FFFFFF, Line 2 spans to x=2567 overlapping knee) */}
+        {/* Main Title: "RATED 4.8/5 BY \n THOUSANDS OF REAL USERS" */}
         <h1 className="text-[max(20px,calc(150*var(--u)))] font-bold uppercase tracking-normal leading-[max(22px,calc(140*var(--u)))] text-[#FFFFFF] max-w-none select-none">
-          <span className="block">RATED 4.8/5 BY</span>
-          <span className="block whitespace-nowrap">THOUSANDS OF REAL USERS</span>
+          <span className="block">{titleLine1}</span>
+          <span className="block whitespace-nowrap">{titleLine2}</span>
         </h1>
 
-        {/* Subtitle: "REAL ROUTINES, REAL STORIES" (PSD: Manrope-Regular italic, 33px at 3840w, tracking 200 / 0.2em, #FFFFFF, 59px below title) */}
+        {/* Subtitle: "REAL ROUTINES, REAL STORIES" */}
         <p className="mt-[max(8px,calc(59*var(--u)))] text-[max(9px,calc(33*var(--u)))] font-normal italic uppercase tracking-[0.2em] text-[#FFFFFF]/90 leading-none">
-          REAL ROUTINES, REAL STORIES
+          {subtitle}
         </p>
 
-        {/* Action Buttons Row (PSD: canvas y=856..946, 58px below subtitle, gap 26px) */}
+        {/* Action Buttons Row */}
         <div className="mt-[max(12px,calc(58*var(--u)))] flex flex-wrap items-center gap-[calc(26*var(--u))]">
-          {/* Button 1: SHARE YOUR STORY (Rectangle 12: 374x90px, 2px white stroke, rounded-10 in PSD, Manrope-SemiBold 30px #FFFFFF) */}
+          {/* Button 1: SHARE YOUR STORY */}
           <a
             href="#share-story"
             onClick={(e) => {
@@ -58,10 +66,10 @@ export default function ReviewHero({ onShareStory, onFindPanel }) {
             }}
             className="w-[max(130px,calc(374*var(--u)))] h-[max(34px,calc(90*var(--u)))] rounded-[calc(10*var(--u))] border border-white/80 sm:border-2 sm:border-[#FFFFFF] bg-white/[0.04] hover:bg-white hover:text-[#000000] text-[#FFFFFF] text-[max(9.5px,calc(30*var(--u)))] font-semibold uppercase tracking-[0.1em] inline-flex items-center justify-center text-center leading-none transition-all duration-300 cursor-pointer shrink-0"
           >
-            SHARE YOUR STORY
+            {shareStoryBtnText}
           </a>
 
-          {/* Button 2: FIND YOUR PANEL (Rectangle 12: 411x90px, 2px white stroke, rounded-10 in PSD, Manrope-SemiBold 30px #FFFFFF) */}
+          {/* Button 2: FIND YOUR PANEL */}
           <a
             href="#products"
             onClick={(e) => {
@@ -72,7 +80,7 @@ export default function ReviewHero({ onShareStory, onFindPanel }) {
             }}
             className="w-[max(130px,calc(411*var(--u)))] h-[max(34px,calc(90*var(--u)))] rounded-[calc(10*var(--u))] border border-white/80 sm:border-2 sm:border-[#FFFFFF] bg-white/[0.04] hover:bg-white hover:text-[#000000] text-[#FFFFFF] text-[max(9.5px,calc(30*var(--u)))] font-semibold uppercase tracking-[0.1em] inline-flex items-center justify-center text-center leading-none transition-all duration-300 cursor-pointer shrink-0"
           >
-            FIND YOUR PANEL
+            {findPanelBtnText}
           </a>
         </div>
       </div>

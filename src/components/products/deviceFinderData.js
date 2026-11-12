@@ -1,0 +1,112 @@
+export const ALL_CATALOG_FINDER_PRODUCTS = [
+  {
+    id: 'luma-glow',
+    slug: 'luma-glow',
+    eyebrow: 'LUMA GLOW FACE MASK',
+    titleLine1: 'LUMA FACE LED',
+    titleLine2: 'LIGHT THERAPY MASK',
+    priceText: '1,200 AED',
+    price: 1200,
+    image: '/assets/about/product-glow-mask.png',
+    imgW: 404,
+    imgH: 323,
+    imgLeft: 97,
+    imgTop: 227,
+  },
+  {
+    id: 'luma-go',
+    slug: 'luma-go',
+    eyebrow: 'LUMA GO',
+    titleLine1: 'LUMA TARGETED RED',
+    titleLine2: 'LIGHT THERAPY PANEL',
+    priceText: '1,890 AED',
+    price: 1890,
+    image: '/assets/products/luma-go.png',
+    imgW: 250,
+    imgH: 478,
+    imgLeft: 164,
+    imgTop: 150,
+  },
+  {
+    id: 'luma-nova',
+    slug: 'luma-nova',
+    eyebrow: 'LUMA NOVA',
+    titleLine1: 'LED TARGETED',
+    titleLine2: 'RED LIGHT THERAPY PANEL',
+    priceText: '2,100 AED',
+    price: 2100,
+    image: '/assets/about/product-luma-nova.png',
+    imgW: 289,
+    imgH: 435,
+    imgLeft: 119,
+    imgTop: 175,
+  },
+  {
+    id: 'luma-surge',
+    slug: 'luma-surge',
+    eyebrow: 'LUMA SURGE',
+    titleLine1: 'LED TARGETED',
+    titleLine2: 'RED LIGHT THERAPY PANEL',
+    priceText: '2,890 AED',
+    price: 2890,
+    image: '/assets/glow/product-luma-surge.png',
+    imgW: 268,
+    imgH: 562,
+    imgLeft: 156,
+    imgTop: 102,
+  },
+  {
+    id: 'luma-apex',
+    slug: 'luma-apex',
+    eyebrow: 'LUMA APEX',
+    titleLine1: 'HALF-BODY RED',
+    titleLine2: 'LIGHT THERAPY PANEL',
+    priceText: '3,800 AED',
+    price: 3800,
+    image: '/assets/about/product-luma-apex.png',
+    imgW: 170,
+    imgH: 619,
+    imgLeft: 208,
+    imgTop: 65,
+  },
+  {
+    id: 'luma-ultra',
+    slug: 'luma-ultra',
+    eyebrow: 'LUMA ULTRA',
+    titleLine1: 'HALF-BODY RED',
+    titleLine2: 'LIGHT THERAPY PANEL',
+    priceText: '4,890 AED',
+    price: 4890,
+    image: '/assets/about/product-luma-max.png',
+    imgW: 150,
+    imgH: 630,
+    imgLeft: 215,
+    imgTop: 50,
+  },
+  {
+    id: 'luma-max',
+    slug: 'luma-max',
+    eyebrow: 'LUMA MAX',
+    titleLine1: 'FULL-BODY RED',
+    titleLine2: 'LIGHT THERAPY PANEL',
+    priceText: '5,890 AED',
+    price: 5890,
+    image: '/assets/about/product-luma-max.png',
+    imgW: 138,
+    imgH: 639,
+    imgLeft: 227,
+    imgTop: 41,
+  },
+];
+
+export function getFinderProductsFor(currentSlug = '') {
+  const norm = (currentSlug || '').toLowerCase().trim();
+  return ALL_CATALOG_FINDER_PRODUCTS.filter((p) => {
+    return p.id !== norm && p.slug !== norm;
+  });
+}
+
+// Backward-compatible exports with full product sets (excluding the active product)
+export const GLOW_FINDER_PRODUCTS = getFinderProductsFor('luma-glow');
+export const GO_FINDER_PRODUCTS = getFinderProductsFor('luma-go');
+export const NOVA_FINDER_PRODUCTS = getFinderProductsFor('luma-nova');

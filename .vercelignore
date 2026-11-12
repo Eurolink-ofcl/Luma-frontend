@@ -1,11 +1,29 @@
-# Exclude massive local files and test artifacts
+# Node modules & Git
+node_modules
+.git
+
+# Build output (Vercel builds on cloud)
+dist
+dist/
+.vercel/output
+
+# Root scratch assets (actual app assets are in public/assets/)
+assets/
+/assets
+scripts/
+
+# Photoshop scratch and temporary files
+*.8bpb
+**/*.8bpb
 *.psd
+**/*.psd
 *.zip
 *.py
 *.jsonl
 *.log
+*.dat
 
-# Exclude local scratch scripts and visual test suites
+# Local scratch scripts and visual test suites
 monitor_tests
 psd_crops
 react_crops
@@ -13,22 +31,21 @@ compare_crops
 slices
 responsive_tests
 
-# Exclude root screenshots while preserving assets in public/
-/test_*.png
-/screen_*.png
-/react_*.png
-/final_*.png
-/verified-*.png
-/macbook-*.png
-/about_comparison_final.jpg
-/clinical_tech_comparison_final.jpg
-/comparison_*.jpg
-/final_sections_comparison.jpg
-/psd_section_hero.jpg
-/react_comparison_final.jpg
-/top_preview*.png
-/user_*.png
+# Root test screenshots and comparison images
+*.png
+*.jpg
+*.jpeg
 
-# Node modules & Git
-node_modules
-.git
+# Preserve assets in public/
+!public/**
+
+# Root documentation and tracking artifacts
+ARCHITECTURE.md
+README-RALPH.md
+prd.json
+progress.txt
+prompt.md
+psd_typography_analysis.json
+ralph.sh
+responsive_coordination_report.json
+run_server.mjs

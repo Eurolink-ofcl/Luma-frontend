@@ -8,6 +8,8 @@ const ENQUIRY_SUBJECTS = [
   'Warranty & Replacement',
 ];
 
+const API_BASE_URL = 'http://localhost:5000/api';
+
 export default function ContactForm() {
   const [formData, setFormData] = useState({
     firstName: '',
@@ -20,6 +22,8 @@ export default function ContactForm() {
 
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
   const dropdownRef = useRef(null);
 
   // Close dropdown on outside click
@@ -36,6 +40,7 @@ export default function ContactForm() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    if (submitError) setSubmitError('');
   };
 
   const handleSelectSubject = (item) => {
@@ -44,7 +49,7 @@ export default function ContactForm() {
   };
 
   const handleReset = (e) => {
-    e.preventDefault();
+    if (e) e.preventDefault();
     setFormData({
       firstName: '',
       lastName: '',
@@ -54,11 +59,70 @@ export default function ContactForm() {
       message: '',
     });
     setSubmitted(false);
+    setSubmitError('');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSubmitted(true);
+    setSubmitError('');
+
+    // Validation
+    if (!formData.firstName.trim()) {
+      setSubmitError('Please enter your first name.');
+      return;
+    }
+    if (!formData.email.trim()) {
+      setSubmitError('Please enter your email address.');
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email.trim())) {
+      setSubmitError('Please enter a valid email address.');
+      return;
+    }
+    if (!formData.message.trim()) {
+      setSubmitError('Please enter your message or enquiry details.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch(`${API_BASE_URL}/contact`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName: formData.firstName.trim(),
+          lastName: formData.lastName.trim(),
+          email: formData.email.trim(),
+          countryCode: '+971',
+          phone: formData.phone.trim() ? `+971 ${formData.phone.trim()}` : '',
+          subject: formData.subject,
+          message: formData.message.trim(),
+        }),
+      });
+
+      const data = await response.json();
+      if (!response.ok || !data.success) {
+        throw new Error(data.message || 'Failed to submit enquiry. Please try again.');
+      }
+
+      setSubmitted(true);
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: '',
+        subject: 'General Enquiry',
+        message: '',
+      });
+    } catch (err) {
+      console.error('Contact form submission error:', err);
+      setSubmitError(err.message || 'Could not send message. Please check connection.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -75,8 +139,20 @@ export default function ContactForm() {
         </h2>
 
         {submitted && (
-          <div className="mb-6 sm:mb-8 p-4 rounded-xl bg-green-50 border border-green-200 text-green-800 text-center text-sm sm:text-base font-medium">
-            Thank you! Your message has been received. Our team will contact you shortly.
+          <div className="mb-6 sm:mb-8 p-4 rounded-xl bg-green-50 border border-green-200 text-green-800 text-center text-sm sm:text-base font-medium flex items-center justify-center gap-2">
+            <svg className="w-5 h-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+            Thank you! Your enquiry has been received. Our team will contact you shortly.
+          </div>
+        )}
+
+        {submitError && (
+          <div className="mb-6 sm:mb-8 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-center text-sm sm:text-base font-medium flex items-center justify-center gap-2">
+            <svg className="w-5 h-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            {submitError}
           </div>
         )}
 
@@ -276,9 +352,12 @@ export default function ContactForm() {
             {/* Submit Button */}
             <button
               type="submit"
-              className="w-[110px] sm:w-[130px] md:w-[150px] lg:w-[calc(438*var(--u))] h-[46px] sm:h-[52px] md:h-[58px] lg:h-[calc(169*var(--u))] rounded-full bg-[#D61611] hover:bg-[#b8120e] active:scale-[0.98] transition-all text-[#FFFFFF] font-['Inter',_'Manrope',_sans-serif] font-semibold text-[14px] sm:text-[16px] md:text-[18px] lg:text-[calc(55.55*var(--u))] flex items-center justify-center cursor-pointer select-none leading-none shadow-md"
+              disabled={isSubmitting}
+              className={`w-[110px] sm:w-[130px] md:w-[150px] lg:w-[calc(438*var(--u))] h-[46px] sm:h-[52px] md:h-[58px] lg:h-[calc(169*var(--u))] rounded-full bg-[#D61611] hover:bg-[#b8120e] active:scale-[0.98] transition-all text-[#FFFFFF] font-['Inter',_'Manrope',_sans-serif] font-semibold text-[14px] sm:text-[16px] md:text-[18px] lg:text-[calc(55.55*var(--u))] flex items-center justify-center cursor-pointer select-none leading-none shadow-md ${
+                isSubmitting ? 'opacity-70 cursor-not-allowed' : ''
+              }`}
             >
-              Submit
+              {isSubmitting ? 'Sending...' : 'Submit'}
             </button>
           </div>
         </form>

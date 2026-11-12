@@ -1,7 +1,21 @@
 import React, { useState } from 'react';
 
-export default function Hero() {
+export default function Hero({ data }) {
   const [activeSlide, setActiveSlide] = useState(0);
+
+  const headingText = data?.badge || 'THE SCIENCE OF LIGHT.\nTHE POWER TO HEAL.';
+  const headingLines = headingText.includes('\n')
+    ? headingText.split('\n')
+    : headingText.includes('.')
+      ? headingText.split('.').map((s) => s.trim()).filter(Boolean).map((s) => s + '.')
+      : [headingText];
+
+  const subtitle = data?.title || "THE WORLD'S MOST ADVANCED RED LIGHT THERAPY PANEL";
+  const exploreBtnText = data?.exploreBtnText || 'EXPLORE LUMA';
+  const exploreBtnLink = data?.exploreBtnLink || '#about';
+  const findPanelBtnText = data?.findPanelBtnText || 'FIND YOUR PANEL';
+  const findPanelBtnLink = data?.findPanelBtnLink || '#assessment-quiz';
+  const bgImage = data?.bgImage || '/assets/hero-bg.jpg';
 
   return (
     <main
@@ -12,7 +26,7 @@ export default function Hero() {
       {/* Background with Authenticity & Depth (Exact PSD Composite: Base + RED LIGHT Circles + Layer 19 + Shade) */}
       <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
         <img
-          src="/assets/hero-bg.jpg"
+          src={bgImage}
           alt="LUMA Red Light Therapy Panels in Modern Wellness Gym"
           className="w-full h-full object-cover object-[66%_center] sm:object-[60%_center] lg:object-center"
         />
@@ -24,28 +38,29 @@ export default function Hero() {
       <div className="relative z-10 w-full flex flex-col items-center">
         {/* Main Heading: Manrope-Bold (700), 150px at 3840w, leading 140px (0.9333), tracking 0, #FFFFFF */}
         <h1 className="font-['Manrope'] text-[27px] sm:text-[42px] md:text-[52px] lg:text-[calc(150*var(--u))] font-bold leading-[1.02] lg:leading-[0.9333] tracking-normal uppercase text-[#FFFFFF] drop-shadow-[0_2px_12px_rgba(0,0,0,0.45)] lg:drop-shadow-none">
-          <span className="block">THE SCIENCE OF LIGHT.</span>
-          <span className="block">THE POWER TO HEAL.</span>
+          {headingLines.map((line, idx) => (
+            <span key={idx} className="block">{line}</span>
+          ))}
         </h1>
 
         {/* Subtitle: Manrope-Regular (400), Italic, 33px at 3840w, tracking 200 (0.2em), #FFFFFF */}
         <p className="font-['Manrope'] text-[9px] sm:text-[12px] lg:text-[calc(33*var(--u))] font-normal italic tracking-[0.11em] sm:tracking-[0.2em] uppercase text-[#FFFFFF]/95 lg:text-[#FFFFFF] leading-snug lg:leading-none mt-3.5 sm:mt-5 lg:mt-[calc(60*var(--u))] max-w-[94vw] whitespace-nowrap">
-          THE WORLD&apos;S MOST ADVANCED RED LIGHT THERAPY PANEL
+          {subtitle}
         </p>
 
         {/* Action Buttons: Manrope-SemiBold (600), 30px at 3840w, tracking 100 (0.1em), #FFFFFF */}
         <div className="luma-hero-buttons flex flex-row items-center justify-center gap-2.5 sm:gap-4 lg:gap-[calc(26*var(--u))] mt-6 sm:mt-8 lg:mt-[calc(61*var(--u))] w-full max-w-[335px] sm:max-w-none">
           <a
-            href="#about"
+            href={exploreBtnLink}
             className="flex-1 sm:flex-initial sm:w-[165px] lg:w-[calc(374*var(--u))] h-[38px] sm:h-[42px] lg:h-[calc(90*var(--u))] inline-flex items-center justify-center rounded-[5px] lg:rounded-[calc(10*var(--u))] text-[10px] sm:text-[12px] lg:text-[calc(30*var(--u))] font-semibold tracking-[0.08em] sm:tracking-[0.1em] uppercase border border-white/85 bg-black/35 backdrop-blur-[2px] lg:backdrop-blur-none lg:bg-black/25 text-[#FFFFFF] hover:bg-white hover:text-black hover:border-white transition-all leading-none whitespace-nowrap"
           >
-            EXPLORE LUMA
+            {exploreBtnText}
           </a>
           <a
-            href="#get-panel"
+            href={findPanelBtnLink}
             className="flex-1 sm:flex-initial sm:w-[180px] lg:w-[calc(411*var(--u))] h-[38px] sm:h-[42px] lg:h-[calc(90*var(--u))] inline-flex items-center justify-center rounded-[5px] lg:rounded-[calc(10*var(--u))] text-[10px] sm:text-[12px] lg:text-[calc(30*var(--u))] font-semibold tracking-[0.08em] sm:tracking-[0.1em] uppercase border border-white/85 bg-black/35 backdrop-blur-[2px] lg:backdrop-blur-none lg:bg-black/25 text-[#FFFFFF] hover:bg-[#EC2024] hover:border-[#EC2024] hover:text-white transition-all leading-none whitespace-nowrap"
           >
-            FIND YOUR PANEL
+            {findPanelBtnText}
           </a>
         </div>
       </div>

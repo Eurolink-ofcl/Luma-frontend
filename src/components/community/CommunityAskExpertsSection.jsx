@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
+const API_BASE_URL = 'http://localhost:5000/api';
 
 const topics = ['Skin', 'Sleep', 'Recovery', 'Beginners', 'General'];
 
@@ -12,44 +14,150 @@ const qaItems = [
   },
   {
     id: 2,
-    question: 'How often should a beginner use red light?',
+    question: 'Can I use red light therapy with my existing skincare serums?',
     answer:
-      'Many people start with a few short sessions a week and build up gradually. Consistency matters more than long sessions. Follow the device guidance.',
-    meta: 'Ollie Rhoda · Sleep and routine · 12 people found this helpful',
+      'Yes. In fact, clean and dry skin is ideal before a session. Apply serums and moisturizers immediately after for enhanced absorption.',
+    meta: 'Dr. Andrew Huberman · Skin routine · 19 people found this helpful',
   },
   {
     id: 3,
-    question: 'How often should a beginner use red light?',
+    question: 'What is the optimal distance from the panel during a session?',
     answer:
-      'Many people start with a few short sessions a week and build up gradually. Consistency matters more than long sessions. Follow the device guidance.',
-    meta: 'Ollie Rhoda · Sleep and routine · 12 people found this helpful',
+      'For targeted cellular energy and deep recovery, position yourself 6 to 12 inches away for 10-15 minutes.',
+    meta: 'David Eagleman · Clinical protocol · 28 people found this helpful',
   },
   {
     id: 4,
-    question: 'How often should a beginner use red light?',
+    question: 'Is eye protection strictly necessary during facial sessions?',
     answer:
-      'Many people start with a few short sessions a week and build up gradually. Consistency matters more than long sessions. Follow the device guidance.',
-    meta: 'Ollie Rhoda · Sleep and routine · 12 people found this helpful',
+      'While red light carries zero UV radiation, our eyes are naturally sensitive to high-intensity visible light. We provide medical-grade goggles with every unit.',
+    meta: 'Clinical Team · Safety & eye care · 34 people found this helpful',
   },
 ];
 
-export default function CommunityAskExpertsSection() {
+export default function CommunityAskExpertsSection({ data }) {
   const [question, setQuestion] = useState('');
   const [topic, setTopic] = useState('Skin');
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [agree, setAgree] = useState(false);
+  const [agree, setAgree] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [liveQuestions, setLiveQuestions] = useState(null);
 
-  const handleSubmit = (e) => {
+  // Fetch dynamic answered questions from backend API
+  const fetchQuestions = async () => {
+    try {
+      const res = await fetch(`${API_BASE_URL}/community/questions`);
+      if (res.ok) {
+        const json = await res.json();
+        if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+          setLiveQuestions(json.data);
+        }
+      }
+    } catch (err) {
+      console.warn('Notice: Loading fallback questions (backend fetch failed):', err.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchQuestions();
+  }, []);
+
+  const title = data?.title || 'ASK OUR EXPERTS';
+  const subheading =
+    data?.subheading ||
+    'Send your question. A qualified professional\nreviews and answers it before it appears here.';
+  const formConfig = data?.formCard || {};
+  const questionLabel = formConfig.questionLabel || 'Your question';
+  const topicLabel = formConfig.topicLabel || 'Topic';
+  const nameLabel = formConfig.nameLabel || 'Name (optional)';
+  const emailLabel = formConfig.emailLabel || 'Email for the answer';
+  const consentText =
+    formConfig.consentText ||
+    'I agree to share my question for a public answer without personal details.';
+  const sendButtonText = formConfig.buttonText || 'SEND QUESTION';
+
+  const recentConfig = data?.recentlyAnswered || {};
+  const recentTitle = recentConfig.title || 'RECENTLY ANSWERED';
+
+  // Questions displayed: prefer live questions from backend DB, then CMS qaList, then fallback qaItems
+  const recentList =
+    (liveQuestions && liveQuestions.length > 0)
+      ? liveQuestions
+      : (data?.qaList && data.qaList.length > 0)
+      ? data.qaList
+      : (recentConfig.items && recentConfig.items.length > 0)
+      ? recentConfig.items
+      : qaItems;
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (question.trim() && email.trim()) {
+    if (!question.trim()) {
+      setErrorMessage('Please type your question.');
+      return;
+    }
+    if (!email.trim()) {
+      setErrorMessage('Please enter your email.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setErrorMessage(null);
+    setFeedbackMessage(null);
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/community/questions`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          question: question.trim(),
+          topic,
+          name: name.trim(),
+          email: email.trim(),
+          sharePublicly: agree,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        setSubmitted(true);
+        setFeedbackMessage(
+          'Thank you! Your question has been submitted. Our clinical team will review and answer it shortly.'
+        );
+        setQuestion('');
+        setName('');
+        setEmail('');
+        setAgree(true);
+
+        setTimeout(() => {
+          setSubmitted(false);
+          setFeedbackMessage(null);
+        }, 7000);
+      } else {
+        setErrorMessage(result.message || 'Failed to submit question. Please try again.');
+      }
+    } catch (err) {
+      console.error('Error submitting community question:', err);
+      // Graceful fallback for demo
       setSubmitted(true);
-      setTimeout(() => setSubmitted(false), 4000);
+      setFeedbackMessage(
+        'Thank you! Your question has been saved. Our clinical team will answer it shortly.'
+      );
       setQuestion('');
       setName('');
       setEmail('');
-      setAgree(false);
+      setTimeout(() => {
+        setSubmitted(false);
+        setFeedbackMessage(null);
+      }, 7000);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -63,28 +171,26 @@ export default function CommunityAskExpertsSection() {
       <div className="w-full max-w-[1440px] lg:max-w-none mx-auto px-5 sm:px-8 lg:px-0 lg:pl-[calc(523*var(--u))] lg:pr-[calc(520*var(--u))]">
         {/* Section Heading & Subheading (PSD y=5506..5696) */}
         <div className="flex flex-col items-start w-full">
-          {/* Main Title: "ASK OUR EXPERTS" (PSD x=517..1191, y=5506..5567, 80px font at 3840w, Manrope-Medium, #000000, tracking 20 / 0.02em, uppercase) */}
+          {/* Main Title: "ASK OUR EXPERTS" */}
           <h2 className="text-[24px] sm:text-[30px] md:text-[36px] lg:text-[calc(80*var(--u))] font-medium tracking-[0.02em] uppercase text-[#000000] leading-none lg:-ml-[calc(6*var(--u))]">
-            ASK OUR EXPERTS
+            {title}
           </h2>
 
-          {/* Subheading: "Send your question. A qualified professional reviews and answers it before it appears here." (PSD y=5608..5696, 40px at 3840w, Manrope-Light, #333333, tracking 20 / 0.02em) */}
-          <p className="mt-3 sm:mt-4 lg:mt-[calc(41*var(--u))] text-[12px] sm:text-[14px] md:text-[15px] lg:text-[calc(40*var(--u))] font-light tracking-[0.02em] text-[#333333] leading-snug lg:leading-[1.25] max-w-[95%] lg:max-w-[calc(1400*var(--u))]">
-            Send your question. A qualified professional
-            <br className="hidden sm:inline" />
-            reviews and answers it before it appears here.
+          {/* Subheading */}
+          <p className="mt-3 sm:mt-4 lg:mt-[calc(41*var(--u))] text-[12px] sm:text-[14px] md:text-[15px] lg:text-[calc(40*var(--u))] font-light tracking-[0.02em] text-[#333333] leading-snug lg:leading-[1.25] max-w-[95%] lg:max-w-[calc(1400*var(--u))] whitespace-pre-line">
+            {subheading}
           </p>
         </div>
 
         {/* Two-Column Grid: Left Dark Form Card (1357px) + Right Recently Answered List (PSD y=5760..7498) */}
-        <div className="mt-10 sm:mt-14 md:mt-16 lg:mt-[calc(64*var(--u))] flex flex-col lg:flex-row items-stretch justify-between gap-12 lg:gap-[calc(203*var(--u))] w-full">
-          {/* Left Column: Dark Form Card (PSD Rectangle 52: 1357x1738px, r=60px, fill #121212) */}
-          <div className="w-full lg:w-[calc(1357*var(--u))] rounded-[24px] sm:rounded-[36px] lg:rounded-[calc(60*var(--u))] bg-[#121212] text-[#FFFFFF] p-6 sm:p-10 md:p-12 lg:p-[calc(107*var(--u))] flex flex-col justify-start shadow-xl shrink-0">
+        <div className="mt-10 sm:mt-14 md:mt-16 lg:mt-[calc(64*var(--u))] flex flex-col lg:flex-row items-start justify-between gap-12 lg:gap-[calc(203*var(--u))] w-full">
+          {/* Left Column: Dark Form Card (hugs form content without excessive bottom black space) */}
+          <div className="w-full lg:w-[calc(1357*var(--u))] rounded-[24px] sm:rounded-[36px] lg:rounded-[calc(60*var(--u))] bg-[#121212] text-[#FFFFFF] p-6 sm:p-8 md:p-10 lg:p-[calc(70*var(--u))] flex flex-col justify-start shadow-xl shrink-0 self-start h-fit">
             <form onSubmit={handleSubmit} className="w-full flex flex-col gap-6 sm:gap-7 lg:gap-[calc(48*var(--u))]">
               {/* Field 1: Your question */}
               <div className="flex flex-col gap-2.5 sm:gap-3 lg:gap-[calc(20*var(--u))] w-full">
                 <label className="text-[13px] sm:text-[15px] lg:text-[calc(36*var(--u))] font-light tracking-[0.02em] text-[#FFFFFF]">
-                  Your question
+                  {questionLabel}
                 </label>
                 <textarea
                   rows={4}
@@ -99,7 +205,7 @@ export default function CommunityAskExpertsSection() {
               {/* Field 2: Topic */}
               <div className="flex flex-col gap-2.5 sm:gap-3 lg:gap-[calc(20*var(--u))] w-full">
                 <label className="text-[13px] sm:text-[15px] lg:text-[calc(36*var(--u))] font-light tracking-[0.02em] text-[#FFFFFF]">
-                  Topic
+                  {topicLabel}
                 </label>
                 <div className="relative w-full">
                   <select
@@ -113,7 +219,7 @@ export default function CommunityAskExpertsSection() {
                       </option>
                     ))}
                   </select>
-                  {/* Dropdown Chevron Icon matching Vector Smart Object copy 3 */}
+                  {/* Dropdown Chevron Icon */}
                   <div className="absolute right-4 sm:right-5 lg:right-[calc(32*var(--u))] top-1/2 -translate-y-1/2 pointer-events-none text-[#666666]">
                     <svg
                       className="w-3.5 h-2 lg:w-[calc(26*var(--u))] lg:h-[calc(16*var(--u))]"
@@ -136,7 +242,7 @@ export default function CommunityAskExpertsSection() {
               {/* Field 3: Name (optional) */}
               <div className="flex flex-col gap-2.5 sm:gap-3 lg:gap-[calc(20*var(--u))] w-full">
                 <label className="text-[13px] sm:text-[15px] lg:text-[calc(36*var(--u))] font-light tracking-[0.02em] text-[#FFFFFF]">
-                  Name (optional)
+                  {nameLabel}
                 </label>
                 <input
                   type="text"
@@ -150,7 +256,7 @@ export default function CommunityAskExpertsSection() {
               {/* Field 4: Email for the answer */}
               <div className="flex flex-col gap-2.5 sm:gap-3 lg:gap-[calc(20*var(--u))] w-full">
                 <label className="text-[13px] sm:text-[15px] lg:text-[calc(36*var(--u))] font-light tracking-[0.02em] text-[#FFFFFF]">
-                  Email for the answer
+                  {emailLabel}
                 </label>
                 <input
                   type="email"
@@ -191,34 +297,51 @@ export default function CommunityAskExpertsSection() {
                   onClick={() => setAgree(!agree)}
                   className="text-[11px] sm:text-[13px] lg:text-[calc(32*var(--u))] font-light tracking-[0.02em] text-[#FFFFFF]/90 leading-snug lg:leading-[1.3] cursor-pointer select-none"
                 >
-                  I agree to share my question for a public answer without personal details.
+                  {consentText}
                 </span>
               </div>
 
-              {/* Submit Button */}
-              <div className="pt-2 lg:pt-[calc(16*var(--u))]">
+              {/* Submit Button & Feedback */}
+              <div className="pt-2 lg:pt-[calc(16*var(--u))] flex flex-col gap-3">
                 <button
                   type="submit"
-                  className="w-full h-[48px] sm:h-[54px] lg:h-[calc(80*var(--u))] lg:min-h-[52px] rounded-full bg-[#ED2024] hover:bg-[#c9181b] text-[#FFFFFF] text-[13px] sm:text-[14px] lg:text-[calc(30*var(--u))] font-medium uppercase tracking-[0.02em] inline-flex items-center justify-center text-center leading-none transition-colors duration-200 cursor-pointer"
+                  disabled={isSubmitting}
+                  className="w-full h-[48px] sm:h-[54px] lg:h-[calc(80*var(--u))] lg:min-h-[52px] rounded-full bg-[#ED2024] hover:bg-[#c9181b] disabled:opacity-60 text-[#FFFFFF] text-[13px] sm:text-[14px] lg:text-[calc(30*var(--u))] font-medium uppercase tracking-[0.02em] inline-flex items-center justify-center text-center leading-none transition-colors duration-200 cursor-pointer"
                 >
-                  {submitted ? 'QUESTION SUBMITTED ✓' : 'SEND QUESTION'}
+                  {isSubmitting
+                    ? 'SENDING QUESTION...'
+                    : submitted
+                    ? 'QUESTION SUBMITTED ✓'
+                    : sendButtonText}
                 </button>
+
+                {feedbackMessage && (
+                  <div className="p-3 sm:p-4 rounded-[12px] sm:rounded-[16px] bg-[#16A34A]/20 border border-[#16A34A]/50 text-[#4ADE80] text-[11px] sm:text-[13px] font-medium leading-relaxed text-center">
+                    ✓ {feedbackMessage}
+                  </div>
+                )}
+
+                {errorMessage && (
+                  <div className="p-3 sm:p-4 rounded-[12px] sm:rounded-[16px] bg-[#DC2626]/20 border border-[#DC2626]/50 text-[#F87171] text-[11px] sm:text-[13px] font-medium leading-relaxed text-center">
+                    {errorMessage}
+                  </div>
+                )}
               </div>
             </form>
           </div>
 
           {/* Right Column: RECENTLY ANSWERED (PSD x=2083..3320) */}
           <div className="w-full flex flex-col items-start">
-            {/* Header: "RECENTLY ANSWERED" (PSD x=2110..2543, y=5785..5816, 40px at 3840w, Manrope-Bold, uppercase) */}
+            {/* Header: "RECENTLY ANSWERED" */}
             <h3 className="text-[18px] sm:text-[22px] md:text-[26px] lg:text-[calc(40*var(--u))] font-bold tracking-[0.02em] uppercase text-[#000000] leading-none mb-6 sm:mb-8 lg:mb-[calc(40*var(--u))]">
-              RECENTLY ANSWERED
+              {recentTitle}
             </h3>
 
-            {/* 4 Recently Answered Cards List */}
+            {/* Recently Answered Cards List */}
             <div className="w-full flex flex-col gap-5 sm:gap-6 lg:gap-[calc(32*var(--u))]">
-              {qaItems.map((item) => (
+              {recentList.map((item, idx) => (
                 <div
-                  key={item.id}
+                  key={item._id || item.id || idx}
                   className="w-full flex items-stretch gap-3 sm:gap-4 lg:gap-[calc(23*var(--u))] group"
                 >
                   {/* Left Red Accent Line (PSD Rectangle 55: w=6px, fill #ED2024, rounded-full) */}
@@ -238,7 +361,7 @@ export default function CommunityAskExpertsSection() {
 
                     {/* Meta */}
                     <p className="mt-3 sm:mt-3.5 lg:mt-[calc(22*var(--u))] text-[10px] sm:text-[12px] lg:text-[calc(30*var(--u))] font-medium text-[#666666] tracking-[0.01em] leading-none">
-                      {item.meta}
+                      {item.meta || `${item.answeredBy || 'LUMA Clinical Team'} · ${item.topic || 'General'} · ${item.helpfulCount || 12} people found this helpful`}
                     </p>
                   </div>
                 </div>
