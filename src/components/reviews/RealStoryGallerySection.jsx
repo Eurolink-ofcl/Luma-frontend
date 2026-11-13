@@ -1,58 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { API_BASE_URL, resolveImageUrl } from '../../config/api';
 
-// Exact 8 Curved Position coordinates on 3840x1606 canvas (PSD: bbox y=3091..4697)
-const CARD_POSITIONS = [
-  { left: 'calc(0 * var(--u))', top: 'calc(0 * var(--u))', width: 'calc(390 * var(--u))', height: 'calc(1606 * var(--u))' },
-  { left: 'calc(446 * var(--u))', top: 'calc(245 * var(--u))', width: 'calc(609 * var(--u))', height: 'calc(1055 * var(--u))' },
-  { left: 'calc(1093 * var(--u))', top: 'calc(418 * var(--u))', width: 'calc(450 * var(--u))', height: 'calc(710 * var(--u))' },
-  { left: 'calc(1571 * var(--u))', top: 'calc(483 * var(--u))', width: 'calc(390 * var(--u))', height: 'calc(577 * var(--u))' },
-  { left: 'calc(1983 * var(--u))', top: 'calc(489 * var(--u))', width: 'calc(386 * var(--u))', height: 'calc(566 * var(--u))' },
-  { left: 'calc(2394 * var(--u))', top: 'calc(439 * var(--u))', width: 'calc(429 * var(--u))', height: 'calc(669 * var(--u))' },
-  { left: 'calc(2862 * var(--u))', top: 'calc(297 * var(--u))', width: 'calc(558 * var(--u))', height: 'calc(951 * var(--u))' },
-  { left: 'calc(3472 * var(--u))', top: 'calc(80 * var(--u))', width: 'calc(368 * var(--u))', height: 'calc(1418 * var(--u))' },
+// Curated stock fallback images from PSD assets
+const FALLBACK_IMAGES = [
+  '/assets/reviews/gallery_cards/card-1-meditation.png',
+  '/assets/reviews/gallery_cards/card-2-glow-mask.png',
+  '/assets/reviews/gallery_cards/card-3-goggles-recovery.png',
+  '/assets/reviews/gallery_cards/card-4-handheld-panel.png',
+  '/assets/reviews/gallery_cards/card-5-mask-session.png',
+  '/assets/reviews/gallery_cards/card-6-unboxing-panel.png',
+  '/assets/reviews/gallery_cards/card-7-assembly-stand.png',
+  '/assets/reviews/gallery_cards/card-8-camera-influencer.png',
 ];
 
-// The 8 dedicated transparent-corner 3D perspective curved card assets from PSD
-const GALLERY_CARD_ASSETS = [
-  {
-    image: '/assets/reviews/gallery_cards/card-1-meditation.png',
-    imageWebp: '/assets/reviews/gallery_cards/card-1-meditation.webp',
-  },
-  {
-    image: '/assets/reviews/gallery_cards/card-2-glow-mask.png',
-    imageWebp: '/assets/reviews/gallery_cards/card-2-glow-mask.webp',
-  },
-  {
-    image: '/assets/reviews/gallery_cards/card-3-goggles-recovery.png',
-    imageWebp: '/assets/reviews/gallery_cards/card-3-goggles-recovery.webp',
-  },
-  {
-    image: '/assets/reviews/gallery_cards/card-4-handheld-panel.png',
-    imageWebp: '/assets/reviews/gallery_cards/card-4-handheld-panel.webp',
-  },
-  {
-    image: '/assets/reviews/gallery_cards/card-5-mask-session.png',
-    imageWebp: '/assets/reviews/gallery_cards/card-5-mask-session.webp',
-  },
-  {
-    image: '/assets/reviews/gallery_cards/card-6-unboxing-panel.png',
-    imageWebp: '/assets/reviews/gallery_cards/card-6-unboxing-panel.webp',
-  },
-  {
-    image: '/assets/reviews/gallery_cards/card-7-assembly-stand.png',
-    imageWebp: '/assets/reviews/gallery_cards/card-7-assembly-stand.webp',
-  },
-  {
-    image: '/assets/reviews/gallery_cards/card-8-camera-influencer.png',
-    imageWebp: '/assets/reviews/gallery_cards/card-8-camera-influencer.webp',
-  },
-];
+const getProductFallbackImage = (productName, idx) => {
+  const p = (productName || '').toLowerCase();
+  if (p.includes('glow') || p.includes('mask')) {
+    return '/assets/reviews/gallery_cards/card-2-glow-mask.png';
+  }
+  if (p.includes('surge') || p.includes('portable')) {
+    return '/assets/reviews/gallery_cards/card-4-handheld-panel.png';
+  }
+  if (p.includes('apex') || p.includes('half')) {
+    return '/assets/reviews/gallery_cards/card-7-assembly-stand.png';
+  }
+  if (p.includes('max') || p.includes('full') || p.includes('ultra')) {
+    return '/assets/reviews/gallery_cards/card-1-meditation.png';
+  }
+  return FALLBACK_IMAGES[idx % FALLBACK_IMAGES.length];
+};
 
-// SLIDE 0: Original Curated PSD Stories
-const SLIDE_0_CARDS = [
+// Curated Fallback Stories
+const CURATED_FALLBACK_STORIES = [
   {
-    id: 's0-1',
+    id: 'c-1',
     title: 'Gym & Meditation Deep Recovery',
     author: 'MARCUS & ELENA',
     product: 'LUMA MAX USER',
@@ -60,9 +41,11 @@ const SLIDE_0_CARDS = [
     stars: 5,
     story:
       'Ten minutes of post-training deep red and near-infrared light reset our physical and mental state after grueling workouts. Muscle tension melts away within hours.',
+    image: '/assets/reviews/gallery_cards/card-1-meditation.png',
+    fallbackImage: '/assets/reviews/gallery_cards/card-1-meditation.png',
   },
   {
-    id: 's0-2',
+    id: 'c-2',
     title: 'Evening Glow Mask Reading Routine',
     author: 'AHANA K.',
     product: 'LUMA GLOW USER',
@@ -70,9 +53,11 @@ const SLIDE_0_CARDS = [
     stars: 5,
     story:
       'The mask is light and comfortable, and the 10-minute session flies by while I read. My evening skincare now feels like a soothing restorative ritual.',
+    image: '/assets/reviews/gallery_cards/card-2-glow-mask.png',
+    fallbackImage: '/assets/reviews/gallery_cards/card-2-glow-mask.png',
   },
   {
-    id: 's0-3',
+    id: 'c-3',
     title: 'Targeted Core & Joint Recovery',
     author: 'JESSICA L.',
     product: 'LUMA SURGE USER',
@@ -80,9 +65,11 @@ const SLIDE_0_CARDS = [
     stars: 5,
     story:
       'Targeting my core and lower back with 100 mW/cm² clinical irradiance helped eliminate chronic post-workout stiffness in less than three weeks.',
+    image: '/assets/reviews/gallery_cards/card-3-goggles-recovery.png',
+    fallbackImage: '/assets/reviews/gallery_cards/card-3-goggles-recovery.png',
   },
   {
-    id: 's0-4',
+    id: 'c-4',
     title: 'Handheld Facial Radiance Protocol',
     author: 'ELENA ROSTOVA',
     product: 'LUMA GLOW USER',
@@ -90,9 +77,11 @@ const SLIDE_0_CARDS = [
     stars: 5,
     story:
       'After 3 weeks of daily 10-minute sessions with Luma Glow, my skin texture has smoothed out noticeably and fine lines around my eyes have faded. Truly clinical grade!',
+    image: '/assets/reviews/gallery_cards/card-4-handheld-panel.png',
+    fallbackImage: '/assets/reviews/gallery_cards/card-4-handheld-panel.png',
   },
   {
-    id: 's0-5',
+    id: 'c-5',
     title: 'Clinical Facial Skin Turnover Session',
     author: 'CHLOE D.',
     product: 'LUMA GLOW USER',
@@ -100,9 +89,11 @@ const SLIDE_0_CARDS = [
     stars: 5,
     story:
       'Zero UV emission, medical-grade LEDs, and zero heat burn risk. I use it four evenings a week. My complexion has never looked firmer or more vibrant.',
+    image: '/assets/reviews/gallery_cards/card-5-mask-session.png',
+    fallbackImage: '/assets/reviews/gallery_cards/card-5-mask-session.png',
   },
   {
-    id: 's0-6',
+    id: 'c-6',
     title: 'Unboxing & First Setup Routine',
     author: 'SARAH M.',
     product: 'LUMA APEX USER',
@@ -111,9 +102,11 @@ const SLIDE_0_CARDS = [
     stars: 5,
     story:
       'Setting up the medical-grade panel took under five minutes. The fanless cooling, silent operation, and immediate soothing warmth make it an extraordinary investment.',
+    image: '/assets/reviews/gallery_cards/card-6-unboxing-panel.png',
+    fallbackImage: '/assets/reviews/gallery_cards/card-6-unboxing-panel.png',
   },
   {
-    id: 's0-7',
+    id: 'c-7',
     title: 'Mobile Stand Assembly & Daily Use',
     author: 'DAVID K.',
     product: 'LUMA APEX USER',
@@ -122,9 +115,11 @@ const SLIDE_0_CARDS = [
     stars: 5,
     story:
       'The wheeled stand glides seamlessly between rooms. Sturdy build, high irradiance, and zero flicker. It has become a foundational pillar of my daily recovery routine.',
+    image: '/assets/reviews/gallery_cards/card-7-assembly-stand.png',
+    fallbackImage: '/assets/reviews/gallery_cards/card-7-assembly-stand.png',
   },
   {
-    id: 's0-8',
+    id: 'c-8',
     title: 'Studio Spectrometer Irradiance Test',
     author: 'MARCUS VANCE',
     product: 'LUMA APEX USER',
@@ -133,34 +128,11 @@ const SLIDE_0_CARDS = [
     stars: 5,
     story:
       'Using the Luma Apex half-body panel after intense workout sessions has cut my recovery time in half. Muscle stiffness is completely gone by the next morning.',
-  },
-];
-
-// SLIDE 1: Customer Verified Real Stories (Dynamically filled with approved customer stories from MongoDB)
-const SLIDE_1_FALLBACK_CARDS = [
-  {
-    id: 's1-1',
-    title: 'Post-Workout Full-Body Reset',
-    author: 'MARCUS VANCE',
-    product: 'LUMA APEX USER',
-    type: 'video',
-    mediaLink: 'https://www.youtube.com/watch?v=sample-apex-review',
-    stars: 5,
-    story:
-      'Using the Luma Apex half-body panel after intense workout sessions has cut my recovery time in half. Muscle stiffness is completely gone by the next morning.',
+    image: '/assets/reviews/gallery_cards/card-8-camera-influencer.png',
+    fallbackImage: '/assets/reviews/gallery_cards/card-8-camera-influencer.png',
   },
   {
-    id: 's1-2',
-    title: 'Evening Collagen & Firming Routine',
-    author: 'ELENA ROSTOVA',
-    product: 'LUMA GLOW USER',
-    type: 'photo',
-    stars: 5,
-    story:
-      'After 3 weeks of daily 10-minute sessions with Luma Glow, my skin texture has smoothed out noticeably and fine lines around my eyes have faded. Truly clinical grade!',
-  },
-  {
-    id: 's1-3',
+    id: 'c-9',
     title: 'Shoulder & Spine Recovery Session',
     author: 'LIAM GALLAGHER',
     product: 'LUMA SURGE USER',
@@ -168,9 +140,11 @@ const SLIDE_1_FALLBACK_CARDS = [
     stars: 5,
     story:
       'Targeting my upper back and neck with focused near-infrared light completely stopped the chronic stiffness I get from computer work.',
+    image: '/assets/reviews/gallery_cards/card-3-goggles-recovery.png',
+    fallbackImage: '/assets/reviews/gallery_cards/card-3-goggles-recovery.png',
   },
   {
-    id: 's1-4',
+    id: 'c-10',
     title: 'Daily Radiance Facial Protocol',
     author: 'SOPHIA CHEN',
     product: 'LUMA GLOW USER',
@@ -178,224 +152,32 @@ const SLIDE_1_FALLBACK_CARDS = [
     stars: 5,
     story:
       'The mask fits effortlessly and zero eye strain with the clinical design. My complexion looks rested and glowing every single morning.',
+    image: '/assets/reviews/gallery_cards/card-2-glow-mask.png',
+    fallbackImage: '/assets/reviews/gallery_cards/card-2-glow-mask.png',
   },
   {
-    id: 's1-5',
-    title: 'Desk Worker Afternoon Recharge',
-    author: 'RACHEL GREEN',
+    id: 'c-11',
+    title: 'Morning Mental Clarity & Vitality',
+    author: 'JAMESON T.',
+    product: 'LUMA ULTRA USER',
+    type: 'photo',
+    stars: 5,
+    story:
+      'Standing in front of the full-body panel for 10 minutes at sunrise has completely replaced morning grogginess with clean cellular vitality.',
+    image: '/assets/reviews/gallery_cards/card-1-meditation.png',
+    fallbackImage: '/assets/reviews/gallery_cards/card-1-meditation.png',
+  },
+  {
+    id: 'c-12',
+    title: 'Hands-Free Remote Controlled Sessions',
+    author: 'OLIVIA PARKER',
     product: 'LUMA NOVA USER',
     type: 'photo',
     stars: 5,
     story:
-      'A 10-minute afternoon session gives me clean mental clarity and completely relaxes my posture tension without caffeine crashes.',
-  },
-  {
-    id: 's1-6',
-    title: 'Full-Body Cellular Energy Session',
-    author: 'JORDAN HAYES',
-    product: 'LUMA APEX USER',
-    type: 'video',
-    mediaLink: 'https://www.youtube.com/watch?v=sample-unboxing-review',
-    stars: 5,
-    story:
-      'Zero fan noise, zero flicker, and true medical irradiance. The build quality feels like hospital equipment. Unboxing was super clean.',
-  },
-  {
-    id: 's1-7',
-    title: '30-Day Recovery Transformation',
-    author: 'NATALIE BROOKS',
-    product: 'LUMA APEX USER',
-    type: 'video',
-    mediaLink: 'https://www.youtube.com/watch?v=sample-apex-review',
-    stars: 5,
-    story:
-      'The mobile stand glides anywhere. I use it every morning on my yoga mat. My joints have never felt this loose and pain-free.',
-  },
-  {
-    id: 's1-8',
-    title: 'Clinical Irradiance Calibration Test',
-    author: 'DR. ALEXANDER WARD',
-    product: 'LUMA APEX USER',
-    type: 'video',
-    mediaLink: 'https://www.youtube.com/watch?v=sample-spectrometer-test',
-    stars: 5,
-    story:
-      'We tested the dual 660nm and 850nm diodes with our lab spectrometer. Output matches clinical specs with exactly zero EMF radiation.',
-  },
-];
-
-// SLIDE 2: Daily Wellness & Clinical Protocols
-const SLIDE_2_CARDS = [
-  {
-    id: 's2-1',
-    title: 'Circadian Rhythm Morning Protocol',
-    author: 'CLINICAL WELLNESS TEAM',
-    product: 'LUMA MAX PROTOCOL',
-    type: 'photo',
-    stars: 5,
-    story:
-      '10 minutes of direct morning exposure within 30 minutes of waking resets the master circadian clock, boosting daytime alertness and nighttime melatonin synthesis.',
-  },
-  {
-    id: 's2-2',
-    title: 'Evening Collagen Synthesis Protocol',
-    author: 'DERMATOLOGY ADVISORY',
-    product: 'LUMA GLOW PROTOCOL',
-    type: 'photo',
-    stars: 5,
-    story:
-      '660nm pure red wavelengths penetrate 2-3mm into the dermal matrix, stimulating fibroblast cells to produce new collagen and elastin fibers.',
-  },
-  {
-    id: 's2-3',
-    title: 'Deep Muscle Soreness (DOMS) Protocol',
-    author: 'SPORTS MEDICINE TEAM',
-    product: 'LUMA SURGE PROTOCOL',
-    type: 'photo',
-    stars: 5,
-    story:
-      'Deep-penetrating 850nm near-infrared wavelengths target muscle mitochondria, clearing lactic acid and reducing post-exercise inflammation.',
-  },
-  {
-    id: 's2-4',
-    title: 'Joint Mobility & Connective Tissue Protocol',
-    author: 'PHYSIOTHERAPY TEAM',
-    product: 'LUMA GLOW PROTOCOL',
-    type: 'photo',
-    stars: 5,
-    story:
-      'Position panel 6 inches from targeted joint for 10-15 minutes prior to stretching to improve joint lubricity and range of motion.',
-  },
-  {
-    id: 's2-5',
-    title: 'Cellular ATP Mitochondrial Protocol',
-    author: 'BIO-OPTIMIZATION LAB',
-    product: 'LUMA GLOW PROTOCOL',
-    type: 'photo',
-    stars: 5,
-    story:
-      'Photobiomodulation at cytochrome c oxidase accelerates ATP production by up to 200%, supplying vital bio-energy for cellular repair.',
-  },
-  {
-    id: 's2-6',
-    title: 'Full-Body Post-Workout Recovery Protocol',
-    author: 'PERFORMANCE COACHES',
-    product: 'LUMA APEX PROTOCOL',
-    type: 'video',
-    mediaLink: 'https://www.youtube.com/watch?v=sample-unboxing-review',
-    stars: 5,
-    story:
-      'Stand 12 inches away for 10 minutes front and 10 minutes back immediately following high-intensity training to cut recovery latency in half.',
-  },
-  {
-    id: 's2-7',
-    title: 'Tension Headache & Neck Relief Protocol',
-    author: 'WELLNESS CLINIC',
-    product: 'LUMA APEX PROTOCOL',
-    type: 'video',
-    mediaLink: 'https://www.youtube.com/watch?v=sample-apex-review',
-    stars: 5,
-    story:
-      'Position stand at shoulder height for 8 minutes to stimulate local nitric oxide release and promote soothing muscular relaxation.',
-  },
-  {
-    id: 's2-8',
-    title: 'Restorative Sleep Architecture Protocol',
-    author: 'SLEEP RESEARCH LAB',
-    product: 'LUMA APEX PROTOCOL',
-    type: 'video',
-    mediaLink: 'https://www.youtube.com/watch?v=sample-spectrometer-test',
-    stars: 5,
-    story:
-      'Bathe bedroom in red light 60 minutes before bedtime with zero blue/green spectrum to signal the pineal gland for deep, restorative sleep.',
-  },
-];
-
-// SLIDE 3: Video Reviews Archive & Irradiance Tests
-const SLIDE_3_CARDS = [
-  {
-    id: 's3-1',
-    title: '100 mW/cm² Irradiance Spectrometer Test',
-    author: 'LAB IRRADIANCE REPORT',
-    product: 'LUMA MAX TEST',
-    type: 'video',
-    mediaLink: 'https://www.youtube.com/watch?v=sample-spectrometer-test',
-    stars: 5,
-    story:
-      'Independent lab testing confirms true 100 mW/cm² irradiance at 6 inches distance with 0.0 µT EMF radiation and 0.0% flicker index.',
-  },
-  {
-    id: 's3-2',
-    title: 'Unboxing the Luma Glow Facial Mask',
-    author: 'SKINCARE DIARIES',
-    product: 'LUMA GLOW REVIEW',
-    type: 'photo',
-    stars: 5,
-    story:
-      'Watch the full unboxing and comfort walkthrough: medical-grade silicone, flexible fit, and eye protection goggles included in the box.',
-  },
-  {
-    id: 's3-3',
-    title: 'Luma Surge Travel Panel Demonstration',
-    author: 'ATHLETE TRAVEL LOG',
-    product: 'LUMA SURGE REVIEW',
-    type: 'photo',
-    stars: 5,
-    story:
-      'Taking clinical red light on the road: how the compact aluminum casing fits into carry-on luggage for hotel recovery sessions.',
-  },
-  {
-    id: 's3-4',
-    title: '60-Day Visual Complexion Timelapse',
-    author: 'ESTHETICIAN REVIEW',
-    product: 'LUMA GLOW REVIEW',
-    type: 'photo',
-    stars: 5,
-    story:
-      'High-resolution dermatological imaging tracking skin tone evenness, pore texture, and redness reduction over 8 consecutive weeks.',
-  },
-  {
-    id: 's3-5',
-    title: 'Dual-Chip Wavelength Technology Explained',
-    author: 'ENGINEERING SPOTLIGHT',
-    product: 'LUMA TECH INSIDE',
-    type: 'photo',
-    stars: 5,
-    story:
-      'Inside the multi-cluster LED array: individual 660nm and 850nm diodes engineered with 30-degree optical lenses for optimal penetration.',
-  },
-  {
-    id: 's3-6',
-    title: 'Heavy Duty Wheeled Stand Assembly Video',
-    author: 'CUSTOMER ASSEMBLY',
-    product: 'LUMA APEX SETUP',
-    type: 'video',
-    mediaLink: 'https://www.youtube.com/watch?v=sample-unboxing-review',
-    stars: 5,
-    story:
-      'Step-by-step 4K assembly video of the wheeled stand and modular bracket mounting system for multi-panel arrays.',
-  },
-  {
-    id: 's3-7',
-    title: 'Panel Cooling & Zero-Noise Sound Meter Test',
-    author: 'TECH RECOVERY CHANNEL',
-    product: 'LUMA APEX TEST',
-    type: 'video',
-    mediaLink: 'https://www.youtube.com/watch?v=sample-apex-review',
-    stars: 5,
-    story:
-      'Decibel meter testing demonstrates whisper-quiet heat dissipation fins running 12 dB below standard competitor fans.',
-  },
-  {
-    id: 's3-8',
-    title: 'Influencer Studio Full-Body Panel Test',
-    author: 'FITNESS CREATOR STUDIO',
-    product: 'LUMA APEX REVIEW',
-    type: 'video',
-    mediaLink: 'https://www.youtube.com/watch?v=sample-spectrometer-test',
-    stars: 5,
-    story:
-      'Live workout recovery test with infrared thermal imaging camera tracking subcutaneous tissue warming and blood circulation.',
+      'The wireless controller and preset clinical modes make each session effortless. I have recommended it to all my physical therapy colleagues.',
+    image: '/assets/reviews/gallery_cards/card-4-handheld-panel.png',
+    fallbackImage: '/assets/reviews/gallery_cards/card-4-handheld-panel.png',
   },
 ];
 
@@ -407,7 +189,6 @@ export default function RealStoryGallerySection({ data }) {
   const [touchStartX, setTouchStartX] = useState(null);
 
   const title = data?.title || 'REAL STORY';
-  const totalSlides = 4;
 
   // Fetch approved customer stories from backend MongoDB
   useEffect(() => {
@@ -415,22 +196,38 @@ export default function RealStoryGallerySection({ data }) {
       .then((res) => res.json())
       .then((json) => {
         if (json && json.success && Array.isArray(json.data) && json.data.length > 0) {
-          const mapped = json.data.map((s, idx) => ({
-            id: s._id || `admin-${idx}`,
-            photo: resolveImageUrl(s.photo || s.thumbnail || ''),
-            thumbnail: resolveImageUrl(s.thumbnail || s.photo || ''),
-            title: `${s.name}'s Real Story`,
-            author: s.badgeName || s.name.toUpperCase(),
-            product: s.badgeProduct || `${(s.product || 'Luma Apex').toUpperCase()} USER`,
-            type: s.mediaLink && s.mediaLink.includes('youtu') ? 'video' : (s.mediaLink ? 'video' : 'photo'),
-            mediaLink: s.mediaLink || '',
-            stars: s.stars || 5,
-            story: s.story,
-          }));
+          const mapped = json.data.map((s, idx) => {
+            const resolvedPhoto = resolveImageUrl(s.photo || s.thumbnail || '');
+            const fallbackImg = getProductFallbackImage(s.product, idx);
+            const rawProd = s.badgeProduct || s.product || 'Luma Glow';
+            const prodClean = rawProd
+              .replace(/^luma\s+/i, '')
+              .replace(/\s+user$/i, '')
+              .trim()
+              .toUpperCase();
+
+            return {
+              id: s._id || `admin-${idx}`,
+              photo: resolvedPhoto,
+              thumbnail: resolvedPhoto,
+              image: resolvedPhoto || fallbackImg,
+              fallbackImage: fallbackImg,
+              title: `${s.name}'s Real Story`,
+              author: s.badgeName || s.name.toUpperCase(),
+              product: `${prodClean} USER`,
+              type: s.mediaLink && s.mediaLink.includes('youtu') ? 'video' : (s.mediaLink ? 'video' : 'photo'),
+              mediaLink: s.mediaLink || '',
+              stars: s.stars || 5,
+              story: s.story,
+              isLiveAdminStory: true,
+            };
+          });
           setAdminStories(mapped);
         }
       })
-      .catch(() => {});
+      .catch((err) => {
+        console.warn('Error fetching live stories:', err);
+      });
   }, []);
 
   // Keyboard close modal on Escape
@@ -441,6 +238,37 @@ export default function RealStoryGallerySection({ data }) {
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
+
+  // Combine live approved customer stories at the FRONT, followed by curated fallbacks
+  const combinedCards = React.useMemo(() => {
+    if (adminStories.length === 0) return CURATED_FALLBACK_STORIES;
+    
+    // Deduplicate any fallback stories whose author matches an admin story
+    const nonDuplicatedFallbacks = CURATED_FALLBACK_STORIES.filter(
+      (fb) => !adminStories.some((as) => as.author?.toLowerCase() === fb.author?.toLowerCase())
+    );
+
+    return [...adminStories, ...nonDuplicatedFallbacks];
+  }, [adminStories]);
+
+  // Group cards into pages of 4 cards each for desktop/tablet
+  const CARDS_PER_SLIDE = 4;
+  const totalSlides = Math.max(3, Math.ceil(combinedCards.length / CARDS_PER_SLIDE));
+
+  const slides = React.useMemo(() => {
+    const list = [];
+    for (let i = 0; i < totalSlides; i++) {
+      const start = i * CARDS_PER_SLIDE;
+      const slice = combinedCards.slice(start, start + CARDS_PER_SLIDE);
+      // If last slide has fewer than 4, fill from beginning
+      if (slice.length < CARDS_PER_SLIDE) {
+        const remaining = CARDS_PER_SLIDE - slice.length;
+        slice.push(...combinedCards.slice(0, remaining));
+      }
+      list.push(slice);
+    }
+    return list;
+  }, [combinedCards, totalSlides]);
 
   // Auto-advance carousel gently when modal is closed and not hovered
   useEffect(() => {
@@ -479,229 +307,171 @@ export default function RealStoryGallerySection({ data }) {
     setTouchStartX(null);
   };
 
-  // Build the 4 slides: ALL SLIDES USE THE EXACT 8-CARD CURVED IMAGES GRID
-  // Customer stories from MongoDB populate Slide 1's story/modal data,
-  // while preserving the curved, full-height 3D perspective assets on the gallery arc!
-  const slide1Cards = SLIDE_1_FALLBACK_CARDS.map((fallback, idx) => {
-    if (adminStories[idx]) {
-      return {
-        ...fallback,
-        ...adminStories[idx],
-      };
-    }
-    return fallback;
-  });
-
-  const allSlides = [
-    { id: 0, cards: SLIDE_0_CARDS },
-    { id: 1, cards: slide1Cards },
-    { id: 2, cards: SLIDE_2_CARDS },
-    { id: 3, cards: SLIDE_3_CARDS },
-  ];
-
   return (
     <section
       id="real-story"
-      style={{ '--u': 'calc(100vw / 3840)' }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="relative w-full bg-[#FFFFFF] text-[#000000] overflow-hidden font-['Manrope'] select-none pt-10 sm:pt-14 md:pt-18 lg:pt-0 pb-10 sm:pb-14 md:pb-18 lg:pb-0"
+      className="relative w-full bg-[#FFFFFF] text-[#000000] overflow-hidden font-['Manrope'] select-none py-14 sm:py-20 lg:py-24"
     >
-      {/* =========================================================================
-          DESKTOP HERO COMPOSITION (Exact PSD 'Layer 1: REAL STORY' y=3091..4697)
-          Aspect ratio: 3840w x 1606h (aspect-[3840/1606])
-          ALL 4 SLIDES DISPLAY IN THE EXACT SAME 8-CARD CURVED PANORAMIC IMAGES GRID!
-          NO TEXT ON THE SLIDE. WHEN USER CLICKS ANY CARD, THE MODAL OPENS WITH THE TEXT.
-          ========================================================================= */}
-      <div className="relative w-full hidden lg:block aspect-[3840/1606] h-[calc(1606*var(--u))] overflow-hidden">
-        {/* Slider Track */}
-        <div
-          className="flex w-full h-full transition-transform duration-700 ease-out will-change-transform"
-          style={{ transform: `translateX(-${activeDot * 100}%)` }}
-        >
-          {allSlides.map((slide, sIdx) => (
-            <div key={slide.id || sIdx} className="relative w-full h-full shrink-0">
-              {/* 8 Separate Interactive Image Cards positioned along the 3D concave curve */}
-              {slide.cards.map((card, cIdx) => {
-                const pos = CARD_POSITIONS[cIdx] || CARD_POSITIONS[0];
-                const cardAsset = GALLERY_CARD_ASSETS[cIdx] || GALLERY_CARD_ASSETS[0];
-
-                return (
-                  <button
-                    key={card.id || `${sIdx}-${cIdx}`}
-                    type="button"
-                    onClick={() =>
-                      setSelectedCard({
-                        ...card,
-                        modalImage: card.photo || card.thumbnail || cardAsset.image,
-                        fallbackImage: cardAsset.image,
-                      })
-                    }
-                    aria-label={`View story: ${card.title}`}
-                    style={{
-                      position: 'absolute',
-                      left: pos.left,
-                      top: pos.top,
-                      width: pos.width,
-                      height: pos.height,
-                    }}
-                    className="group cursor-pointer focus:outline-none transition-transform duration-300 hover:scale-[1.03] hover:z-20 will-change-transform"
-                  >
-                    {/* Individual Card Image - Always uses the 3D perspective curved silhouette */}
-                    <div className="w-full h-full overflow-hidden">
-                      <picture>
-                        <source srcSet={cardAsset.imageWebp} type="image/webp" />
-                        <img
-                          src={cardAsset.image}
-                          alt={card.title}
-                          className="w-full h-full object-contain pointer-events-none select-none filter drop-shadow-sm group-hover:drop-shadow-2xl transition-all duration-300"
-                          draggable={false}
-                        />
-                      </picture>
-                    </div>
-
-                    {/* Subtle Hover Action Hint */}
-                    <div className="absolute bottom-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap z-10">
-                      <span className="px-3 py-1 rounded-full text-[calc(14*var(--u))] font-semibold bg-black/85 text-white backdrop-blur-sm shadow-md">
-                        🔍 View Story
-                      </span>
-                    </div>
-                  </button>
-                );
-              })}
-
-              {/* Section Header: Title + Red Pill Bar (PSD canvas y=3198..3326 -> relative y=107..235) */}
-              <div
-                style={{ top: 'calc(107 * var(--u))' }}
-                className="absolute left-1/2 -translate-x-1/2 z-10 flex flex-col items-center justify-center text-center pointer-events-none"
-              >
-                <h2 className="text-[calc(80*var(--u))] font-extralight uppercase tracking-[0.02em] text-[#131313] leading-none whitespace-nowrap">
-                  {title}
-                </h2>
-                <div
-                  style={{
-                    marginTop: 'calc(47 * var(--u))',
-                    width: 'calc(150 * var(--u))',
-                    height: 'calc(20 * var(--u))',
-                  }}
-                  className="rounded-full bg-[#ED2124]"
-                  aria-hidden="true"
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* 4 Pagination Dots (PSD: 4 dots at y=4403, 20x20px each, gap 10px, active #ED2124, rest #C0C0C0) */}
-        <div
-          style={{
-            top: 'calc(1312 * var(--u))',
-            gap: 'calc(14 * var(--u))',
-          }}
-          className="absolute left-1/2 -translate-x-1/2 z-30 flex items-center justify-center pointer-events-auto"
-        >
-          {Array.from({ length: totalSlides }).map((_, idx) => (
-            <button
-              key={idx}
-              type="button"
-              onClick={() => setActiveDot(idx)}
-              aria-label={`Go to slide ${idx + 1}`}
-              style={{
-                width: 'calc(20 * var(--u))',
-                height: 'calc(20 * var(--u))',
-              }}
-              className={`min-w-[12px] min-h-[12px] rounded-full transition-all duration-300 cursor-pointer ${
-                activeDot === idx
-                  ? 'bg-[#ED2124] scale-125 shadow-md'
-                  : 'bg-[#C0C0C0] hover:bg-[#888888]'
-              }`}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* =========================================================================
-          MOBILE & TABLET RESPONSIVE LAYOUT (< lg screens)
-          Each slide renders 8 image cards in horizontal scrollable strip.
-          No text on slide; clicking opens modal with story and video.
-          ========================================================================= */}
-      <div
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-        className="w-full lg:hidden flex flex-col items-center"
-      >
-        <div className="w-full overflow-hidden">
+      <div className="max-w-[1520px] mx-auto px-5 sm:px-8 lg:px-12">
+        {/* Section Header: Title + Red Accent Bar */}
+        <div className="flex flex-col items-center justify-center text-center mb-10 sm:mb-14">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-[56px] font-extralight uppercase tracking-[0.02em] text-[#131313] leading-none">
+            {title}
+          </h2>
           <div
-            className="flex w-full transition-transform duration-700 ease-out will-change-transform"
-            style={{ transform: `translateX(-${activeDot * 100}%)` }}
-          >
-            {allSlides.map((slide, sIdx) => (
-              <div key={slide.id || sIdx} className="w-full shrink-0 flex flex-col items-center">
-                <div className="flex flex-col items-center justify-center text-center px-4">
-                  <h2 className="text-[26px] sm:text-[34px] md:text-[44px] font-extralight uppercase tracking-[0.02em] text-[#131313] leading-none">
-                    {title}
-                  </h2>
-                  <div
-                    className="mt-3 sm:mt-4 w-[60px] sm:w-[80px] h-[8px] sm:h-[11px] rounded-full bg-[#ED2124]"
-                    aria-hidden="true"
-                  />
-                </div>
+            className="mt-3.5 sm:mt-5 w-20 sm:w-28 md:w-36 h-2 sm:h-2.5 rounded-full bg-[#ED2124]"
+            aria-hidden="true"
+          />
+          <p className="mt-3 text-xs sm:text-sm text-gray-500 font-light tracking-wide max-w-xl">
+            Real customer clinical outcomes, recovery routines, and authentic treatment experiences.
+          </p>
+        </div>
 
-                {/* Scrollable Cards Strip */}
-                <div className="relative w-full mt-6 sm:mt-8 overflow-x-auto scrollbar-none pb-4 px-4">
-                  <div className="flex items-center gap-3 sm:gap-4 min-w-max">
-                    {slide.cards.map((card, cIdx) => {
-                      const cardAsset = GALLERY_CARD_ASSETS[cIdx] || GALLERY_CARD_ASSETS[0];
-                      return (
-                        <button
-                          key={card.id || `${sIdx}-${cIdx}`}
-                          type="button"
-                          onClick={() =>
-                            setSelectedCard({
-                              ...card,
-                              modalImage: card.photo || card.thumbnail || cardAsset.image,
-                              fallbackImage: cardAsset.image,
-                            })
+        {/* Carousel Container with Left/Right Arrow Navigation */}
+        <div
+          className="relative w-full"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          {/* Previous Arrow Button */}
+          <button
+            type="button"
+            onClick={handlePrev}
+            aria-label="Previous customer stories"
+            className="absolute -left-3 sm:-left-5 lg:-left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/95 hover:bg-white text-gray-800 shadow-xl border border-gray-200/80 flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer focus:outline-none"
+          >
+            <svg className="w-5 h-5 -ml-0.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+
+          {/* Next Arrow Button */}
+          <button
+            type="button"
+            onClick={handleNext}
+            aria-label="Next customer stories"
+            className="absolute -right-3 sm:-right-5 lg:-right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/95 hover:bg-white text-gray-800 shadow-xl border border-gray-200/80 flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95 cursor-pointer focus:outline-none"
+          >
+            <svg className="w-5 h-5 -mr-0.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+
+          {/* Slider Viewport */}
+          <div className="w-full overflow-hidden">
+            <div
+              className="flex w-full transition-transform duration-700 ease-out will-change-transform"
+              style={{ transform: `translateX(-${activeDot * 100}%)` }}
+            >
+              {slides.map((slideCards, sIdx) => (
+                <div
+                  key={`slide-${sIdx}`}
+                  className="w-full shrink-0 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 px-1 sm:px-2"
+                >
+                  {slideCards.map((card, cIdx) => (
+                    <div
+                      key={card.id || `${sIdx}-${cIdx}`}
+                      onClick={() =>
+                        setSelectedCard({
+                          ...card,
+                          modalImage: card.photo || card.thumbnail || card.image || card.fallbackImage,
+                          fallbackImage: card.fallbackImage,
+                        })
+                      }
+                      className="group relative aspect-[3/4] rounded-2xl sm:rounded-[22px] overflow-hidden bg-neutral-900 border border-gray-200/80 shadow-md hover:shadow-2xl transition-all duration-300 hover:-translate-y-1.5 cursor-pointer flex flex-col justify-end p-5 sm:p-6 select-none"
+                    >
+                      {/* Card Photo / Image */}
+                      <img
+                        src={card.image || card.photo || card.thumbnail || card.fallbackImage}
+                        alt={card.title || card.author}
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                        onError={(e) => {
+                          if (card.fallbackImage && e.currentTarget.src !== card.fallbackImage) {
+                            e.currentTarget.src = card.fallbackImage;
                           }
-                          className="relative w-[180px] sm:w-[240px] aspect-[3/4] rounded-2xl overflow-hidden shadow-md active:scale-95 transition-transform bg-[#1a1a1a] flex flex-col justify-end p-3 text-left"
-                        >
-                          <img
-                            src={cardAsset.image}
-                            alt={card.title}
-                            className="absolute inset-0 w-full h-full object-cover"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                          
-                          <div className="relative z-10 text-white">
-                            <span className="text-[10px] uppercase font-bold text-[#ED2124] tracking-wider block">
-                              {card.author || card.product}
-                            </span>
-                            <h4 className="text-[12px] font-medium leading-snug line-clamp-2">
-                              {card.title}
-                            </h4>
+                        }}
+                      />
+
+                      {/* Card Gradient Overlay for Readability */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/45 to-black/10 group-hover:from-black/100 transition-colors duration-300" />
+
+                      {/* Video Play Badge if Video */}
+                      {card.type === 'video' && (
+                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                          <div className="w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-[#ED2124] text-white flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform duration-300">
+                            <svg className="w-6 h-6 fill-white ml-0.5" viewBox="0 0 24 24">
+                              <path d="M8 5v14l11-7z" />
+                            </svg>
                           </div>
-                        </button>
-                      );
-                    })}
-                  </div>
+                        </div>
+                      )}
+
+                      {/* Top Pill: Verified User Story Badge */}
+                      <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
+                        {card.isLiveAdminStory ? (
+                          <span className="px-2.5 py-1 rounded-full text-[10.5px] font-bold tracking-wider uppercase bg-emerald-500/90 text-white backdrop-blur-md shadow-sm flex items-center gap-1">
+                            ✓ Verified Review
+                          </span>
+                        ) : (
+                          <span className="px-2.5 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase bg-white/20 text-white/90 backdrop-blur-md">
+                            Clinical Story
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Card Information Bottom Panel */}
+                      <div className="relative z-10 text-white space-y-2">
+                        {/* Author & Product Badges */}
+                        <div className="flex items-center justify-between gap-2 flex-wrap">
+                          <span className="px-2.5 py-0.5 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-[#ED2124] text-white shadow-xs">
+                            {card.author}
+                          </span>
+                          <span className="text-[11px] text-white/80 font-medium tracking-wide">
+                            {card.product}
+                          </span>
+                        </div>
+
+                        {/* 5 Stars Rating */}
+                        <div className="flex items-center gap-1">
+                          {Array.from({ length: card.stars || 5 }).map((_, i) => (
+                            <span key={i} className="text-[#ED2124] text-sm leading-none">
+                              ★
+                            </span>
+                          ))}
+                        </div>
+
+                        {/* Story Quote Snippet */}
+                        <p className="text-xs sm:text-[13px] font-light text-white/95 line-clamp-3 leading-snug italic pt-0.5">
+                          “{card.story}”
+                        </p>
+
+                        {/* Hover Prompt Link */}
+                        <div className="pt-1 flex items-center text-[11px] font-semibold text-white/70 group-hover:text-white transition-colors">
+                          <span>Read full review →</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* Mobile Navigation Dots */}
-        <div className="flex items-center justify-center gap-2 sm:gap-2.5 mt-5 sm:mt-6">
+        {/* Pagination Dots */}
+        <div className="flex items-center justify-center gap-2.5 mt-8 sm:mt-10">
           {Array.from({ length: totalSlides }).map((_, idx) => (
             <button
               key={idx}
               type="button"
               onClick={() => setActiveDot(idx)}
               aria-label={`Go to slide ${idx + 1}`}
-              className={`w-[9px] sm:w-[11px] h-[9px] sm:h-[11px] rounded-full transition-all duration-300 cursor-pointer ${
+              className={`rounded-full transition-all duration-300 cursor-pointer ${
                 activeDot === idx
-                  ? 'bg-[#ED2124] scale-125 shadow-sm'
-                  : 'bg-[#C0C0C0] hover:bg-[#888888]'
+                  ? 'bg-[#ED2124] w-7 h-2.5 shadow-sm'
+                  : 'bg-gray-300 hover:bg-gray-400 w-2.5 h-2.5'
               }`}
             />
           ))}
@@ -710,7 +480,7 @@ export default function RealStoryGallerySection({ data }) {
 
       {/* =========================================================================
           INTERACTIVE STORY & VIDEO MODAL POPUP
-          Opens when user clicks ANY card (Cards 1..8 across ALL slides)
+          Opens when user clicks ANY card
           Shows: Photo / Video Player, Full Story Text, Author Badge, Stars & Details
           ========================================================================= */}
       {selectedCard && (
@@ -718,19 +488,19 @@ export default function RealStoryGallerySection({ data }) {
           role="dialog"
           aria-modal="true"
           onClick={() => setSelectedCard(null)}
-          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 animate-fadeIn"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200"
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-2xl bg-[#141416] text-white rounded-[26px] border border-white/15 overflow-hidden shadow-2xl flex flex-col max-h-[90vh]"
+            className="relative w-full max-w-xl bg-[#141415] border border-white/10 rounded-2xl sm:rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
           >
             {/* Modal Header Bar */}
-            <div className="px-6 py-4 border-b border-white/10 flex items-center justify-between">
-              <div className="flex items-center gap-2.5 flex-wrap">
-                <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#ED2124] text-white">
-                  {selectedCard.author || selectedCard.name}
+            <div className="px-6 py-4 border-b border-white/10 flex items-center justify-between bg-black/40">
+              <div className="flex items-center gap-3">
+                <span className="text-xs font-bold uppercase tracking-wider text-[#ED2124]">
+                  {selectedCard.author}
                 </span>
-                <span className="text-xs font-semibold text-white/70 uppercase">
+                <span className="text-xs text-white/60">
                   {selectedCard.product}
                 </span>
                 <span className="text-[11px] text-emerald-400 font-medium">
@@ -783,7 +553,7 @@ export default function RealStoryGallerySection({ data }) {
                         Customer Recovery Video Session
                       </span>
                       <span className="text-xs text-white/70 mt-1">
-                        High-Definition 4K Clinical Recording
+                        High-Definition Clinical Recording
                       </span>
                     </div>
                   </div>
@@ -808,12 +578,9 @@ export default function RealStoryGallerySection({ data }) {
                 {/* 5 Red Stars */}
                 <div className="flex items-center gap-1 shrink-0">
                   {Array.from({ length: selectedCard.stars || 5 }).map((_, i) => (
-                    <img
-                      key={i}
-                      src="/assets/reviews/star-red.png"
-                      alt="Star"
-                      className="w-4 h-4 object-contain"
-                    />
+                    <span key={i} className="text-[#ED2124] text-base leading-none">
+                      ★
+                    </span>
                   ))}
                 </div>
               </div>
