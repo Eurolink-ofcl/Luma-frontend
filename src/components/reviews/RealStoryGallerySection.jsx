@@ -1,10 +1,5 @@
 import React, { useState, useEffect } from 'react';
-
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ||
-  (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
-    ? 'https://astro.bloodme.in/luma-api/api'
-    : 'http://localhost:5000/api');
+import { API_BASE_URL, resolveImageUrl } from '../../config/api';
 
 // Exact 8 Curved Position coordinates on 3840x1606 canvas (PSD: bbox y=3091..4697)
 const CARD_POSITIONS = [
@@ -422,8 +417,8 @@ export default function RealStoryGallerySection({ data }) {
         if (json && json.success && Array.isArray(json.data) && json.data.length > 0) {
           const mapped = json.data.map((s, idx) => ({
             id: s._id || `admin-${idx}`,
-            photo: s.photo || s.thumbnail || '',
-            thumbnail: s.thumbnail || s.photo || '',
+            photo: resolveImageUrl(s.photo || s.thumbnail || ''),
+            thumbnail: resolveImageUrl(s.thumbnail || s.photo || ''),
             title: `${s.name}'s Real Story`,
             author: s.badgeName || s.name.toUpperCase(),
             product: s.badgeProduct || `${(s.product || 'Luma Apex').toUpperCase()} USER`,

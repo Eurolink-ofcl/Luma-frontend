@@ -1,11 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ImageUploadField from './ImageUploadField';
-
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ||
-  (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
-    ? 'https://astro.bloodme.in/luma-api/api'
-    : 'http://localhost:5000/api');
+import { API_BASE_URL, resolveImageUrl } from '../../config/api';
 
 const DEFAULT_BEFORE_AFTER_CATEGORIES = [
   {
@@ -1275,9 +1270,16 @@ export default function ReviewsCmsEditor({ onOpenLivePage }) {
                           {(s.photo || s.thumbnail) ? (
                             <div className="flex items-center gap-2">
                               <img
-                                src={s.photo || s.thumbnail}
+                                src={resolveImageUrl(s.photo || s.thumbnail)}
                                 alt="Story thumbnail"
                                 className="w-12 h-12 rounded-lg object-cover border border-gray-300 shadow-2xs"
+                                onError={(e) => {
+                                  // Fallback to directly testing the luma-api prefix
+                                  const currentSrc = e.currentTarget.src;
+                                  if (currentSrc.includes('astro.bloodme.in') && !currentSrc.includes('/luma-api/')) {
+                                    e.currentTarget.src = currentSrc.replace('astro.bloodme.in/', 'astro.bloodme.in/luma-api/');
+                                  }
+                                }}
                               />
                               <span className="text-[11px] text-gray-500 font-medium">Uploaded Image</span>
                             </div>

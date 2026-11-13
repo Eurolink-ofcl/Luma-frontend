@@ -1,10 +1,5 @@
 import React, { useState, useRef } from 'react';
-
-const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL ||
-  (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
-    ? 'https://astro.bloodme.in/luma-api/api'
-    : 'http://localhost:5000/api');
+import { API_BASE_URL, resolveImageUrl } from '../../config/api';
 
 const PRODUCT_OPTIONS = [
   'Luma Glow',
@@ -64,10 +59,11 @@ export default function ShareStorySection({ data }) {
         });
         const json = await res.json();
         if (res.ok && json.success && json.url) {
+          const resolvedUrl = resolveImageUrl(json.url);
           setFormData((prev) => ({
             ...prev,
-            photo: json.url,
-            thumbnail: json.url,
+            photo: resolvedUrl,
+            thumbnail: resolvedUrl,
           }));
         }
       } catch (err) {
