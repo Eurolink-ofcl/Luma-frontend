@@ -43,7 +43,7 @@ const EMPTY_PRODUCT_FORM = {
   ],
   specifications: {
     Wavelengths: '660nm & 850nm',
-    Irradiance: '120 mW/cmÂ² at 6 inches',
+    Irradiance: '120 mW/cm² at 6 inches',
     'Session Time': '10-15 Minutes',
     Warranty: '2-Year Official Warranty',
   },
@@ -71,11 +71,11 @@ const EMPTY_PRODUCT_FORM = {
     'Use 1-2 times daily for optimal restorative results.',
   ],
   inTheBox: [
-    '1Ã— LUMA Device',
-    '1Ã— Protective Travel Pouch',
-    '1Ã— USB Type-C Fast Charging Cable',
-    '1Ã— Protective Travel Eye Goggles',
-    '1Ã— Comprehensive User Manual & Quick Start Guide',
+    '1× LUMA Device',
+    '1× Protective Travel Pouch',
+    '1× USB Type-C Fast Charging Cable',
+    '1× Protective Travel Eye Goggles',
+    '1× Comprehensive User Manual & Quick Start Guide',
   ],
   benefitCards: [],
   specRows: [],
@@ -819,7 +819,7 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
           }`}
         >
           <span className="text-[14px]">
-            {notification.type === 'success' ? 'âœ“' : 'âš ï¸'}
+            {notification.type === 'success' ? '✓' : '⚠️'}
           </span>
           <span className="text-[13px] font-medium">{notification.message}</span>
         </div>
@@ -830,7 +830,7 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
         <div>
           <div className="flex items-center gap-2 text-[#ED2024] text-[11px] font-bold uppercase tracking-[0.14em] mb-1">
             <span>Management</span>
-            <span>â€¢</span>
+            <span>•</span>
             <span>Catalog Collection</span>
           </div>
           <h1 className="text-[24px] sm:text-[28px] font-extrabold uppercase tracking-[0.02em] text-gray-900">
@@ -915,7 +915,7 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
             </span>
           </div>
           <div className="w-8 h-8 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600">
-            <span className="text-[13px] font-bold">âœ“</span>
+            <span className="text-[13px] font-bold">✓</span>
           </div>
         </div>
 
@@ -929,7 +929,7 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
             </span>
           </div>
           <div className="w-8 h-8 rounded-lg bg-rose-50 flex items-center justify-center text-rose-600">
-            <span className="text-[13px] font-bold">âœ•</span>
+            <span className="text-[13px] font-bold">✕</span>
           </div>
         </div>
 
@@ -973,7 +973,7 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
                 onClick={() => setSearchQuery('')}
                 className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-700"
               >
-                âœ•
+                ✕
               </button>
             )}
           </div>
@@ -1228,7 +1228,7 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
                       {/* Rating */}
                       <td className="py-3.5 px-4">
                         <div className="flex items-center gap-1">
-                          <span className="text-amber-500 text-[12px]">â˜…</span>
+                          <span className="text-amber-500 text-[12px]">★</span>
                           <span className="font-semibold text-gray-800">{p.rating ?? 4.9}</span>
                           <span className="text-[10.5px] text-gray-400">({p.reviewsCount ?? 0})</span>
                         </div>
@@ -1397,9 +1397,12 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 hover:bg-gray-200 transition-colors"
+                className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 hover:text-gray-900 flex items-center justify-center transition-colors cursor-pointer"
+                title="Close modal"
               >
-                âœ•
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
               </button>
             </div>
 
@@ -1407,8 +1410,15 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
             {formError && (
               <div className="mx-6 mt-4 p-3 rounded-[10px] bg-red-50 border border-red-200 text-[#ED2024] text-[12px] flex items-center justify-between font-medium">
                 <span>{formError}</span>
-                <button type="button" onClick={() => setFormError(null)} className="text-gray-500 hover:text-gray-800">
-                  âœ•
+                <button
+                  type="button"
+                  onClick={() => setFormError(null)}
+                  className="w-5 h-5 rounded flex items-center justify-center text-gray-500 hover:text-gray-800 transition-colors cursor-pointer"
+                  title="Dismiss error"
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
                 </button>
               </div>
             )}
@@ -1416,12 +1426,12 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
             {/* Modal Tabs Navigation */}
             <div className="px-6 pt-3 border-b border-gray-200 flex items-center gap-2 overflow-x-auto no-scrollbar bg-white">
               {[
-                { id: 'general', label: '1. General Info' },
-                { id: 'pricing', label: '2. Pricing & Stock' },
-                { id: 'media', label: '3. Image & Media' },
-                { id: 'features', label: '4. Features & Details' },
-                { id: 'specs', label: '5. Technical Specs' },
-                { id: 'accordions', label: '6. Accordion Sections' },
+                { id: 'general', label: '1. Hero — Info & Pricing' },
+                { id: 'media', label: '2. Hero — Images & Media' },
+                { id: 'accordions', label: '3. Hero — Accordion Drawers' },
+                { id: 'features', label: '4. Section 2 — 3 Benefit Cards' },
+                { id: 'specs', label: '5. Section 3 — Technical Specs' },
+                { id: 'storefront', label: '6. Storefront & Catalog' },
               ].map((tab) => {
                 const isActive = modalTab === tab.id;
                 return (
@@ -1443,19 +1453,32 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
 
             {/* Modal Form Body */}
             <form onSubmit={handleSaveProduct} className="p-6 max-h-[70vh] overflow-y-auto no-scrollbar space-y-5 bg-white">
-              {/* TAB 1: GENERAL INFO */}
+
+              {/* TAB 1: HERO — INFO & PRICING */}
               {modalTab === 'general' && (
-                <div className="space-y-4">
+                <div className="space-y-5">
+                  {/* Visual Section Indicator */}
+                  <div className="p-3 rounded-[12px] bg-red-50/60 border border-red-200/80 flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded bg-[#ED2024] text-white font-black text-[10px] uppercase">
+                        Section 1: Hero (Top Right)
+                      </span>
+                      <span className="font-bold text-gray-900">Product Title, Tagline, Pricing &amp; Inventory</span>
+                    </div>
+                    <span className="text-gray-500 text-[11px] hidden sm:inline">Controls the main purchase area at the top of the product page</span>
+                  </div>
+
+                  {/* Product Name & Slug */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-[11px] font-bold uppercase tracking-[0.08em] text-gray-700 mb-1.5">
-                        Product Name *
+                        Product Name * (Hero Title)
                       </label>
                       <input
                         type="text"
                         value={formData.name}
                         onChange={(e) => updateFormField('name', e.target.value)}
-                        placeholder="e.g. LUMA NOVA"
+                        placeholder="e.g. LIGHT THERAPY MASK or LUMA NOVA"
                         required
                         className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[10px] px-3.5 py-2.5 text-gray-900 text-[13px] outline-none font-bold shadow-xs"
                       />
@@ -1469,12 +1492,13 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
                         type="text"
                         value={formData.slug}
                         onChange={(e) => updateFormField('slug', e.target.value)}
-                        placeholder="e.g. luma-nova"
+                        placeholder="e.g. luma-glow or luma-nova"
                         className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[10px] px-3.5 py-2.5 text-gray-900 text-[13px] outline-none font-mono shadow-xs"
                       />
                     </div>
                   </div>
 
+                  {/* Category & SKU */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-[11px] font-bold uppercase tracking-[0.08em] text-gray-700 mb-1.5">
@@ -1501,515 +1525,95 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
                         type="text"
                         value={formData.sku}
                         onChange={(e) => updateFormField('sku', e.target.value)}
-                        placeholder="e.g. LUM-NOV-03"
+                        placeholder="e.g. LUM-GLW-01"
                         className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[10px] px-3.5 py-2.5 text-gray-900 text-[13px] outline-none font-mono shadow-xs"
                       />
                     </div>
                   </div>
 
-                  {/* Storefront Layout & Hierarchy */}
-                  <div className="p-3.5 rounded-[12px] bg-gray-50 border border-gray-200 space-y-3.5">
-                    <span className="text-[10px] font-bold text-[#ED2024] uppercase tracking-wider block">
-                      Storefront Structure Settings
-                    </span>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                      <div>
-                        <label className="block text-[11px] font-bold uppercase tracking-[0.08em] text-gray-700 mb-1.5">
-                          Display Order (1..7) *
-                        </label>
-                        <input
-                          type="number"
-                          min="1"
-                          max="99"
-                          value={formData.displayOrder}
-                          onChange={(e) => updateFormField('displayOrder', Number(e.target.value))}
-                          placeholder="1"
-                          required
-                          className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[10px] px-3.5 py-2.5 text-gray-900 text-[13px] outline-none font-bold font-mono shadow-xs"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-[11px] font-bold uppercase tracking-[0.08em] text-gray-700 mb-1.5">
-                          Red Eyebrow (e.g. LUMA GLOW)
-                        </label>
-                        <input
-                          type="text"
-                          value={formData.eyebrow}
-                          onChange={(e) => updateFormField('eyebrow', e.target.value)}
-                          placeholder="e.g. LUMA GLOW"
-                          className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[10px] px-3.5 py-2.5 text-[#ED2024] text-[13px] outline-none font-bold shadow-xs"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                      <div>
-                        <label className="block text-[11px] font-bold uppercase tracking-[0.08em] text-gray-700 mb-1.5">
-                          Title Line 1
-                        </label>
-                        <input
-                          type="text"
-                          value={formData.titleLine1}
-                          onChange={(e) => updateFormField('titleLine1', e.target.value)}
-                          placeholder="e.g. LUMA FACE LED"
-                          className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[10px] px-3.5 py-2.5 text-gray-900 text-[13px] outline-none font-bold uppercase shadow-xs"
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-[11px] font-bold uppercase tracking-[0.08em] text-gray-700 mb-1.5">
-                          Title Line 2
-                        </label>
-                        <input
-                          type="text"
-                          value={formData.titleLine2}
-                          onChange={(e) => updateFormField('titleLine2', e.target.value)}
-                          placeholder="e.g. LIGHT THERAPY MASK"
-                          className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[10px] px-3.5 py-2.5 text-gray-900 text-[13px] outline-none font-bold uppercase shadow-xs"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
+                  {/* Subtitle / Tagline shown under title on product page */}
                   <div>
                     <label className="block text-[11px] font-bold uppercase tracking-[0.08em] text-gray-700 mb-1.5">
-                      Subtitle / Fallback Header
+                      Hero Subtitle / Clinical Tagline (Displayed directly under the title)
                     </label>
                     <input
                       type="text"
                       value={formData.subtitle}
                       onChange={(e) => updateFormField('subtitle', e.target.value)}
-                      placeholder="e.g. HALF BODY RED LIGHT THERAPY PANEL"
+                      placeholder="e.g. A lightweight, wearable face mask designed for effortless daily treatments — simply wear it, relax, and let the light rejuvenate your skin."
                       className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[10px] px-3.5 py-2.5 text-gray-900 text-[13px] outline-none shadow-xs"
                     />
                   </div>
 
+                  {/* Short Overview Summary */}
                   <div>
                     <label className="block text-[11px] font-bold uppercase tracking-[0.08em] text-gray-700 mb-1.5">
-                      Short Overview Summary
+                      Short Product Summary
                     </label>
                     <textarea
-                      rows={3}
+                      rows={2}
                       value={formData.description}
                       onChange={(e) => updateFormField('description', e.target.value)}
-                      placeholder="Brief 1-2 sentence marketing description for product cards..."
-                      className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[10px] p-3 text-gray-900 text-[13px] outline-none leading-relaxed shadow-xs"
+                      placeholder="Brief 1-2 sentence overview used on catalog cards and share links..."
+                      className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[10px] p-3 text-gray-900 text-[13px] outline-none leading-relaxed shadow-xs resize-none"
                     />
                   </div>
-                </div>
-              )}
 
-
-
-              {/* TAB 6: ACCORDION SECTIONS (PRODUCT SPECIFICATION, HEALTH BENEFITS, THE WAVELENGTHS, HOW TO USE, WHAT'S IN THE BOX) */}
-              {modalTab === 'accordions' && (
-                <div className="space-y-6">
-                  {/* Informational Banner */}
-                  <div className="p-4 rounded-[12px] bg-red-50/60 border border-red-200/80 flex items-start gap-3">
-                    <span className="text-[18px] leading-none text-[#ED2024] shrink-0">ℹ️</span>
-                    <div className="text-[12px] text-gray-700 leading-relaxed">
-                      <strong className="text-gray-900 font-bold block mb-0.5">
-                        Product Page Accordion Drawers
-                      </strong>
-                      These 5 accordions appear directly below the product hero on product detail pages (e.g. LUMA GO, LUMA GLOW, LUMA NOVA, etc.). You can customize the specification highlights, benefits, clinical wavelengths description, usage protocols, and packaged items for this product.
-                    </div>
-                  </div>
-
-                  {/* 1. PRODUCT SPECIFICATION HIGHLIGHTS */}
-                  <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-3">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div>
-                        <h4 className="text-[13px] font-bold uppercase tracking-wider text-gray-900 flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-[#ED2024]" />
-                          1. Product Specification Highlights
-                        </h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">
-                          2-column key-value metrics displayed when the Product Specification accordion drawer is expanded (e.g. Leds, Coverage, Dimensions, Lifespan, Battery Size, Wavelength).
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultSpecHighlights}
-                          className="px-2.5 py-1.5 rounded-[8px] bg-white hover:bg-gray-100 border border-gray-300 text-gray-600 text-[11px] font-semibold cursor-pointer transition-colors shadow-xs"
-                        >
-                          Reset Defaults
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleAddSpecHighlight}
-                          className="px-3 py-1.5 rounded-[8px] bg-[#ED2024] hover:bg-[#d4191d] text-white text-[11px] font-bold cursor-pointer transition-colors shadow-xs"
-                        >
-                          + Add Highlight
-                        </button>
-                      </div>
-                    </div>
-
-                    {(!formData.specHighlights || formData.specHighlights.length === 0) ? (
-                      <div className="p-4 text-center rounded-[8px] bg-white border border-dashed border-gray-300 text-gray-500 text-[12px]">
-                        No specification highlights added yet.{' '}
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultSpecHighlights}
-                          className="text-[#ED2024] font-bold hover:underline cursor-pointer"
-                        >
-                          Click here to populate default highlights
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        <div className="grid grid-cols-12 gap-2 px-2 text-[10px] font-bold uppercase tracking-wider text-gray-500">
-                          <span className="col-span-5">Label (e.g. Dimensions)</span>
-                          <span className="col-span-6">Value (e.g. 140 x 70 x 29 mm)</span>
-                          <span className="col-span-1 text-right">Action</span>
-                        </div>
-                        {formData.specHighlights.map((item, idx) => (
-                          <div
-                            key={idx}
-                            className="grid grid-cols-12 gap-2 items-center p-2 rounded-[8px] bg-white border border-gray-200 shadow-xs hover:border-gray-300 transition-colors"
-                          >
-                            <div className="col-span-5">
-                              <input
-                                type="text"
-                                value={item.label || ''}
-                                onChange={(e) => handleUpdateSpecHighlight(idx, 'label', e.target.value)}
-                                placeholder="e.g. Leds / Battery Size"
-                                className="w-full bg-gray-50 border border-gray-300 focus:border-[#ED2024] rounded-[6px] px-2.5 py-1.5 text-gray-900 font-bold text-[12px] outline-none"
-                              />
-                            </div>
-                            <div className="col-span-6">
-                              <input
-                                type="text"
-                                value={item.value || ''}
-                                onChange={(e) => handleUpdateSpecHighlight(idx, 'value', e.target.value)}
-                                placeholder="e.g. 12 / 7.4V 2500mAh"
-                                className="w-full bg-gray-50 border border-gray-300 focus:border-[#ED2024] rounded-[6px] px-2.5 py-1.5 text-gray-800 font-medium text-[12px] outline-none"
-                              />
-                            </div>
-                            <div className="col-span-1 text-right">
-                              <button
-                                type="button"
-                                onClick={() => handleRemoveSpecHighlight(idx)}
-                                className="p-1.5 text-gray-400 hover:text-rose-600 transition-colors cursor-pointer"
-                                title="Remove highlight"
-                              >
-                                ✕
-                              </button>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* 2. HEALTH BENEFITS */}
-                  <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-3">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div>
-                        <h4 className="text-[13px] font-bold uppercase tracking-wider text-gray-900 flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-[#ED2024]" />
-                          2. Health Benefits
-                        </h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">
-                          List of clinical health benefits and biological improvements displayed inside the Health Benefits accordion drawer.
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultHealthBenefits}
-                          className="px-2.5 py-1.5 rounded-[8px] bg-white hover:bg-gray-100 border border-gray-300 text-gray-600 text-[11px] font-semibold cursor-pointer transition-colors shadow-xs"
-                        >
-                          Reset Defaults
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleAddHealthBenefit}
-                          className="px-3 py-1.5 rounded-[8px] bg-[#ED2024] hover:bg-[#d4191d] text-white text-[11px] font-bold cursor-pointer transition-colors shadow-xs"
-                        >
-                          + Add Benefit
-                        </button>
-                      </div>
-                    </div>
-
-                    {(!formData.healthBenefits || formData.healthBenefits.length === 0) ? (
-                      <div className="p-4 text-center rounded-[8px] bg-white border border-dashed border-gray-300 text-gray-500 text-[12px]">
-                        No health benefits added yet.{' '}
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultHealthBenefits}
-                          className="text-[#ED2024] font-bold hover:underline cursor-pointer"
-                        >
-                          Click here to populate default benefits
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        {formData.healthBenefits.map((benefit, idx) => (
-                          <div key={idx} className="flex items-center gap-2.5 p-2 rounded-[8px] bg-white border border-gray-200 shadow-xs">
-                            <span className="text-[#ED2024] font-black text-[14px] select-none pl-1">•</span>
-                            <input
-                              type="text"
-                              value={benefit || ''}
-                              onChange={(e) => handleUpdateHealthBenefit(idx, e.target.value)}
-                              placeholder="e.g. Targeted cellular energy (ATP) stimulation for deep tissue recovery."
-                              className="flex-1 bg-gray-50 border border-gray-300 focus:border-[#ED2024] rounded-[6px] px-3 py-1.5 text-gray-900 text-[12px] outline-none"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveHealthBenefit(idx)}
-                              className="p-1.5 text-gray-400 hover:text-rose-600 transition-colors cursor-pointer"
-                              title="Delete benefit"
-                            >
-                              ✕
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* 3. THE 8 WAVELENGTHS (ACCORDION TITLE & CLINICAL DESCRIPTION) */}
+                  {/* Pricing & Stock Card */}
                   <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-4">
-                    <div>
-                      <h4 className="text-[13px] font-bold uppercase tracking-wider text-gray-900 flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-[#ED2024]" />
-                        3. The Wavelengths (Title &amp; Clinical Description)
-                      </h4>
-                      <p className="text-[11px] text-gray-500 mt-0.5">
-                        Customize the accordion header text (e.g. &ldquo;THE 8 WAVELENGTHS&rdquo;, &ldquo;THE WAVELENGTHS&rdquo;, &ldquo;THE 4 WAVELENGTHS&rdquo;) and the detailed spectral absorption description.
-                      </p>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                      <div className="sm:col-span-1">
-                        <label className="block text-[11px] font-bold uppercase tracking-[0.08em] text-gray-700 mb-1.5">
-                          Accordion Header Title *
-                        </label>
-                        <input
-                          type="text"
-                          value={formData.the8WavelengthsTitle || 'THE 8 WAVELENGTHS'}
-                          onChange={(e) => updateFormField('the8WavelengthsTitle', e.target.value.toUpperCase())}
-                          placeholder="e.g. THE 8 WAVELENGTHS"
-                          className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[8px] px-3 py-2 text-gray-900 text-[12.5px] font-bold uppercase outline-none shadow-xs"
-                        />
-                        <span className="text-[10px] text-gray-400 mt-1 block">
-                          Shown on the clickable accordion toggle bar.
-                        </span>
-                      </div>
-
-                      <div className="sm:col-span-2">
-                        <label className="block text-[11px] font-bold uppercase tracking-[0.08em] text-gray-700 mb-1.5">
-                          Wavelengths Explanation Text *
-                        </label>
-                        <textarea
-                          rows={3}
-                          value={formData.wavelengthsDesc || ''}
-                          onChange={(e) => updateFormField('wavelengthsDesc', e.target.value)}
-                          placeholder="e.g. LUMA GO concentrates high-intensity 660nm red light with a focused 30° optical beam angle, maximizing photon absorption in the skin and superficial tissue layers for peak biological rejuvenation."
-                          className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[8px] p-2.5 text-gray-900 text-[12.5px] outline-none leading-relaxed shadow-xs"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* 4. HOW TO USE */}
-                  <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-3">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div>
-                        <h4 className="text-[13px] font-bold uppercase tracking-wider text-gray-900 flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-[#ED2024]" />
-                          4. How To Use (Protocol Steps)
-                        </h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">
-                          Numbered step-by-step treatment protocols displayed inside the How To Use accordion drawer.
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultHowToUse}
-                          className="px-2.5 py-1.5 rounded-[8px] bg-white hover:bg-gray-100 border border-gray-300 text-gray-600 text-[11px] font-semibold cursor-pointer transition-colors shadow-xs"
-                        >
-                          Reset Defaults
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleAddHowToUse}
-                          className="px-3 py-1.5 rounded-[8px] bg-[#ED2024] hover:bg-[#d4191d] text-white text-[11px] font-bold cursor-pointer transition-colors shadow-xs"
-                        >
-                          + Add Step
-                        </button>
-                      </div>
-                    </div>
-
-                    {(!formData.howToUse || formData.howToUse.length === 0) ? (
-                      <div className="p-4 text-center rounded-[8px] bg-white border border-dashed border-gray-300 text-gray-500 text-[12px]">
-                        No usage steps added yet.{' '}
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultHowToUse}
-                          className="text-[#ED2024] font-bold hover:underline cursor-pointer"
-                        >
-                          Click here to populate default steps
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        {formData.howToUse.map((step, idx) => (
-                          <div key={idx} className="flex items-center gap-2.5 p-2 rounded-[8px] bg-white border border-gray-200 shadow-xs">
-                            <span className="w-5 h-5 rounded-full bg-red-100 text-[#ED2024] font-bold text-[11px] flex items-center justify-center shrink-0 select-none">
-                              {idx + 1}
-                            </span>
-                            <input
-                              type="text"
-                              value={step || ''}
-                              onChange={(e) => handleUpdateHowToUse(idx, e.target.value)}
-                              placeholder={`Step ${idx + 1} instructions...`}
-                              className="flex-1 bg-gray-50 border border-gray-300 focus:border-[#ED2024] rounded-[6px] px-3 py-1.5 text-gray-900 text-[12px] outline-none"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveHowToUse(idx)}
-                              className="p-1.5 text-gray-400 hover:text-rose-600 transition-colors cursor-pointer"
-                              title="Delete step"
-                            >
-                              ✕
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* 5. WHAT'S IN THE BOX */}
-                  <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-3">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div>
-                        <h4 className="text-[13px] font-bold uppercase tracking-wider text-gray-900 flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-[#ED2024]" />
-                          5. What&apos;s In The Box (Package Contents)
-                        </h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">
-                          List of hardware and accessories included inside the product package.
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultInTheBox}
-                          className="px-2.5 py-1.5 rounded-[8px] bg-white hover:bg-gray-100 border border-gray-300 text-gray-600 text-[11px] font-semibold cursor-pointer transition-colors shadow-xs"
-                        >
-                          Reset Defaults
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleAddInTheBox}
-                          className="px-3 py-1.5 rounded-[8px] bg-[#ED2024] hover:bg-[#d4191d] text-white text-[11px] font-bold cursor-pointer transition-colors shadow-xs"
-                        >
-                          + Add Box Item
-                        </button>
-                      </div>
-                    </div>
-
-                    {(!formData.inTheBox || formData.inTheBox.length === 0) ? (
-                      <div className="p-4 text-center rounded-[8px] bg-white border border-dashed border-gray-300 text-gray-500 text-[12px]">
-                        No package items added yet.{' '}
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultInTheBox}
-                          className="text-[#ED2024] font-bold hover:underline cursor-pointer"
-                        >
-                          Click here to populate default package contents
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        {formData.inTheBox.map((item, idx) => (
-                          <div key={idx} className="flex items-center gap-2.5 p-2 rounded-[8px] bg-white border border-gray-200 shadow-xs">
-                            <span className="text-[14px] shrink-0 select-none">📦</span>
-                            <input
-                              type="text"
-                              value={item || ''}
-                              onChange={(e) => handleUpdateInTheBox(idx, e.target.value)}
-                              placeholder="e.g. 1× LUMA Device"
-                              className="flex-1 bg-gray-50 border border-gray-300 focus:border-[#ED2024] rounded-[6px] px-3 py-1.5 text-gray-900 text-[12px] outline-none"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveInTheBox(idx)}
-                              className="p-1.5 text-gray-400 hover:text-rose-600 transition-colors cursor-pointer"
-                              title="Delete package item"
-                            >
-                              ✕
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* TAB 2: PRICING & INVENTORY */}
-              {modalTab === 'pricing' && (
-                <div className="space-y-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div>
-                      <label className="block text-[11px] font-bold uppercase tracking-[0.08em] text-gray-700 mb-1.5">
-                        Selling Price (AED) *
-                      </label>
-                      <input
-                        type="number"
-                        min="0"
-                        step="1"
-                        value={formData.price}
-                        onChange={(e) => updateFormField('price', e.target.value)}
-                        placeholder="e.g. 2150"
-                        required
-                        className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[10px] px-3.5 py-2.5 text-[#ED2024] text-[14px] font-black outline-none shadow-xs"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-[11px] font-bold uppercase tracking-[0.08em] text-gray-700 mb-1.5">
-                        Compare-at / Original Price (AED)
-                      </label>
-                      <input
-                        type="number"
-                        min="0"
-                        step="1"
-                        value={formData.originalPrice}
-                        onChange={(e) => updateFormField('originalPrice', e.target.value)}
-                        placeholder="e.g. 2890 (optional)"
-                        className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[10px] px-3.5 py-2.5 text-gray-500 text-[13px] outline-none shadow-xs"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-[11px] font-bold uppercase tracking-[0.08em] text-gray-700 mb-1.5">
-                        Stock Quantity (Units)
-                      </label>
-                      <input
-                        type="number"
-                        min="0"
-                        step="1"
-                        value={formData.stock}
-                        onChange={(e) => updateFormField('stock', e.target.value)}
-                        placeholder="20"
-                        className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[10px] px-3.5 py-2.5 text-gray-900 text-[13px] outline-none font-semibold shadow-xs"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-3">
-                    <span className="text-[11px] font-bold uppercase tracking-wider text-gray-900 block">
-                      Inventory &amp; Visibility Status
+                    <span className="text-[10px] font-bold text-[#ED2024] uppercase tracking-wider block">
+                      Pricing, Currency &amp; Stock Availability
                     </span>
 
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                      <div>
+                        <label className="block text-[11px] font-bold uppercase tracking-[0.08em] text-gray-700 mb-1.5">
+                          Selling Price (AED) *
+                        </label>
+                        <input
+                          type="number"
+                          min="0"
+                          step="1"
+                          value={formData.price}
+                          onChange={(e) => updateFormField('price', e.target.value)}
+                          placeholder="e.g. 326"
+                          required
+                          className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[10px] px-3.5 py-2.5 text-[#ED2024] text-[15px] font-black outline-none shadow-xs"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-bold uppercase tracking-[0.08em] text-gray-700 mb-1.5">
+                          Compare-at / Original Price (AED)
+                        </label>
+                        <input
+                          type="number"
+                          min="0"
+                          step="1"
+                          value={formData.originalPrice}
+                          onChange={(e) => updateFormField('originalPrice', e.target.value)}
+                          placeholder="e.g. 590 (shown with strikethrough)"
+                          className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[10px] px-3.5 py-2.5 text-gray-500 text-[13px] outline-none shadow-xs"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-bold uppercase tracking-[0.08em] text-gray-700 mb-1.5">
+                          Stock Quantity (Units)
+                        </label>
+                        <input
+                          type="number"
+                          min="0"
+                          step="1"
+                          value={formData.stock}
+                          onChange={(e) => updateFormField('stock', e.target.value)}
+                          placeholder="20"
+                          className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[10px] px-3.5 py-2.5 text-gray-900 text-[13px] outline-none font-semibold shadow-xs"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pt-2 border-t border-gray-200">
                       <label className="flex items-center gap-3 cursor-pointer select-none">
                         <input
                           type="checkbox"
@@ -2017,415 +1621,57 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
                           onChange={(e) => updateFormField('inStock', e.target.checked)}
                           className="w-4 h-4 accent-[#ED2024] rounded"
                         />
-                        <span className="text-[13px] text-gray-900 font-medium">
-                          In Stock (Available for Purchase)
+                        <span className="text-[13px] text-gray-900 font-bold">
+                          In Stock (Shows active "Add to Cart" and "Buy Now" buttons)
                         </span>
                       </label>
 
-                      <label className="flex items-center gap-3 cursor-pointer select-none">
-                        <input
-                          type="checkbox"
-                          checked={formData.isActive}
-                          onChange={(e) => updateFormField('isActive', e.target.checked)}
-                          className="w-4 h-4 accent-[#ED2024] rounded"
-                        />
-                        <span className="text-[13px] text-gray-900 font-medium">
-                          Active &amp; Published in Store Catalog
-                        </span>
-                      </label>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-[11px] font-bold uppercase tracking-[0.08em] text-gray-700 mb-1.5">
-                        Average Rating (Stars 1.0 - 5.0)
-                      </label>
-                      <input
-                        type="number"
-                        step="0.1"
-                        min="1"
-                        max="5"
-                        value={formData.rating}
-                        onChange={(e) => updateFormField('rating', e.target.value)}
-                        className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[10px] px-3.5 py-2.5 text-gray-900 text-[13px] outline-none shadow-xs"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-[11px] font-bold uppercase tracking-[0.08em] text-gray-700 mb-1.5">
-                        Customer Reviews Count
-                      </label>
-                      <input
-                        type="number"
-                        min="0"
-                        value={formData.reviewsCount}
-                        onChange={(e) => updateFormField('reviewsCount', e.target.value)}
-                        className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[10px] px-3.5 py-2.5 text-gray-900 text-[13px] outline-none shadow-xs"
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
-
-
-
-              {/* TAB 6: ACCORDION SECTIONS (PRODUCT SPECIFICATION, HEALTH BENEFITS, THE WAVELENGTHS, HOW TO USE, WHAT'S IN THE BOX) */}
-              {modalTab === 'accordions' && (
-                <div className="space-y-6">
-                  {/* Informational Banner */}
-                  <div className="p-4 rounded-[12px] bg-red-50/60 border border-red-200/80 flex items-start gap-3">
-                    <span className="text-[18px] leading-none text-[#ED2024] shrink-0">ℹ️</span>
-                    <div className="text-[12px] text-gray-700 leading-relaxed">
-                      <strong className="text-gray-900 font-bold block mb-0.5">
-                        Product Page Accordion Drawers
-                      </strong>
-                      These 5 accordions appear directly below the product hero on product detail pages (e.g. LUMA GO, LUMA GLOW, LUMA NOVA, etc.). You can customize the specification highlights, benefits, clinical wavelengths description, usage protocols, and packaged items for this product.
-                    </div>
-                  </div>
-
-                  {/* 1. PRODUCT SPECIFICATION HIGHLIGHTS */}
-                  <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-3">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div>
-                        <h4 className="text-[13px] font-bold uppercase tracking-wider text-gray-900 flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-[#ED2024]" />
-                          1. Product Specification Highlights
-                        </h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">
-                          2-column key-value metrics displayed when the Product Specification accordion drawer is expanded (e.g. Leds, Coverage, Dimensions, Lifespan, Battery Size, Wavelength).
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultSpecHighlights}
-                          className="px-2.5 py-1.5 rounded-[8px] bg-white hover:bg-gray-100 border border-gray-300 text-gray-600 text-[11px] font-semibold cursor-pointer transition-colors shadow-xs"
-                        >
-                          Reset Defaults
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleAddSpecHighlight}
-                          className="px-3 py-1.5 rounded-[8px] bg-[#ED2024] hover:bg-[#d4191d] text-white text-[11px] font-bold cursor-pointer transition-colors shadow-xs"
-                        >
-                          + Add Highlight
-                        </button>
-                      </div>
-                    </div>
-
-                    {(!formData.specHighlights || formData.specHighlights.length === 0) ? (
-                      <div className="p-4 text-center rounded-[8px] bg-white border border-dashed border-gray-300 text-gray-500 text-[12px]">
-                        No specification highlights added yet.{' '}
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultSpecHighlights}
-                          className="text-[#ED2024] font-bold hover:underline cursor-pointer"
-                        >
-                          Click here to populate default highlights
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        <div className="grid grid-cols-12 gap-2 px-2 text-[10px] font-bold uppercase tracking-wider text-gray-500">
-                          <span className="col-span-5">Label (e.g. Dimensions)</span>
-                          <span className="col-span-6">Value (e.g. 140 x 70 x 29 mm)</span>
-                          <span className="col-span-1 text-right">Action</span>
+                      <div className="flex items-center gap-4 text-xs">
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-gray-500 text-[11px]">Rating:</span>
+                          <input
+                            type="number"
+                            step="0.1"
+                            min="1"
+                            max="5"
+                            value={formData.rating}
+                            onChange={(e) => updateFormField('rating', e.target.value)}
+                            className="w-16 bg-white border border-gray-300 rounded-[6px] px-2 py-1 text-center font-bold text-gray-900 text-xs outline-none"
+                          />
                         </div>
-                        {formData.specHighlights.map((item, idx) => (
-                          <div
-                            key={idx}
-                            className="grid grid-cols-12 gap-2 items-center p-2 rounded-[8px] bg-white border border-gray-200 shadow-xs hover:border-gray-300 transition-colors"
-                          >
-                            <div className="col-span-5">
-                              <input
-                                type="text"
-                                value={item.label || ''}
-                                onChange={(e) => handleUpdateSpecHighlight(idx, 'label', e.target.value)}
-                                placeholder="e.g. Leds / Battery Size"
-                                className="w-full bg-gray-50 border border-gray-300 focus:border-[#ED2024] rounded-[6px] px-2.5 py-1.5 text-gray-900 font-bold text-[12px] outline-none"
-                              />
-                            </div>
-                            <div className="col-span-6">
-                              <input
-                                type="text"
-                                value={item.value || ''}
-                                onChange={(e) => handleUpdateSpecHighlight(idx, 'value', e.target.value)}
-                                placeholder="e.g. 12 / 7.4V 2500mAh"
-                                className="w-full bg-gray-50 border border-gray-300 focus:border-[#ED2024] rounded-[6px] px-2.5 py-1.5 text-gray-800 font-medium text-[12px] outline-none"
-                              />
-                            </div>
-                            <div className="col-span-1 text-right">
-                              <button
-                                type="button"
-                                onClick={() => handleRemoveSpecHighlight(idx)}
-                                className="p-1.5 text-gray-400 hover:text-rose-600 transition-colors cursor-pointer"
-                                title="Remove highlight"
-                              >
-                                ✕
-                              </button>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* 2. HEALTH BENEFITS */}
-                  <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-3">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div>
-                        <h4 className="text-[13px] font-bold uppercase tracking-wider text-gray-900 flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-[#ED2024]" />
-                          2. Health Benefits
-                        </h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">
-                          List of clinical health benefits and biological improvements displayed inside the Health Benefits accordion drawer.
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultHealthBenefits}
-                          className="px-2.5 py-1.5 rounded-[8px] bg-white hover:bg-gray-100 border border-gray-300 text-gray-600 text-[11px] font-semibold cursor-pointer transition-colors shadow-xs"
-                        >
-                          Reset Defaults
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleAddHealthBenefit}
-                          className="px-3 py-1.5 rounded-[8px] bg-[#ED2024] hover:bg-[#d4191d] text-white text-[11px] font-bold cursor-pointer transition-colors shadow-xs"
-                        >
-                          + Add Benefit
-                        </button>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-gray-500 text-[11px]">Reviews:</span>
+                          <input
+                            type="number"
+                            min="0"
+                            value={formData.reviewsCount}
+                            onChange={(e) => updateFormField('reviewsCount', e.target.value)}
+                            className="w-20 bg-white border border-gray-300 rounded-[6px] px-2 py-1 text-center font-bold text-gray-900 text-xs outline-none"
+                          />
+                        </div>
                       </div>
                     </div>
-
-                    {(!formData.healthBenefits || formData.healthBenefits.length === 0) ? (
-                      <div className="p-4 text-center rounded-[8px] bg-white border border-dashed border-gray-300 text-gray-500 text-[12px]">
-                        No health benefits added yet.{' '}
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultHealthBenefits}
-                          className="text-[#ED2024] font-bold hover:underline cursor-pointer"
-                        >
-                          Click here to populate default benefits
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        {formData.healthBenefits.map((benefit, idx) => (
-                          <div key={idx} className="flex items-center gap-2.5 p-2 rounded-[8px] bg-white border border-gray-200 shadow-xs">
-                            <span className="text-[#ED2024] font-black text-[14px] select-none pl-1">•</span>
-                            <input
-                              type="text"
-                              value={benefit || ''}
-                              onChange={(e) => handleUpdateHealthBenefit(idx, e.target.value)}
-                              placeholder="e.g. Targeted cellular energy (ATP) stimulation for deep tissue recovery."
-                              className="flex-1 bg-gray-50 border border-gray-300 focus:border-[#ED2024] rounded-[6px] px-3 py-1.5 text-gray-900 text-[12px] outline-none"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveHealthBenefit(idx)}
-                              className="p-1.5 text-gray-400 hover:text-rose-600 transition-colors cursor-pointer"
-                              title="Delete benefit"
-                            >
-                              ✕
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* 3. THE 8 WAVELENGTHS (ACCORDION TITLE & CLINICAL DESCRIPTION) */}
-                  <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-4">
-                    <div>
-                      <h4 className="text-[13px] font-bold uppercase tracking-wider text-gray-900 flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-[#ED2024]" />
-                        3. The Wavelengths (Title &amp; Clinical Description)
-                      </h4>
-                      <p className="text-[11px] text-gray-500 mt-0.5">
-                        Customize the accordion header text (e.g. &ldquo;THE 8 WAVELENGTHS&rdquo;, &ldquo;THE WAVELENGTHS&rdquo;, &ldquo;THE 4 WAVELENGTHS&rdquo;) and the detailed spectral absorption description.
-                      </p>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                      <div className="sm:col-span-1">
-                        <label className="block text-[11px] font-bold uppercase tracking-[0.08em] text-gray-700 mb-1.5">
-                          Accordion Header Title *
-                        </label>
-                        <input
-                          type="text"
-                          value={formData.the8WavelengthsTitle || 'THE 8 WAVELENGTHS'}
-                          onChange={(e) => updateFormField('the8WavelengthsTitle', e.target.value.toUpperCase())}
-                          placeholder="e.g. THE 8 WAVELENGTHS"
-                          className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[8px] px-3 py-2 text-gray-900 text-[12.5px] font-bold uppercase outline-none shadow-xs"
-                        />
-                        <span className="text-[10px] text-gray-400 mt-1 block">
-                          Shown on the clickable accordion toggle bar.
-                        </span>
-                      </div>
-
-                      <div className="sm:col-span-2">
-                        <label className="block text-[11px] font-bold uppercase tracking-[0.08em] text-gray-700 mb-1.5">
-                          Wavelengths Explanation Text *
-                        </label>
-                        <textarea
-                          rows={3}
-                          value={formData.wavelengthsDesc || ''}
-                          onChange={(e) => updateFormField('wavelengthsDesc', e.target.value)}
-                          placeholder="e.g. LUMA GO concentrates high-intensity 660nm red light with a focused 30° optical beam angle, maximizing photon absorption in the skin and superficial tissue layers for peak biological rejuvenation."
-                          className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[8px] p-2.5 text-gray-900 text-[12.5px] outline-none leading-relaxed shadow-xs"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* 4. HOW TO USE */}
-                  <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-3">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div>
-                        <h4 className="text-[13px] font-bold uppercase tracking-wider text-gray-900 flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-[#ED2024]" />
-                          4. How To Use (Protocol Steps)
-                        </h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">
-                          Numbered step-by-step treatment protocols displayed inside the How To Use accordion drawer.
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultHowToUse}
-                          className="px-2.5 py-1.5 rounded-[8px] bg-white hover:bg-gray-100 border border-gray-300 text-gray-600 text-[11px] font-semibold cursor-pointer transition-colors shadow-xs"
-                        >
-                          Reset Defaults
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleAddHowToUse}
-                          className="px-3 py-1.5 rounded-[8px] bg-[#ED2024] hover:bg-[#d4191d] text-white text-[11px] font-bold cursor-pointer transition-colors shadow-xs"
-                        >
-                          + Add Step
-                        </button>
-                      </div>
-                    </div>
-
-                    {(!formData.howToUse || formData.howToUse.length === 0) ? (
-                      <div className="p-4 text-center rounded-[8px] bg-white border border-dashed border-gray-300 text-gray-500 text-[12px]">
-                        No usage steps added yet.{' '}
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultHowToUse}
-                          className="text-[#ED2024] font-bold hover:underline cursor-pointer"
-                        >
-                          Click here to populate default steps
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        {formData.howToUse.map((step, idx) => (
-                          <div key={idx} className="flex items-center gap-2.5 p-2 rounded-[8px] bg-white border border-gray-200 shadow-xs">
-                            <span className="w-5 h-5 rounded-full bg-red-100 text-[#ED2024] font-bold text-[11px] flex items-center justify-center shrink-0 select-none">
-                              {idx + 1}
-                            </span>
-                            <input
-                              type="text"
-                              value={step || ''}
-                              onChange={(e) => handleUpdateHowToUse(idx, e.target.value)}
-                              placeholder={`Step ${idx + 1} instructions...`}
-                              className="flex-1 bg-gray-50 border border-gray-300 focus:border-[#ED2024] rounded-[6px] px-3 py-1.5 text-gray-900 text-[12px] outline-none"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveHowToUse(idx)}
-                              className="p-1.5 text-gray-400 hover:text-rose-600 transition-colors cursor-pointer"
-                              title="Delete step"
-                            >
-                              ✕
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* 5. WHAT'S IN THE BOX */}
-                  <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-3">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div>
-                        <h4 className="text-[13px] font-bold uppercase tracking-wider text-gray-900 flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-[#ED2024]" />
-                          5. What&apos;s In The Box (Package Contents)
-                        </h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">
-                          List of hardware and accessories included inside the product package.
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultInTheBox}
-                          className="px-2.5 py-1.5 rounded-[8px] bg-white hover:bg-gray-100 border border-gray-300 text-gray-600 text-[11px] font-semibold cursor-pointer transition-colors shadow-xs"
-                        >
-                          Reset Defaults
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleAddInTheBox}
-                          className="px-3 py-1.5 rounded-[8px] bg-[#ED2024] hover:bg-[#d4191d] text-white text-[11px] font-bold cursor-pointer transition-colors shadow-xs"
-                        >
-                          + Add Box Item
-                        </button>
-                      </div>
-                    </div>
-
-                    {(!formData.inTheBox || formData.inTheBox.length === 0) ? (
-                      <div className="p-4 text-center rounded-[8px] bg-white border border-dashed border-gray-300 text-gray-500 text-[12px]">
-                        No package items added yet.{' '}
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultInTheBox}
-                          className="text-[#ED2024] font-bold hover:underline cursor-pointer"
-                        >
-                          Click here to populate default package contents
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        {formData.inTheBox.map((item, idx) => (
-                          <div key={idx} className="flex items-center gap-2.5 p-2 rounded-[8px] bg-white border border-gray-200 shadow-xs">
-                            <span className="text-[14px] shrink-0 select-none">📦</span>
-                            <input
-                              type="text"
-                              value={item || ''}
-                              onChange={(e) => handleUpdateInTheBox(idx, e.target.value)}
-                              placeholder="e.g. 1× LUMA Device"
-                              className="flex-1 bg-gray-50 border border-gray-300 focus:border-[#ED2024] rounded-[6px] px-3 py-1.5 text-gray-900 text-[12px] outline-none"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveInTheBox(idx)}
-                              className="p-1.5 text-gray-400 hover:text-rose-600 transition-colors cursor-pointer"
-                              title="Delete package item"
-                            >
-                              ✕
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
                   </div>
                 </div>
               )}
 
-              {/* TAB 3: MEDIA & IMAGES */}
+              {/* TAB 2: HERO — IMAGES & MEDIA */}
               {modalTab === 'media' && (
                 <div className="space-y-5">
+                  {/* Visual Section Indicator */}
+                  <div className="p-3 rounded-[12px] bg-red-50/60 border border-red-200/80 flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded bg-[#ED2024] text-white font-black text-[10px] uppercase">
+                        Section 1: Hero (Top Left)
+                      </span>
+                      <span className="font-bold text-gray-900">Product Photography &amp; Gallery Slides</span>
+                    </div>
+                    <span className="text-gray-500 text-[11px] hidden sm:inline">Shown on the left side of the product page with image switcher dots</span>
+                  </div>
+
                   <div>
                     <span className="text-[11px] font-bold uppercase tracking-wider text-gray-900 block mb-2">
-                      Primary Product Image
+                      Primary Product Showcase Image
                     </span>
                     <ImageUploadField
                       label="Upload Main Product Image from Computer"
@@ -2443,6 +1689,9 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
                     <span className="text-[11px] font-bold uppercase tracking-wider text-gray-900 block mb-2">
                       Additional Gallery Images ({formData.images?.length || 0})
                     </span>
+                    <p className="text-[11.5px] text-gray-500 mb-3">
+                      These images appear in the hero photo gallery slide show on the product page.
+                    </p>
 
                     <div className="space-y-3">
                       {formData.images?.map((imgUrl, idx) => (
@@ -2469,10 +1718,10 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
                           <button
                             type="button"
                             onClick={() => handleRemoveGalleryImage(idx)}
-                            className="p-1.5 rounded-lg text-gray-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+                            className="p-1.5 rounded-lg text-gray-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
                             title="Remove image"
                           >
-                            âœ•
+                            ✕
                           </button>
                         </div>
                       ))}
@@ -2491,9 +1740,7 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
                 </div>
               )}
 
-
-
-              {/* TAB 6: ACCORDION SECTIONS (PRODUCT SPECIFICATION, HEALTH BENEFITS, THE WAVELENGTHS, HOW TO USE, WHAT'S IN THE BOX) */}
+{/* TAB 3: HERO ACCORDION DRAWERS (PRODUCT SPECIFICATION, HEALTH BENEFITS, THE WAVELENGTHS, HOW TO USE, WHAT'S IN THE BOX) */}
               {modalTab === 'accordions' && (
                 <div className="space-y-6">
                   {/* Informational Banner */}
@@ -2819,7 +2066,9 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
                       <div className="space-y-2">
                         {formData.inTheBox.map((item, idx) => (
                           <div key={idx} className="flex items-center gap-2.5 p-2 rounded-[8px] bg-white border border-gray-200 shadow-xs">
-                            <span className="text-[14px] shrink-0 select-none">📦</span>
+                            <svg className="w-4 h-4 text-[#ED2024] shrink-0 select-none" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                            </svg>
                             <input
                               type="text"
                               value={item || ''}
@@ -2830,10 +2079,12 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
                             <button
                               type="button"
                               onClick={() => handleRemoveInTheBox(idx)}
-                              className="p-1.5 text-gray-400 hover:text-rose-600 transition-colors cursor-pointer"
+                              className="p-1.5 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-md transition-colors cursor-pointer"
                               title="Delete package item"
                             >
-                              ✕
+                              <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                              </svg>
                             </button>
                           </div>
                         ))}
@@ -2843,19 +2094,30 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
                 </div>
               )}
 
-              {/* TAB 4: FEATURES & DETAILS */}
+              {/* TAB 4: SECTION 2 — 3 BENEFIT CARDS */}
               {modalTab === 'features' && (
                 <div className="space-y-6">
+                  {/* Visual Section Indicator */}
+                  <div className="p-3 rounded-[12px] bg-red-50/60 border border-red-200/80 flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded bg-[#ED2024] text-white font-black text-[10px] uppercase">
+                        Section 2: Middle Section
+                      </span>
+                      <span className="font-bold text-gray-900">3 Clinical Benefit Cards (Under Hero Section)</span>
+                    </div>
+                    <span className="text-gray-500 text-[11px] hidden sm:inline">The 3 feature cards displayed across the middle of the product page</span>
+                  </div>
+
                   {/* Section 1: Clinical Benefit Cards (The 3 Image Cards with details underneath) */}
                   <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-4">
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <div>
                         <h4 className="text-[13px] font-bold uppercase tracking-wider text-gray-900 flex items-center gap-2">
                           <span className="w-2 h-2 rounded-full bg-[#ED2024]" />
-                          1. Clinical Benefit Cards
+                          Clinical Benefit Cards (3 Cards)
                         </h4>
                         <p className="text-[11px] text-gray-500 mt-0.5">
-                          Edit the 3 visual cards shown directly under the Hero section on the product inside page (Photo, Eyebrow, Title & Details).
+                          Edit the 3 visual cards shown directly under the Hero section on the product page (Photo, Eyebrow, Title &amp; Details).
                         </p>
                       </div>
                       <div className="flex items-center gap-2">
@@ -2905,7 +2167,7 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
                                 onClick={() => handleRemoveBenefitCard(idx)}
                                 className="text-gray-400 hover:text-rose-600 text-[12px] px-2 py-0.5 rounded hover:bg-rose-50 transition-colors cursor-pointer font-semibold"
                               >
-                                âœ• Delete Card
+                                ✕ Delete Card
                               </button>
                             </div>
 
@@ -2923,13 +2185,13 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
                             {/* Eyebrow */}
                             <div>
                               <label className="block text-[10.5px] font-bold uppercase tracking-wider text-gray-700 mb-1">
-                                Red Eyebrow Label (Above Image)
+                                Red Eyebrow Label (Above Image, e.g. 4 WAVELENGTHS)
                               </label>
                               <input
                                 type="text"
                                 value={card.eyebrow || ''}
                                 onChange={(e) => handleUpdateBenefitCard(idx, 'eyebrow', e.target.value.toUpperCase())}
-                                placeholder="e.g. DUAL CLINICAL WAVELENGTHS"
+                                placeholder="e.g. 4 WAVELENGTHS"
                                 className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[6px] px-3 py-1.5 text-[#ED2024] text-[12px] font-bold uppercase outline-none shadow-xs"
                               />
                             </div>
@@ -2944,7 +2206,7 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
                                   type="text"
                                   value={card.titleLine1 || ''}
                                   onChange={(e) => handleUpdateBenefitCard(idx, 'titleLine1', e.target.value.toUpperCase())}
-                                  placeholder="e.g. EPIDERMAL & DEEP DERMAL"
+                                  placeholder="e.g. BLUE, RED & NEAR-INFRARED"
                                   className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[6px] px-3 py-1.5 text-gray-900 text-[12px] font-bold uppercase outline-none shadow-xs"
                                 />
                               </div>
@@ -2956,7 +2218,7 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
                                   type="text"
                                   value={card.titleLine2 || ''}
                                   onChange={(e) => handleUpdateBenefitCard(idx, 'titleLine2', e.target.value.toUpperCase())}
-                                  placeholder="e.g. CELLULAR REJUVENATION"
+                                  placeholder="e.g. FOR YOUR SKIN"
                                   className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[6px] px-3 py-1.5 text-gray-900 text-[12px] font-bold uppercase outline-none shadow-xs"
                                 />
                               </div>
@@ -2971,7 +2233,7 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
                                 rows={2}
                                 value={card.description || ''}
                                 onChange={(e) => handleUpdateBenefitCard(idx, 'description', e.target.value)}
-                                placeholder="e.g. 660nm deep red activates fibroblasts to trigger collagen remodeling, while 850nm near-infrared calms deep tissue..."
+                                placeholder="e.g. LUMA GLOW combines four wavelengths (460nm, 665nm, 850nm and 1064nm) across 236 chips..."
                                 className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[6px] p-2.5 text-gray-900 text-[12px] outline-none leading-relaxed shadow-xs"
                               />
                             </div>
@@ -2981,54 +2243,10 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
                     )}
                   </div>
 
-                  {/* Section 2: What's In The Box Accordion */}
-                  <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h4 className="text-[13px] font-bold uppercase tracking-wider text-gray-900 flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-[#ED2024]" />
-                          2. &quot;What&apos;s In The Box&quot; Items
-                        </h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">
-                          List of package contents shown inside the top accordion drawer.
-                        </p>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={handleAddInTheBox}
-                        className="px-3 py-1.5 rounded-[8px] bg-white hover:bg-gray-100 border border-gray-300 text-gray-800 text-[11px] font-bold cursor-pointer transition-colors shadow-xs"
-                      >
-                        + Add Box Item
-                      </button>
-                    </div>
-
-                    <div className="space-y-2">
-                      {formData.inTheBox?.map((item, idx) => (
-                        <div key={idx} className="flex items-center gap-2">
-                          <span className="text-[#ED2024] font-bold text-[11px]">ðŸ“¦</span>
-                          <input
-                            type="text"
-                            value={item}
-                            onChange={(e) => handleUpdateInTheBox(idx, e.target.value)}
-                            placeholder="e.g. LUMA Protective Eyewear (NIR Shielding)"
-                            className="flex-1 bg-white border border-gray-300 focus:border-[#ED2024] rounded-[6px] px-3 py-1.5 text-gray-900 text-[12px] outline-none shadow-xs"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveInTheBox(idx)}
-                            className="p-1.5 text-gray-400 hover:text-rose-600"
-                          >
-                            âœ•
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Section 3: Detailed Clinical Description */}
+                  {/* Section 2: Detailed Clinical Description */}
                   <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-2">
                     <label className="block text-[12px] font-bold uppercase tracking-wider text-gray-900">
-                      3. Long / Detailed Description
+                      Long / Detailed Clinical Background
                     </label>
                     <textarea
                       rows={4}
@@ -3038,402 +2256,23 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
                       className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[10px] p-3 text-gray-900 text-[13px] outline-none leading-relaxed shadow-xs"
                     />
                   </div>
-
-                  {/* Section 4: Key Features & Bullet Points */}
-                  <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-3">
-                    <div className="flex items-center justify-between">
-                      <label className="text-[12px] font-bold uppercase tracking-wider text-gray-900">
-                        4. Key Features &amp; Bullet Points
-                      </label>
-                      <button
-                        type="button"
-                        onClick={handleAddFeature}
-                        className="text-[11px] text-[#ED2024] hover:underline font-bold flex items-center gap-1 cursor-pointer"
-                      >
-                        + Add Bullet Point
-                      </button>
-                    </div>
-
-                    <div className="space-y-2">
-                      {formData.features?.map((feat, idx) => (
-                        <div key={idx} className="flex items-center gap-2">
-                          <span className="text-[#ED2024] font-bold">â€¢</span>
-                          <input
-                            type="text"
-                            value={feat}
-                            onChange={(e) => handleUpdateFeature(idx, e.target.value)}
-                            placeholder="e.g. Dual clinical wavelengths: 660nm Red & 850nm Near-Infrared"
-                            className="flex-1 bg-white border border-gray-300 focus:border-[#ED2024] rounded-[8px] px-3 py-2 text-gray-900 text-[12.5px] outline-none shadow-xs"
-                          />
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveFeature(idx)}
-                            className="p-1.5 text-gray-400 hover:text-rose-600"
-                          >
-                            âœ•
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
                 </div>
               )}
 
-
-
-              {/* TAB 6: ACCORDION SECTIONS (PRODUCT SPECIFICATION, HEALTH BENEFITS, THE WAVELENGTHS, HOW TO USE, WHAT'S IN THE BOX) */}
-              {modalTab === 'accordions' && (
-                <div className="space-y-6">
-                  {/* Informational Banner */}
-                  <div className="p-4 rounded-[12px] bg-red-50/60 border border-red-200/80 flex items-start gap-3">
-                    <span className="text-[18px] leading-none text-[#ED2024] shrink-0">ℹ️</span>
-                    <div className="text-[12px] text-gray-700 leading-relaxed">
-                      <strong className="text-gray-900 font-bold block mb-0.5">
-                        Product Page Accordion Drawers
-                      </strong>
-                      These 5 accordions appear directly below the product hero on product detail pages (e.g. LUMA GO, LUMA GLOW, LUMA NOVA, etc.). You can customize the specification highlights, benefits, clinical wavelengths description, usage protocols, and packaged items for this product.
-                    </div>
-                  </div>
-
-                  {/* 1. PRODUCT SPECIFICATION HIGHLIGHTS */}
-                  <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-3">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div>
-                        <h4 className="text-[13px] font-bold uppercase tracking-wider text-gray-900 flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-[#ED2024]" />
-                          1. Product Specification Highlights
-                        </h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">
-                          2-column key-value metrics displayed when the Product Specification accordion drawer is expanded (e.g. Leds, Coverage, Dimensions, Lifespan, Battery Size, Wavelength).
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultSpecHighlights}
-                          className="px-2.5 py-1.5 rounded-[8px] bg-white hover:bg-gray-100 border border-gray-300 text-gray-600 text-[11px] font-semibold cursor-pointer transition-colors shadow-xs"
-                        >
-                          Reset Defaults
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleAddSpecHighlight}
-                          className="px-3 py-1.5 rounded-[8px] bg-[#ED2024] hover:bg-[#d4191d] text-white text-[11px] font-bold cursor-pointer transition-colors shadow-xs"
-                        >
-                          + Add Highlight
-                        </button>
-                      </div>
-                    </div>
-
-                    {(!formData.specHighlights || formData.specHighlights.length === 0) ? (
-                      <div className="p-4 text-center rounded-[8px] bg-white border border-dashed border-gray-300 text-gray-500 text-[12px]">
-                        No specification highlights added yet.{' '}
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultSpecHighlights}
-                          className="text-[#ED2024] font-bold hover:underline cursor-pointer"
-                        >
-                          Click here to populate default highlights
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        <div className="grid grid-cols-12 gap-2 px-2 text-[10px] font-bold uppercase tracking-wider text-gray-500">
-                          <span className="col-span-5">Label (e.g. Dimensions)</span>
-                          <span className="col-span-6">Value (e.g. 140 x 70 x 29 mm)</span>
-                          <span className="col-span-1 text-right">Action</span>
-                        </div>
-                        {formData.specHighlights.map((item, idx) => (
-                          <div
-                            key={idx}
-                            className="grid grid-cols-12 gap-2 items-center p-2 rounded-[8px] bg-white border border-gray-200 shadow-xs hover:border-gray-300 transition-colors"
-                          >
-                            <div className="col-span-5">
-                              <input
-                                type="text"
-                                value={item.label || ''}
-                                onChange={(e) => handleUpdateSpecHighlight(idx, 'label', e.target.value)}
-                                placeholder="e.g. Leds / Battery Size"
-                                className="w-full bg-gray-50 border border-gray-300 focus:border-[#ED2024] rounded-[6px] px-2.5 py-1.5 text-gray-900 font-bold text-[12px] outline-none"
-                              />
-                            </div>
-                            <div className="col-span-6">
-                              <input
-                                type="text"
-                                value={item.value || ''}
-                                onChange={(e) => handleUpdateSpecHighlight(idx, 'value', e.target.value)}
-                                placeholder="e.g. 12 / 7.4V 2500mAh"
-                                className="w-full bg-gray-50 border border-gray-300 focus:border-[#ED2024] rounded-[6px] px-2.5 py-1.5 text-gray-800 font-medium text-[12px] outline-none"
-                              />
-                            </div>
-                            <div className="col-span-1 text-right">
-                              <button
-                                type="button"
-                                onClick={() => handleRemoveSpecHighlight(idx)}
-                                className="p-1.5 text-gray-400 hover:text-rose-600 transition-colors cursor-pointer"
-                                title="Remove highlight"
-                              >
-                                ✕
-                              </button>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* 2. HEALTH BENEFITS */}
-                  <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-3">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div>
-                        <h4 className="text-[13px] font-bold uppercase tracking-wider text-gray-900 flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-[#ED2024]" />
-                          2. Health Benefits
-                        </h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">
-                          List of clinical health benefits and biological improvements displayed inside the Health Benefits accordion drawer.
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultHealthBenefits}
-                          className="px-2.5 py-1.5 rounded-[8px] bg-white hover:bg-gray-100 border border-gray-300 text-gray-600 text-[11px] font-semibold cursor-pointer transition-colors shadow-xs"
-                        >
-                          Reset Defaults
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleAddHealthBenefit}
-                          className="px-3 py-1.5 rounded-[8px] bg-[#ED2024] hover:bg-[#d4191d] text-white text-[11px] font-bold cursor-pointer transition-colors shadow-xs"
-                        >
-                          + Add Benefit
-                        </button>
-                      </div>
-                    </div>
-
-                    {(!formData.healthBenefits || formData.healthBenefits.length === 0) ? (
-                      <div className="p-4 text-center rounded-[8px] bg-white border border-dashed border-gray-300 text-gray-500 text-[12px]">
-                        No health benefits added yet.{' '}
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultHealthBenefits}
-                          className="text-[#ED2024] font-bold hover:underline cursor-pointer"
-                        >
-                          Click here to populate default benefits
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        {formData.healthBenefits.map((benefit, idx) => (
-                          <div key={idx} className="flex items-center gap-2.5 p-2 rounded-[8px] bg-white border border-gray-200 shadow-xs">
-                            <span className="text-[#ED2024] font-black text-[14px] select-none pl-1">•</span>
-                            <input
-                              type="text"
-                              value={benefit || ''}
-                              onChange={(e) => handleUpdateHealthBenefit(idx, e.target.value)}
-                              placeholder="e.g. Targeted cellular energy (ATP) stimulation for deep tissue recovery."
-                              className="flex-1 bg-gray-50 border border-gray-300 focus:border-[#ED2024] rounded-[6px] px-3 py-1.5 text-gray-900 text-[12px] outline-none"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveHealthBenefit(idx)}
-                              className="p-1.5 text-gray-400 hover:text-rose-600 transition-colors cursor-pointer"
-                              title="Delete benefit"
-                            >
-                              ✕
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* 3. THE 8 WAVELENGTHS (ACCORDION TITLE & CLINICAL DESCRIPTION) */}
-                  <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-4">
-                    <div>
-                      <h4 className="text-[13px] font-bold uppercase tracking-wider text-gray-900 flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-[#ED2024]" />
-                        3. The Wavelengths (Title &amp; Clinical Description)
-                      </h4>
-                      <p className="text-[11px] text-gray-500 mt-0.5">
-                        Customize the accordion header text (e.g. &ldquo;THE 8 WAVELENGTHS&rdquo;, &ldquo;THE WAVELENGTHS&rdquo;, &ldquo;THE 4 WAVELENGTHS&rdquo;) and the detailed spectral absorption description.
-                      </p>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                      <div className="sm:col-span-1">
-                        <label className="block text-[11px] font-bold uppercase tracking-[0.08em] text-gray-700 mb-1.5">
-                          Accordion Header Title *
-                        </label>
-                        <input
-                          type="text"
-                          value={formData.the8WavelengthsTitle || 'THE 8 WAVELENGTHS'}
-                          onChange={(e) => updateFormField('the8WavelengthsTitle', e.target.value.toUpperCase())}
-                          placeholder="e.g. THE 8 WAVELENGTHS"
-                          className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[8px] px-3 py-2 text-gray-900 text-[12.5px] font-bold uppercase outline-none shadow-xs"
-                        />
-                        <span className="text-[10px] text-gray-400 mt-1 block">
-                          Shown on the clickable accordion toggle bar.
-                        </span>
-                      </div>
-
-                      <div className="sm:col-span-2">
-                        <label className="block text-[11px] font-bold uppercase tracking-[0.08em] text-gray-700 mb-1.5">
-                          Wavelengths Explanation Text *
-                        </label>
-                        <textarea
-                          rows={3}
-                          value={formData.wavelengthsDesc || ''}
-                          onChange={(e) => updateFormField('wavelengthsDesc', e.target.value)}
-                          placeholder="e.g. LUMA GO concentrates high-intensity 660nm red light with a focused 30° optical beam angle, maximizing photon absorption in the skin and superficial tissue layers for peak biological rejuvenation."
-                          className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[8px] p-2.5 text-gray-900 text-[12.5px] outline-none leading-relaxed shadow-xs"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* 4. HOW TO USE */}
-                  <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-3">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div>
-                        <h4 className="text-[13px] font-bold uppercase tracking-wider text-gray-900 flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-[#ED2024]" />
-                          4. How To Use (Protocol Steps)
-                        </h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">
-                          Numbered step-by-step treatment protocols displayed inside the How To Use accordion drawer.
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultHowToUse}
-                          className="px-2.5 py-1.5 rounded-[8px] bg-white hover:bg-gray-100 border border-gray-300 text-gray-600 text-[11px] font-semibold cursor-pointer transition-colors shadow-xs"
-                        >
-                          Reset Defaults
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleAddHowToUse}
-                          className="px-3 py-1.5 rounded-[8px] bg-[#ED2024] hover:bg-[#d4191d] text-white text-[11px] font-bold cursor-pointer transition-colors shadow-xs"
-                        >
-                          + Add Step
-                        </button>
-                      </div>
-                    </div>
-
-                    {(!formData.howToUse || formData.howToUse.length === 0) ? (
-                      <div className="p-4 text-center rounded-[8px] bg-white border border-dashed border-gray-300 text-gray-500 text-[12px]">
-                        No usage steps added yet.{' '}
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultHowToUse}
-                          className="text-[#ED2024] font-bold hover:underline cursor-pointer"
-                        >
-                          Click here to populate default steps
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        {formData.howToUse.map((step, idx) => (
-                          <div key={idx} className="flex items-center gap-2.5 p-2 rounded-[8px] bg-white border border-gray-200 shadow-xs">
-                            <span className="w-5 h-5 rounded-full bg-red-100 text-[#ED2024] font-bold text-[11px] flex items-center justify-center shrink-0 select-none">
-                              {idx + 1}
-                            </span>
-                            <input
-                              type="text"
-                              value={step || ''}
-                              onChange={(e) => handleUpdateHowToUse(idx, e.target.value)}
-                              placeholder={`Step ${idx + 1} instructions...`}
-                              className="flex-1 bg-gray-50 border border-gray-300 focus:border-[#ED2024] rounded-[6px] px-3 py-1.5 text-gray-900 text-[12px] outline-none"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveHowToUse(idx)}
-                              className="p-1.5 text-gray-400 hover:text-rose-600 transition-colors cursor-pointer"
-                              title="Delete step"
-                            >
-                              ✕
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* 5. WHAT'S IN THE BOX */}
-                  <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-3">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div>
-                        <h4 className="text-[13px] font-bold uppercase tracking-wider text-gray-900 flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-[#ED2024]" />
-                          5. What&apos;s In The Box (Package Contents)
-                        </h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">
-                          List of hardware and accessories included inside the product package.
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultInTheBox}
-                          className="px-2.5 py-1.5 rounded-[8px] bg-white hover:bg-gray-100 border border-gray-300 text-gray-600 text-[11px] font-semibold cursor-pointer transition-colors shadow-xs"
-                        >
-                          Reset Defaults
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleAddInTheBox}
-                          className="px-3 py-1.5 rounded-[8px] bg-[#ED2024] hover:bg-[#d4191d] text-white text-[11px] font-bold cursor-pointer transition-colors shadow-xs"
-                        >
-                          + Add Box Item
-                        </button>
-                      </div>
-                    </div>
-
-                    {(!formData.inTheBox || formData.inTheBox.length === 0) ? (
-                      <div className="p-4 text-center rounded-[8px] bg-white border border-dashed border-gray-300 text-gray-500 text-[12px]">
-                        No package items added yet.{' '}
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultInTheBox}
-                          className="text-[#ED2024] font-bold hover:underline cursor-pointer"
-                        >
-                          Click here to populate default package contents
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        {formData.inTheBox.map((item, idx) => (
-                          <div key={idx} className="flex items-center gap-2.5 p-2 rounded-[8px] bg-white border border-gray-200 shadow-xs">
-                            <span className="text-[14px] shrink-0 select-none">📦</span>
-                            <input
-                              type="text"
-                              value={item || ''}
-                              onChange={(e) => handleUpdateInTheBox(idx, e.target.value)}
-                              placeholder="e.g. 1× LUMA Device"
-                              className="flex-1 bg-gray-50 border border-gray-300 focus:border-[#ED2024] rounded-[6px] px-3 py-1.5 text-gray-900 text-[12px] outline-none"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveInTheBox(idx)}
-                              className="p-1.5 text-gray-400 hover:text-rose-600 transition-colors cursor-pointer"
-                              title="Delete package item"
-                            >
-                              ✕
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* TAB 5: TECHNICAL SPECIFICATIONS */}
+              {/* TAB 5: SECTION 3 — TECHNICAL SPECIFICATIONS TABLE */}
               {modalTab === 'specs' && (
                 <div className="space-y-6">
+                  {/* Visual Section Indicator */}
+                  <div className="p-3 rounded-[12px] bg-red-50/60 border border-red-200/80 flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded bg-[#ED2024] text-white font-black text-[10px] uppercase">
+                        Section 3: Dark Specs Table
+                      </span>
+                      <span className="font-bold text-gray-900">Full Technical Specifications (Device Render &amp; Table)</span>
+                    </div>
+                    <span className="text-gray-500 text-[11px] hidden sm:inline">The full-width dark specifications table displayed on the product page</span>
+                  </div>
+
                   {/* Section A: Specification Device Showcase Image */}
                   <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-3">
                     <div>
@@ -3442,7 +2281,7 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
                         1. Specification Device Showcase Image
                       </h4>
                       <p className="text-[11px] text-gray-500 mt-0.5">
-                        The isolated product photo displayed alongside the specifications table on the product page.
+                        The isolated product photo displayed alongside the dark specifications table on the product page.
                       </p>
                     </div>
 
@@ -3536,7 +2375,7 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
                                   className="p-1.5 text-gray-400 hover:text-rose-600 transition-colors cursor-pointer"
                                   title="Delete Row"
                                 >
-                                  âœ•
+                                  ✕
                                 </button>
                               </div>
                             </div>
@@ -3597,7 +2436,7 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
                               className="p-1.5 text-gray-400 hover:text-rose-600"
                               title="Delete row"
                             >
-                              âœ•
+                              ✕
                             </button>
                           </div>
                         </div>
@@ -3607,707 +2446,114 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
                 </div>
               )}
 
-              {/* TAB 6: ACCORDION SECTIONS (PRODUCT SPECIFICATION, HEALTH BENEFITS, THE WAVELENGTHS, HOW TO USE, WHAT'S IN THE BOX) */}
-              {modalTab === 'accordions' && (
-                <div className="space-y-6">
-                  {/* Informational Banner */}
-                  <div className="p-4 rounded-[12px] bg-red-50/60 border border-red-200/80 flex items-start gap-3">
-                    <span className="text-[18px] leading-none text-[#ED2024] shrink-0">â„¹ï¸</span>
-                    <div className="text-[12px] text-gray-700 leading-relaxed">
-                      <strong className="text-gray-900 font-bold block mb-0.5">
-                        Product Page Accordion Drawers
-                      </strong>
-                      These 5 accordions appear directly below the product hero on product detail pages (e.g. LUMA GO, LUMA GLOW, LUMA NOVA, etc.). You can customize the specification highlights, benefits, clinical wavelengths description, usage protocols, and packaged items for this product.
+              {/* TAB 6: SECTION 4 — STOREFRONT & CATALOG SETTINGS */}
+              {modalTab === 'storefront' && (
+                <div className="space-y-5">
+                  {/* Visual Section Indicator */}
+                  <div className="p-3 rounded-[12px] bg-red-50/60 border border-red-200/80 flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-2">
+                      <span className="px-2 py-0.5 rounded bg-[#ED2024] text-white font-black text-[10px] uppercase">
+                        Section 4: Storefront &amp; Listings
+                      </span>
+                      <span className="font-bold text-gray-900">Device Finder Carousel &amp; Catalog Placement</span>
                     </div>
+                    <span className="text-gray-500 text-[11px] hidden sm:inline">Controls the 'FIND YOUR DEVICE' cards and main catalog order</span>
                   </div>
 
-                  {/* 1. PRODUCT SPECIFICATION HIGHLIGHTS */}
-                  <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-3">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div>
-                        <h4 className="text-[13px] font-bold uppercase tracking-wider text-gray-900 flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-[#ED2024]" />
-                          1. Product Specification Highlights
-                        </h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">
-                          2-column key-value metrics displayed when the Product Specification accordion drawer is expanded (e.g. Leds, Coverage, Dimensions, Lifespan, Battery Size, Wavelength).
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultSpecHighlights}
-                          className="px-2.5 py-1.5 rounded-[8px] bg-white hover:bg-gray-100 border border-gray-300 text-gray-600 text-[11px] font-semibold cursor-pointer transition-colors shadow-xs"
-                        >
-                          Reset Defaults
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleAddSpecHighlight}
-                          className="px-3 py-1.5 rounded-[8px] bg-[#ED2024] hover:bg-[#d4191d] text-white text-[11px] font-bold cursor-pointer transition-colors shadow-xs"
-                        >
-                          + Add Highlight
-                        </button>
-                      </div>
-                    </div>
-
-                    {(!formData.specHighlights || formData.specHighlights.length === 0) ? (
-                      <div className="p-4 text-center rounded-[8px] bg-white border border-dashed border-gray-300 text-gray-500 text-[12px]">
-                        No specification highlights added yet.{' '}
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultSpecHighlights}
-                          className="text-[#ED2024] font-bold hover:underline cursor-pointer"
-                        >
-                          Click here to populate default highlights
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        <div className="grid grid-cols-12 gap-2 px-2 text-[10px] font-bold uppercase tracking-wider text-gray-500">
-                          <span className="col-span-5">Label (e.g. Dimensions)</span>
-                          <span className="col-span-6">Value (e.g. 140 x 70 x 29 mm)</span>
-                          <span className="col-span-1 text-right">Action</span>
-                        </div>
-                        {formData.specHighlights.map((item, idx) => (
-                          <div
-                            key={idx}
-                            className="grid grid-cols-12 gap-2 items-center p-2 rounded-[8px] bg-white border border-gray-200 shadow-xs hover:border-gray-300 transition-colors"
-                          >
-                            <div className="col-span-5">
-                              <input
-                                type="text"
-                                value={item.label || ''}
-                                onChange={(e) => handleUpdateSpecHighlight(idx, 'label', e.target.value)}
-                                placeholder="e.g. Leds / Battery Size"
-                                className="w-full bg-gray-50 border border-gray-300 focus:border-[#ED2024] rounded-[6px] px-2.5 py-1.5 text-gray-900 font-bold text-[12px] outline-none"
-                              />
-                            </div>
-                            <div className="col-span-6">
-                              <input
-                                type="text"
-                                value={item.value || ''}
-                                onChange={(e) => handleUpdateSpecHighlight(idx, 'value', e.target.value)}
-                                placeholder="e.g. 12 / 7.4V 2500mAh"
-                                className="w-full bg-gray-50 border border-gray-300 focus:border-[#ED2024] rounded-[6px] px-2.5 py-1.5 text-gray-800 font-medium text-[12px] outline-none"
-                              />
-                            </div>
-                            <div className="col-span-1 text-right">
-                              <button
-                                type="button"
-                                onClick={() => handleRemoveSpecHighlight(idx)}
-                                className="p-1.5 text-gray-400 hover:text-rose-600 transition-colors cursor-pointer"
-                                title="Remove highlight"
-                              >
-                                âœ•
-                              </button>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* 2. HEALTH BENEFITS */}
-                  <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-3">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div>
-                        <h4 className="text-[13px] font-bold uppercase tracking-wider text-gray-900 flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-[#ED2024]" />
-                          2. Health Benefits
-                        </h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">
-                          List of clinical health benefits and biological improvements displayed inside the Health Benefits accordion drawer.
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultHealthBenefits}
-                          className="px-2.5 py-1.5 rounded-[8px] bg-white hover:bg-gray-100 border border-gray-300 text-gray-600 text-[11px] font-semibold cursor-pointer transition-colors shadow-xs"
-                        >
-                          Reset Defaults
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleAddHealthBenefit}
-                          className="px-3 py-1.5 rounded-[8px] bg-[#ED2024] hover:bg-[#d4191d] text-white text-[11px] font-bold cursor-pointer transition-colors shadow-xs"
-                        >
-                          + Add Benefit
-                        </button>
-                      </div>
-                    </div>
-
-                    {(!formData.healthBenefits || formData.healthBenefits.length === 0) ? (
-                      <div className="p-4 text-center rounded-[8px] bg-white border border-dashed border-gray-300 text-gray-500 text-[12px]">
-                        No health benefits added yet.{' '}
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultHealthBenefits}
-                          className="text-[#ED2024] font-bold hover:underline cursor-pointer"
-                        >
-                          Click here to populate default benefits
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        {formData.healthBenefits.map((benefit, idx) => (
-                          <div key={idx} className="flex items-center gap-2.5 p-2 rounded-[8px] bg-white border border-gray-200 shadow-xs">
-                            <span className="text-[#ED2024] font-black text-[14px] select-none pl-1">â€¢</span>
-                            <input
-                              type="text"
-                              value={benefit || ''}
-                              onChange={(e) => handleUpdateHealthBenefit(idx, e.target.value)}
-                              placeholder="e.g. Targeted cellular energy (ATP) stimulation for deep tissue recovery."
-                              className="flex-1 bg-gray-50 border border-gray-300 focus:border-[#ED2024] rounded-[6px] px-3 py-1.5 text-gray-900 text-[12px] outline-none"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveHealthBenefit(idx)}
-                              className="p-1.5 text-gray-400 hover:text-rose-600 transition-colors cursor-pointer"
-                              title="Delete benefit"
-                            >
-                              âœ•
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* 3. THE 8 WAVELENGTHS (ACCORDION TITLE & CLINICAL DESCRIPTION) */}
                   <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-4">
-                    <div>
-                      <h4 className="text-[13px] font-bold uppercase tracking-wider text-gray-900 flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-[#ED2024]" />
-                        3. The Wavelengths (Title &amp; Clinical Description)
-                      </h4>
-                      <p className="text-[11px] text-gray-500 mt-0.5">
-                        Customize the accordion header text (e.g. &ldquo;THE 8 WAVELENGTHS&rdquo;, &ldquo;THE WAVELENGTHS&rdquo;, &ldquo;THE 4 WAVELENGTHS&rdquo;) and the detailed spectral absorption description.
-                      </p>
-                    </div>
+                    <span className="text-[10px] font-bold text-[#ED2024] uppercase tracking-wider block">
+                      Device Finder Carousel Display Settings
+                    </span>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                      <div className="sm:col-span-1">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
                         <label className="block text-[11px] font-bold uppercase tracking-[0.08em] text-gray-700 mb-1.5">
-                          Accordion Header Title *
+                          Display Order in Store (1..8) *
                         </label>
                         <input
-                          type="text"
-                          value={formData.the8WavelengthsTitle || 'THE 8 WAVELENGTHS'}
-                          onChange={(e) => updateFormField('the8WavelengthsTitle', e.target.value.toUpperCase())}
-                          placeholder="e.g. THE 8 WAVELENGTHS"
-                          className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[8px] px-3 py-2 text-gray-900 text-[12.5px] font-bold uppercase outline-none shadow-xs"
+                          type="number"
+                          min="1"
+                          max="99"
+                          value={formData.displayOrder}
+                          onChange={(e) => updateFormField('displayOrder', Number(e.target.value))}
+                          placeholder="1"
+                          required
+                          className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[10px] px-3.5 py-2.5 text-gray-900 text-[13px] outline-none font-bold font-mono shadow-xs"
                         />
-                        <span className="text-[10px] text-gray-400 mt-1 block">
-                          Shown on the clickable accordion toggle bar.
+                        <span className="text-[10.5px] text-gray-400 mt-1 block">
+                          Lower numbers appear first in the catalog and product carousels (1 = First).
                         </span>
                       </div>
 
-                      <div className="sm:col-span-2">
+                      <div>
                         <label className="block text-[11px] font-bold uppercase tracking-[0.08em] text-gray-700 mb-1.5">
-                          Wavelengths Explanation Text *
+                          Red Eyebrow Label (e.g. LUMA GLOW)
                         </label>
-                        <textarea
-                          rows={3}
-                          value={formData.wavelengthsDesc || ''}
-                          onChange={(e) => updateFormField('wavelengthsDesc', e.target.value)}
-                          placeholder="e.g. LUMA GO concentrates high-intensity 660nm red light with a focused 30Â° optical beam angle, maximizing photon absorption in the skin and superficial tissue layers for peak biological rejuvenation."
-                          className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[8px] p-2.5 text-gray-900 text-[12.5px] outline-none leading-relaxed shadow-xs"
+                        <input
+                          type="text"
+                          value={formData.eyebrow}
+                          onChange={(e) => updateFormField('eyebrow', e.target.value)}
+                          placeholder="e.g. LUMA GLOW"
+                          className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[10px] px-3.5 py-2.5 text-[#ED2024] text-[13px] outline-none font-bold shadow-xs"
+                        />
+                        <span className="text-[10.5px] text-gray-400 mt-1 block">
+                          Red uppercase brand badge shown above the title on cards.
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-[11px] font-bold uppercase tracking-[0.08em] text-gray-700 mb-1.5">
+                          Card Title Line 1
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.titleLine1}
+                          onChange={(e) => updateFormField('titleLine1', e.target.value)}
+                          placeholder="e.g. LUMA FACE LED"
+                          className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[10px] px-3.5 py-2.5 text-gray-900 text-[13px] outline-none font-bold uppercase shadow-xs"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-[11px] font-bold uppercase tracking-[0.08em] text-gray-700 mb-1.5">
+                          Card Title Line 2
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.titleLine2}
+                          onChange={(e) => updateFormField('titleLine2', e.target.value)}
+                          placeholder="e.g. LIGHT THERAPY MASK"
+                          className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[10px] px-3.5 py-2.5 text-gray-900 text-[13px] outline-none font-bold uppercase shadow-xs"
                         />
                       </div>
                     </div>
                   </div>
 
-                  {/* 4. HOW TO USE */}
-                  <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-3">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
+                  {/* Visibility toggle */}
+                  <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200">
+                    <label className="flex items-center gap-3 cursor-pointer select-none">
+                      <input
+                        type="checkbox"
+                        checked={formData.isActive}
+                        onChange={(e) => updateFormField('isActive', e.target.checked)}
+                        className="w-4 h-4 accent-[#ED2024] rounded"
+                      />
                       <div>
-                        <h4 className="text-[13px] font-bold uppercase tracking-wider text-gray-900 flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-[#ED2024]" />
-                          4. How To Use (Protocol Steps)
-                        </h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">
-                          Numbered step-by-step treatment protocols displayed inside the How To Use accordion drawer.
-                        </p>
+                        <span className="text-[13px] text-gray-900 font-bold block">
+                          Active &amp; Published in Store Catalog
+                        </span>
+                        <span className="text-[11px] text-gray-500">
+                          When enabled, this product is visible to public customers in the store and product pages.
+                        </span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultHowToUse}
-                          className="px-2.5 py-1.5 rounded-[8px] bg-white hover:bg-gray-100 border border-gray-300 text-gray-600 text-[11px] font-semibold cursor-pointer transition-colors shadow-xs"
-                        >
-                          Reset Defaults
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleAddHowToUse}
-                          className="px-3 py-1.5 rounded-[8px] bg-[#ED2024] hover:bg-[#d4191d] text-white text-[11px] font-bold cursor-pointer transition-colors shadow-xs"
-                        >
-                          + Add Step
-                        </button>
-                      </div>
-                    </div>
-
-                    {(!formData.howToUse || formData.howToUse.length === 0) ? (
-                      <div className="p-4 text-center rounded-[8px] bg-white border border-dashed border-gray-300 text-gray-500 text-[12px]">
-                        No usage steps added yet.{' '}
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultHowToUse}
-                          className="text-[#ED2024] font-bold hover:underline cursor-pointer"
-                        >
-                          Click here to populate default steps
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        {formData.howToUse.map((step, idx) => (
-                          <div key={idx} className="flex items-center gap-2.5 p-2 rounded-[8px] bg-white border border-gray-200 shadow-xs">
-                            <span className="w-5 h-5 rounded-full bg-red-100 text-[#ED2024] font-bold text-[11px] flex items-center justify-center shrink-0 select-none">
-                              {idx + 1}
-                            </span>
-                            <input
-                              type="text"
-                              value={step || ''}
-                              onChange={(e) => handleUpdateHowToUse(idx, e.target.value)}
-                              placeholder={`Step ${idx + 1} instructions...`}
-                              className="flex-1 bg-gray-50 border border-gray-300 focus:border-[#ED2024] rounded-[6px] px-3 py-1.5 text-gray-900 text-[12px] outline-none"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveHowToUse(idx)}
-                              className="p-1.5 text-gray-400 hover:text-rose-600 transition-colors cursor-pointer"
-                              title="Delete step"
-                            >
-                              âœ•
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* 5. WHAT'S IN THE BOX */}
-                  <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-3">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div>
-                        <h4 className="text-[13px] font-bold uppercase tracking-wider text-gray-900 flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-[#ED2024]" />
-                          5. What&apos;s In The Box (Package Contents)
-                        </h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">
-                          List of hardware and accessories included inside the product package.
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultInTheBox}
-                          className="px-2.5 py-1.5 rounded-[8px] bg-white hover:bg-gray-100 border border-gray-300 text-gray-600 text-[11px] font-semibold cursor-pointer transition-colors shadow-xs"
-                        >
-                          Reset Defaults
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleAddInTheBox}
-                          className="px-3 py-1.5 rounded-[8px] bg-[#ED2024] hover:bg-[#d4191d] text-white text-[11px] font-bold cursor-pointer transition-colors shadow-xs"
-                        >
-                          + Add Box Item
-                        </button>
-                      </div>
-                    </div>
-
-                    {(!formData.inTheBox || formData.inTheBox.length === 0) ? (
-                      <div className="p-4 text-center rounded-[8px] bg-white border border-dashed border-gray-300 text-gray-500 text-[12px]">
-                        No package items added yet.{' '}
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultInTheBox}
-                          className="text-[#ED2024] font-bold hover:underline cursor-pointer"
-                        >
-                          Click here to populate default package contents
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        {formData.inTheBox.map((item, idx) => (
-                          <div key={idx} className="flex items-center gap-2.5 p-2 rounded-[8px] bg-white border border-gray-200 shadow-xs">
-                            <span className="text-[14px] shrink-0 select-none">ðŸ“¦</span>
-                            <input
-                              type="text"
-                              value={item || ''}
-                              onChange={(e) => handleUpdateInTheBox(idx, e.target.value)}
-                              placeholder="e.g. 1Ã— LUMA Device"
-                              className="flex-1 bg-gray-50 border border-gray-300 focus:border-[#ED2024] rounded-[6px] px-3 py-1.5 text-gray-900 text-[12px] outline-none"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveInTheBox(idx)}
-                              className="p-1.5 text-gray-400 hover:text-rose-600 transition-colors cursor-pointer"
-                              title="Delete package item"
-                            >
-                              âœ•
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                    </label>
                   </div>
                 </div>
               )}
 
-              {/* TAB 6: ACCORDION SECTIONS (PRODUCT SPECIFICATION, HEALTH BENEFITS, THE WAVELENGTHS, HOW TO USE, WHAT'S IN THE BOX) */}
-              {modalTab === 'accordions' && (
-                <div className="space-y-6">
-                  {/* Informational Banner */}
-                  <div className="p-4 rounded-[12px] bg-red-50/60 border border-red-200/80 flex items-start gap-3">
-                    <span className="text-[18px] leading-none text-[#ED2024] shrink-0">ℹ️</span>
-                    <div className="text-[12px] text-gray-700 leading-relaxed">
-                      <strong className="text-gray-900 font-bold block mb-0.5">
-                        Product Page Accordion Drawers
-                      </strong>
-                      These 5 accordions appear directly below the product hero on product detail pages (e.g. LUMA GO, LUMA GLOW, LUMA NOVA, etc.). You can customize the specification highlights, benefits, clinical wavelengths description, usage protocols, and packaged items for this product.
-                    </div>
-                  </div>
-
-                  {/* 1. PRODUCT SPECIFICATION HIGHLIGHTS */}
-                  <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-3">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div>
-                        <h4 className="text-[13px] font-bold uppercase tracking-wider text-gray-900 flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-[#ED2024]" />
-                          1. Product Specification Highlights
-                        </h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">
-                          2-column key-value metrics displayed when the Product Specification accordion drawer is expanded (e.g. Leds, Coverage, Dimensions, Lifespan, Battery Size, Wavelength).
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultSpecHighlights}
-                          className="px-2.5 py-1.5 rounded-[8px] bg-white hover:bg-gray-100 border border-gray-300 text-gray-600 text-[11px] font-semibold cursor-pointer transition-colors shadow-xs"
-                        >
-                          Reset Defaults
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleAddSpecHighlight}
-                          className="px-3 py-1.5 rounded-[8px] bg-[#ED2024] hover:bg-[#d4191d] text-white text-[11px] font-bold cursor-pointer transition-colors shadow-xs"
-                        >
-                          + Add Highlight
-                        </button>
-                      </div>
-                    </div>
-
-                    {(!formData.specHighlights || formData.specHighlights.length === 0) ? (
-                      <div className="p-4 text-center rounded-[8px] bg-white border border-dashed border-gray-300 text-gray-500 text-[12px]">
-                        No specification highlights added yet.{' '}
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultSpecHighlights}
-                          className="text-[#ED2024] font-bold hover:underline cursor-pointer"
-                        >
-                          Click here to populate default highlights
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        <div className="grid grid-cols-12 gap-2 px-2 text-[10px] font-bold uppercase tracking-wider text-gray-500">
-                          <span className="col-span-5">Label (e.g. Dimensions)</span>
-                          <span className="col-span-6">Value (e.g. 140 x 70 x 29 mm)</span>
-                          <span className="col-span-1 text-right">Action</span>
-                        </div>
-                        {formData.specHighlights.map((item, idx) => (
-                          <div
-                            key={idx}
-                            className="grid grid-cols-12 gap-2 items-center p-2 rounded-[8px] bg-white border border-gray-200 shadow-xs hover:border-gray-300 transition-colors"
-                          >
-                            <div className="col-span-5">
-                              <input
-                                type="text"
-                                value={item.label || ''}
-                                onChange={(e) => handleUpdateSpecHighlight(idx, 'label', e.target.value)}
-                                placeholder="e.g. Leds / Battery Size"
-                                className="w-full bg-gray-50 border border-gray-300 focus:border-[#ED2024] rounded-[6px] px-2.5 py-1.5 text-gray-900 font-bold text-[12px] outline-none"
-                              />
-                            </div>
-                            <div className="col-span-6">
-                              <input
-                                type="text"
-                                value={item.value || ''}
-                                onChange={(e) => handleUpdateSpecHighlight(idx, 'value', e.target.value)}
-                                placeholder="e.g. 12 / 7.4V 2500mAh"
-                                className="w-full bg-gray-50 border border-gray-300 focus:border-[#ED2024] rounded-[6px] px-2.5 py-1.5 text-gray-800 font-medium text-[12px] outline-none"
-                              />
-                            </div>
-                            <div className="col-span-1 text-right">
-                              <button
-                                type="button"
-                                onClick={() => handleRemoveSpecHighlight(idx)}
-                                className="p-1.5 text-gray-400 hover:text-rose-600 transition-colors cursor-pointer"
-                                title="Remove highlight"
-                              >
-                                ✕
-                              </button>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* 2. HEALTH BENEFITS */}
-                  <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-3">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div>
-                        <h4 className="text-[13px] font-bold uppercase tracking-wider text-gray-900 flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-[#ED2024]" />
-                          2. Health Benefits
-                        </h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">
-                          List of clinical health benefits and biological improvements displayed inside the Health Benefits accordion drawer.
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultHealthBenefits}
-                          className="px-2.5 py-1.5 rounded-[8px] bg-white hover:bg-gray-100 border border-gray-300 text-gray-600 text-[11px] font-semibold cursor-pointer transition-colors shadow-xs"
-                        >
-                          Reset Defaults
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleAddHealthBenefit}
-                          className="px-3 py-1.5 rounded-[8px] bg-[#ED2024] hover:bg-[#d4191d] text-white text-[11px] font-bold cursor-pointer transition-colors shadow-xs"
-                        >
-                          + Add Benefit
-                        </button>
-                      </div>
-                    </div>
-
-                    {(!formData.healthBenefits || formData.healthBenefits.length === 0) ? (
-                      <div className="p-4 text-center rounded-[8px] bg-white border border-dashed border-gray-300 text-gray-500 text-[12px]">
-                        No health benefits added yet.{' '}
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultHealthBenefits}
-                          className="text-[#ED2024] font-bold hover:underline cursor-pointer"
-                        >
-                          Click here to populate default benefits
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        {formData.healthBenefits.map((benefit, idx) => (
-                          <div key={idx} className="flex items-center gap-2.5 p-2 rounded-[8px] bg-white border border-gray-200 shadow-xs">
-                            <span className="text-[#ED2024] font-black text-[14px] select-none pl-1">•</span>
-                            <input
-                              type="text"
-                              value={benefit || ''}
-                              onChange={(e) => handleUpdateHealthBenefit(idx, e.target.value)}
-                              placeholder="e.g. Targeted cellular energy (ATP) stimulation for deep tissue recovery."
-                              className="flex-1 bg-gray-50 border border-gray-300 focus:border-[#ED2024] rounded-[6px] px-3 py-1.5 text-gray-900 text-[12px] outline-none"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveHealthBenefit(idx)}
-                              className="p-1.5 text-gray-400 hover:text-rose-600 transition-colors cursor-pointer"
-                              title="Delete benefit"
-                            >
-                              ✕
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* 3. THE 8 WAVELENGTHS (ACCORDION TITLE & CLINICAL DESCRIPTION) */}
-                  <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-4">
-                    <div>
-                      <h4 className="text-[13px] font-bold uppercase tracking-wider text-gray-900 flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-[#ED2024]" />
-                        3. The Wavelengths (Title &amp; Clinical Description)
-                      </h4>
-                      <p className="text-[11px] text-gray-500 mt-0.5">
-                        Customize the accordion header text (e.g. &ldquo;THE 8 WAVELENGTHS&rdquo;, &ldquo;THE WAVELENGTHS&rdquo;, &ldquo;THE 4 WAVELENGTHS&rdquo;) and the detailed spectral absorption description.
-                      </p>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                      <div className="sm:col-span-1">
-                        <label className="block text-[11px] font-bold uppercase tracking-[0.08em] text-gray-700 mb-1.5">
-                          Accordion Header Title *
-                        </label>
-                        <input
-                          type="text"
-                          value={formData.the8WavelengthsTitle || 'THE 8 WAVELENGTHS'}
-                          onChange={(e) => updateFormField('the8WavelengthsTitle', e.target.value.toUpperCase())}
-                          placeholder="e.g. THE 8 WAVELENGTHS"
-                          className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[8px] px-3 py-2 text-gray-900 text-[12.5px] font-bold uppercase outline-none shadow-xs"
-                        />
-                        <span className="text-[10px] text-gray-400 mt-1 block">
-                          Shown on the clickable accordion toggle bar.
-                        </span>
-                      </div>
-
-                      <div className="sm:col-span-2">
-                        <label className="block text-[11px] font-bold uppercase tracking-[0.08em] text-gray-700 mb-1.5">
-                          Wavelengths Explanation Text *
-                        </label>
-                        <textarea
-                          rows={3}
-                          value={formData.wavelengthsDesc || ''}
-                          onChange={(e) => updateFormField('wavelengthsDesc', e.target.value)}
-                          placeholder="e.g. LUMA GO concentrates high-intensity 660nm red light with a focused 30° optical beam angle, maximizing photon absorption in the skin and superficial tissue layers for peak biological rejuvenation."
-                          className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[8px] p-2.5 text-gray-900 text-[12.5px] outline-none leading-relaxed shadow-xs"
-                        />
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* 4. HOW TO USE */}
-                  <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-3">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div>
-                        <h4 className="text-[13px] font-bold uppercase tracking-wider text-gray-900 flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-[#ED2024]" />
-                          4. How To Use (Protocol Steps)
-                        </h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">
-                          Numbered step-by-step treatment protocols displayed inside the How To Use accordion drawer.
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultHowToUse}
-                          className="px-2.5 py-1.5 rounded-[8px] bg-white hover:bg-gray-100 border border-gray-300 text-gray-600 text-[11px] font-semibold cursor-pointer transition-colors shadow-xs"
-                        >
-                          Reset Defaults
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleAddHowToUse}
-                          className="px-3 py-1.5 rounded-[8px] bg-[#ED2024] hover:bg-[#d4191d] text-white text-[11px] font-bold cursor-pointer transition-colors shadow-xs"
-                        >
-                          + Add Step
-                        </button>
-                      </div>
-                    </div>
-
-                    {(!formData.howToUse || formData.howToUse.length === 0) ? (
-                      <div className="p-4 text-center rounded-[8px] bg-white border border-dashed border-gray-300 text-gray-500 text-[12px]">
-                        No usage steps added yet.{' '}
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultHowToUse}
-                          className="text-[#ED2024] font-bold hover:underline cursor-pointer"
-                        >
-                          Click here to populate default steps
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        {formData.howToUse.map((step, idx) => (
-                          <div key={idx} className="flex items-center gap-2.5 p-2 rounded-[8px] bg-white border border-gray-200 shadow-xs">
-                            <span className="w-5 h-5 rounded-full bg-red-100 text-[#ED2024] font-bold text-[11px] flex items-center justify-center shrink-0 select-none">
-                              {idx + 1}
-                            </span>
-                            <input
-                              type="text"
-                              value={step || ''}
-                              onChange={(e) => handleUpdateHowToUse(idx, e.target.value)}
-                              placeholder={`Step ${idx + 1} instructions...`}
-                              className="flex-1 bg-gray-50 border border-gray-300 focus:border-[#ED2024] rounded-[6px] px-3 py-1.5 text-gray-900 text-[12px] outline-none"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveHowToUse(idx)}
-                              className="p-1.5 text-gray-400 hover:text-rose-600 transition-colors cursor-pointer"
-                              title="Delete step"
-                            >
-                              ✕
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* 5. WHAT'S IN THE BOX */}
-                  <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-3">
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div>
-                        <h4 className="text-[13px] font-bold uppercase tracking-wider text-gray-900 flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-[#ED2024]" />
-                          5. What&apos;s In The Box (Package Contents)
-                        </h4>
-                        <p className="text-[11px] text-gray-500 mt-0.5">
-                          List of hardware and accessories included inside the product package.
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultInTheBox}
-                          className="px-2.5 py-1.5 rounded-[8px] bg-white hover:bg-gray-100 border border-gray-300 text-gray-600 text-[11px] font-semibold cursor-pointer transition-colors shadow-xs"
-                        >
-                          Reset Defaults
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleAddInTheBox}
-                          className="px-3 py-1.5 rounded-[8px] bg-[#ED2024] hover:bg-[#d4191d] text-white text-[11px] font-bold cursor-pointer transition-colors shadow-xs"
-                        >
-                          + Add Box Item
-                        </button>
-                      </div>
-                    </div>
-
-                    {(!formData.inTheBox || formData.inTheBox.length === 0) ? (
-                      <div className="p-4 text-center rounded-[8px] bg-white border border-dashed border-gray-300 text-gray-500 text-[12px]">
-                        No package items added yet.{' '}
-                        <button
-                          type="button"
-                          onClick={handleLoadDefaultInTheBox}
-                          className="text-[#ED2024] font-bold hover:underline cursor-pointer"
-                        >
-                          Click here to populate default package contents
-                        </button>
-                      </div>
-                    ) : (
-                      <div className="space-y-2">
-                        {formData.inTheBox.map((item, idx) => (
-                          <div key={idx} className="flex items-center gap-2.5 p-2 rounded-[8px] bg-white border border-gray-200 shadow-xs">
-                            <span className="text-[14px] shrink-0 select-none">📦</span>
-                            <input
-                              type="text"
-                              value={item || ''}
-                              onChange={(e) => handleUpdateInTheBox(idx, e.target.value)}
-                              placeholder="e.g. 1× LUMA Device"
-                              className="flex-1 bg-gray-50 border border-gray-300 focus:border-[#ED2024] rounded-[6px] px-3 py-1.5 text-gray-900 text-[12px] outline-none"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveInTheBox(idx)}
-                              className="p-1.5 text-gray-400 hover:text-rose-600 transition-colors cursor-pointer"
-                              title="Delete package item"
-                            >
-                              ✕
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {/* Modal Footer Actions */}
+{/* Modal Footer Actions */}
               <div className="pt-4 border-t border-gray-200 flex items-center justify-between gap-3 bg-white">
                 <span className="text-[11px] text-gray-500">
                   Changes save directly in real time.

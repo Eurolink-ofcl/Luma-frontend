@@ -858,7 +858,9 @@ export default function AdminDashboardPage({ onNavigateHome, onNavigatePage, onL
                                 <td className="py-3.5 px-5">
                                   <span
                                     className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10.5px] font-bold uppercase tracking-wider ${
-                                      order.status === 'Delivered'
+                                      order.status === 'Returned' || order.returnStatus === 'Approved'
+                                        ? 'bg-purple-100 text-purple-800 border border-purple-300'
+                                        : order.status === 'Delivered'
                                         ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                                         : order.status === 'Processing' || order.status === 'Shipped'
                                         ? 'bg-blue-50 text-blue-700 border border-blue-200'
@@ -867,7 +869,9 @@ export default function AdminDashboardPage({ onNavigateHome, onNavigatePage, onL
                                         : 'bg-amber-50 text-amber-700 border border-amber-200'
                                     }`}
                                   >
-                                    {order.status || 'Pending'}
+                                    {order.status === 'Returned' || order.returnStatus === 'Approved'
+                                      ? 'Returned & Refunded'
+                                      : order.status || 'Pending'}
                                   </span>
                                 </td>
                                 <td className="py-3.5 px-5">

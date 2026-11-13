@@ -701,9 +701,11 @@ export default function ReviewsCmsEditor({ onOpenLivePage }) {
                         onChange={(e) => updateReview(idx, 'stars', Number(e.target.value))}
                         className="w-full px-3 py-1.5 text-xs border border-gray-300 rounded bg-white focus:outline-none focus:border-[#ED2024]"
                       >
-                        <option value={5}>★★★★★ (5 Stars)</option>
-                        <option value={4}>★★★★☆ (4 Stars)</option>
+                        <option value={1}>★☆☆☆☆ (1 Star)</option>
+                        <option value={2}>★★☆☆☆ (2 Stars)</option>
                         <option value={3}>★★★☆☆ (3 Stars)</option>
+                        <option value={4}>★★★★☆ (4 Stars)</option>
+                        <option value={5}>★★★★★ (5 Stars)</option>
                       </select>
                     </div>
                   </div>

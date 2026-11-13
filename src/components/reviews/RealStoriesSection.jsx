@@ -269,21 +269,31 @@ export default function RealStoriesSection({ data }) {
 
   const title = data?.title || 'REAL STORIES';
 
-  // Page 1 is strictly the exact PSD design reviews (matches PSD Layer 'REAL STORIES')
-  // Page 2 contains the real stories approved by admin from MongoDB (Marcus Vance, etc.)
+  // Collect all reviews. If real customer stories are approved by admin,
+  // prepend them right on Page 1 so newly approved reviews are immediately visible in the Real Stories carousel!
   const allPages = (() => {
-    const page1 = (data?.reviews && Array.isArray(data.reviews) && data.reviews.length >= 6)
+    const defaultPage1 = (data?.reviews && Array.isArray(data.reviews) && data.reviews.length >= 6)
       ? data.reviews.slice(0, 6)
       : REVIEWS_DATA[0];
 
-    const page2 = liveApprovedStories.length > 0
-      ? [...liveApprovedStories, ...REVIEWS_DATA[1].slice(liveApprovedStories.length)]
-      : (data?.reviews && data.reviews.length >= 12 ? data.reviews.slice(6, 12) : REVIEWS_DATA[1]);
+    const defaultPage2 = (data?.reviews && data.reviews.length >= 12)
+      ? data.reviews.slice(6, 12)
+      : REVIEWS_DATA[1];
 
-    const page3 = REVIEWS_DATA[2];
-    const page4 = REVIEWS_DATA[3];
+    if (liveApprovedStories.length > 0) {
+      const page1 = [
+        ...liveApprovedStories.slice(0, 6),
+        ...defaultPage1.slice(0, Math.max(0, 6 - liveApprovedStories.length)),
+      ];
+      const overflowLive = liveApprovedStories.slice(6);
+      const page2 = [
+        ...overflowLive,
+        ...defaultPage2.slice(0, Math.max(0, 6 - overflowLive.length)),
+      ];
+      return [page1, page2, REVIEWS_DATA[2], REVIEWS_DATA[3]];
+    }
 
-    return [page1, page2, page3, page4];
+    return [defaultPage1, defaultPage2, REVIEWS_DATA[2], REVIEWS_DATA[3]];
   })();
 
   const totalPages = allPages.length;
@@ -430,7 +440,7 @@ export default function RealStoriesSection({ data }) {
 
                       {/* 5 Red Stars Rating (PSD: star(2) 42x40px each, gap 3px, fill #ED2124, 91px from card left) */}
                       <div className="mt-3.5 sm:mt-5 lg:mt-[calc(31*var(--u))] lg:pl-[calc(12*var(--u))] flex items-center gap-1 sm:gap-1.5 lg:gap-[calc(3*var(--u))] shrink-0">
-                        {Array.from({ length: review.stars }).map((_, i) => (
+                        {Array.from({ length: review.stars || 5 }).map((_, i) => (
                           <img
                             key={i}
                             src="/assets/reviews/star-red.png"

@@ -637,13 +637,19 @@ export default function CustomersManager() {
                           <div className="flex items-center gap-3">
                             <div className="w-12 h-12 rounded-[10px] bg-white border border-gray-200 flex items-center justify-center overflow-hidden shrink-0">
                               {item.image ? (
-                                <img src={item.image} alt={item.title} className="w-full h-full object-contain p-1" />
+                                <img
+                                  src={item.image}
+                                  alt={item.title || item.name || 'Product'}
+                                  className="w-full h-full object-contain p-1"
+                                />
                               ) : (
                                 <span className="text-[11px] text-gray-400 font-bold">LUMA</span>
                               )}
                             </div>
                             <div>
-                              <div className="text-[14px] font-bold text-gray-900">{item.title}</div>
+                              <div className="text-[14px] font-bold text-gray-900">
+                                {item.title || item.name || 'LUMA Product'}
+                              </div>
                               {item.variant && <div className="text-[11.5px] text-gray-500">{item.variant}</div>}
                               <div className="text-[12px] text-[#ED2024] font-bold mt-0.5">
                                 {formatPrice(item.price)} AED × {item.quantity || 1}
@@ -686,7 +692,9 @@ export default function CustomersManager() {
                               </span>
                               <span
                                 className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${
-                                  ord.status === 'Delivered'
+                                  ord.status === 'Returned' || ord.returnStatus === 'Approved'
+                                    ? 'bg-purple-100 text-purple-800 border border-purple-300'
+                                    : ord.status === 'Delivered'
                                     ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                                     : ord.status === 'Processing'
                                     ? 'bg-blue-50 text-blue-700 border border-blue-200'
@@ -695,15 +703,29 @@ export default function CustomersManager() {
                                     : 'bg-amber-50 text-amber-700 border border-amber-200'
                                 }`}
                               >
-                                {ord.status || 'Confirmed'}
+                                {ord.status === 'Returned' || ord.returnStatus === 'Approved'
+                                  ? 'Returned & Refunded'
+                                  : ord.status || 'Confirmed'}
                               </span>
                             </div>
                             <div className="text-[12px] text-gray-500 mt-1">
                               Placed on {formatDateTime(ord.createdAt)}
                             </div>
                             {ord.items && ord.items.length > 0 && (
-                              <div className="text-[12px] text-gray-700 mt-2">
-                                {ord.items.map((it) => `${it.title} (×${it.quantity})`).join(', ')}
+                              <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
+                                {ord.items.map((it, idx) => {
+                                  const productName =
+                                    it.name || it.title || it.productName || it.product?.name || 'LUMA Device';
+                                  return (
+                                    <span
+                                      key={idx}
+                                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[7px] bg-white border border-gray-200 text-gray-900 font-semibold text-[11.5px] shadow-2xs"
+                                    >
+                                      <span>{productName}</span>
+                                      <span className="text-gray-400 font-normal">×{it.quantity || 1}</span>
+                                    </span>
+                                  );
+                                })}
                               </div>
                             )}
                           </div>

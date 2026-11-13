@@ -18,6 +18,13 @@ export default function OrdersManager() {
   const [statusUpdating, setStatusUpdating] = useState(false);
   const [cancellationReason, setCancellationReason] = useState('Customer requested cancellation');
   const [actionMessage, setActionMessage] = useState(null);
+  const [returnRejectNotes, setReturnRejectNotes] = useState('');
+  const [reviewingReturn, setReviewingReturn] = useState(false);
+  const [showRejectForm, setShowRejectForm] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [approvingReview, setApprovingReview] = useState(false);
+  const [reviewApproveMsg, setReviewApproveMsg] = useState('');
 
   // Fetch orders
   const fetchOrders = async (isManualRefresh = false) => {
@@ -55,6 +62,15 @@ export default function OrdersManager() {
     // Filter by status tab
     if (statusFilter !== 'all') {
       result = result.filter((ord) => {
+        if (statusFilter === 'Returns') {
+          return ord.returnStatus === 'Requested';
+        }
+        if (statusFilter === 'Returned') {
+          return ord.status === 'Returned' || ord.returnStatus === 'Approved';
+        }
+        if (statusFilter === 'Delivered') {
+          return ord.status === 'Delivered' && ord.returnStatus !== 'Approved';
+        }
         const s = ord.status || 'Confirmed';
         if (statusFilter === 'Confirmed') {
           return s === 'Confirmed' || s === 'Processing' || s === 'Pending';
@@ -74,7 +90,8 @@ export default function OrdersManager() {
           (ord.customer?.phone && ord.customer.phone.toLowerCase().includes(q)) ||
           (ord.shippingAddress?.city && ord.shippingAddress.city.toLowerCase().includes(q)) ||
           (ord.shippingAddress?.street && ord.shippingAddress.street.toLowerCase().includes(q)) ||
-          (ord.items && ord.items.some((it) => it.name && it.name.toLowerCase().includes(q)))
+          (ord.items && ord.items.some((it) => it.name && it.name.toLowerCase().includes(q))) ||
+          (ord.returnRequest?.reason && ord.returnRequest.reason.toLowerCase().includes(q))
       );
     }
 
@@ -88,17 +105,55 @@ export default function OrdersManager() {
       (o) => o.status === 'Confirmed' || o.status === 'Processing' || o.status === 'Pending'
     ).length;
     const shipped = orders.filter((o) => o.status === 'Shipped').length;
-    const delivered = orders.filter((o) => o.status === 'Delivered').length;
+    const delivered = orders.filter(
+      (o) => o.status === 'Delivered' && o.returnStatus !== 'Approved'
+    ).length;
+    const returned = orders.filter(
+      (o) => o.status === 'Returned' || o.returnStatus === 'Approved'
+    ).length;
     const cancelled = orders.filter((o) => o.status === 'Cancelled').length;
+    const returns = orders.filter((o) => o.returnStatus === 'Requested').length;
     const totalRevenue = orders.reduce((sum, o) => {
-      if (o.status !== 'Cancelled') {
+      if (o.status !== 'Cancelled' && o.status !== 'Returned' && o.returnStatus !== 'Approved') {
         return sum + (Number(o.totalAmount) || 0);
       }
       return sum;
     }, 0);
 
-    return { total, confirmed, shipped, delivered, cancelled, totalRevenue };
+    return { total, confirmed, shipped, delivered, returned, cancelled, returns, totalRevenue };
   }, [orders]);
+
+  // Reset pagination to page 1 whenever filters or search query changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, statusFilter, itemsPerPage]);
+
+  // Pagination telemetry & windowing
+  const totalOrdersCount = filteredOrders.length;
+  const totalPages = Math.max(1, Math.ceil(totalOrdersCount / itemsPerPage));
+  const validCurrentPage = Math.min(currentPage, totalPages);
+  const startIndex = (validCurrentPage - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, totalOrdersCount);
+
+  const paginatedOrders = useMemo(() => {
+    return filteredOrders.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredOrders, startIndex, itemsPerPage]);
+
+  const getPageNumbers = () => {
+    const pages = [];
+    if (totalPages <= 7) {
+      for (let i = 1; i <= totalPages; i++) pages.push(i);
+    } else {
+      if (validCurrentPage <= 4) {
+        pages.push(1, 2, 3, 4, 5, '...', totalPages);
+      } else if (validCurrentPage >= totalPages - 3) {
+        pages.push(1, '...', totalPages - 4, totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
+      } else {
+        pages.push(1, '...', validCurrentPage - 1, validCurrentPage, validCurrentPage + 1, '...', totalPages);
+      }
+    }
+    return pages;
+  };
 
   // Execute progressive status update
   const handleUpdateStatus = async () => {
@@ -151,6 +206,86 @@ export default function OrdersManager() {
       alert('Network error while updating order status.');
     } finally {
       setStatusUpdating(false);
+    }
+  };
+
+  // Review Approval: Admin approves delivered order review for Real Stories carousel
+  const handleApproveReview = async (order) => {
+    if (!order) return;
+    setApprovingReview(true);
+    setReviewApproveMsg('');
+    try {
+      const res = await fetch(`${API_BASE_URL}/admin/orders/${order._id || order.id}/review-approve`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || 'Failed to approve review.');
+      }
+      setOrders((prev) =>
+        prev.map((o) => ((o._id || o.id) === (order._id || order.id) ? data.order : o))
+      );
+      if (selectedOrder && (selectedOrder._id || selectedOrder.id) === (order._id || order.id)) {
+        setSelectedOrder(data.order);
+      }
+      setActionMessage(
+        `Review for Order #${order.orderNumber} APPROVED and published to public Real Stories carousel!`
+      );
+      setReviewApproveMsg('✓ Review approved and live on Real Stories!');
+      setTimeout(() => {
+        setActionMessage(null);
+        setReviewApproveMsg('');
+      }, 5000);
+    } catch (err) {
+      console.error('Error approving review:', err);
+      alert(err.message || 'Failed to approve review.');
+    } finally {
+      setApprovingReview(false);
+    }
+  };
+
+  // Rule 2: Admin reviews return reason and approves (with full refund) or declines
+  const handleReturnDecision = async (order, decision, adminNotes = '') => {
+    if (!order) return;
+    setReviewingReturn(true);
+    try {
+      const res = await fetch(`${API_BASE_URL}/admin/orders/${order._id || order.id}/return-decision`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ decision, adminNotes }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || 'Failed to update return request.');
+      }
+
+      // Update state
+      setOrders((prev) =>
+        prev.map((o) => ((o._id || o.id) === (order._id || order.id) ? data.order : o))
+      );
+      if (selectedOrder && (selectedOrder._id || selectedOrder.id) === (order._id || order.id)) {
+        setSelectedOrder(data.order);
+      }
+
+      setShowRejectForm(false);
+      setReturnRejectNotes('');
+
+      if (decision === 'approve') {
+        setActionMessage(
+          `Return request APPROVED for Order #${order.orderNumber}. Automated refund of ${formatPrice(data.order?.refundAmount || order.totalAmount)} ${order.currency || 'AED'} initiated to customer card (${data.order?.refundId || 'Refunded'}).`
+        );
+      } else {
+        setActionMessage(
+          `Return request for Order #${order.orderNumber} has been DECLINED.`
+        );
+      }
+      setTimeout(() => setActionMessage(null), 6000);
+    } catch (err) {
+      console.error('Error reviewing return request:', err);
+      alert(err.message || 'Network error while processing return decision.');
+    } finally {
+      setReviewingReturn(false);
     }
   };
 
@@ -363,13 +498,15 @@ export default function OrdersManager() {
       {/* ========================================================================= */}
       <div className="mt-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
         {/* Status Filter Tabs */}
-        <div className="flex items-center gap-1.5 p-1 bg-white rounded-[12px] border border-gray-200 shadow-sm overflow-x-auto">
+        <div className="flex items-center gap-1.5 p-1 bg-white rounded-[12px] border border-gray-200 shadow-sm overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {[
             { id: 'all', label: 'All Orders', count: metrics.total },
             { id: 'Confirmed', label: 'Confirmed', count: metrics.confirmed },
             { id: 'Shipped', label: 'Shipped', count: metrics.shipped },
             { id: 'Delivered', label: 'Delivered', count: metrics.delivered },
+            { id: 'Returned', label: 'Returned', count: metrics.returned },
             { id: 'Cancelled', label: 'Cancelled', count: metrics.cancelled },
+            { id: 'Returns', label: 'Return Requests', count: metrics.returns },
           ].map((tab) => {
             const isActive = statusFilter === tab.id;
             return (
@@ -472,11 +609,13 @@ export default function OrdersManager() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {filteredOrders.map((ord) => {
-                  const currentStatus =
-                    ord.status === 'Processing' || ord.status === 'Pending'
-                      ? 'Confirmed'
-                      : ord.status || 'Confirmed';
+                {paginatedOrders.map((ord) => {
+                  const isReturned = ord.status === 'Returned' || ord.returnStatus === 'Approved';
+                  const currentStatus = isReturned
+                    ? 'Returned'
+                    : ord.status === 'Processing' || ord.status === 'Pending'
+                    ? 'Confirmed'
+                    : ord.status || 'Confirmed';
 
                   const allowedTransitions = getAllowedForwardTransitions(currentStatus);
 
@@ -563,7 +702,9 @@ export default function OrdersManager() {
                         <div className="flex flex-col gap-1 items-start">
                           <span
                             className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-[0.04em] ${
-                              currentStatus === 'Delivered'
+                              isReturned
+                                ? 'bg-purple-100 text-purple-800 border border-purple-300'
+                                : currentStatus === 'Delivered'
                                 ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                                 : currentStatus === 'Shipped'
                                 ? 'bg-blue-50 text-blue-700 border border-blue-200'
@@ -574,7 +715,9 @@ export default function OrdersManager() {
                           >
                             <span
                               className={`w-1.5 h-1.5 rounded-full ${
-                                currentStatus === 'Delivered'
+                                isReturned
+                                  ? 'bg-purple-600'
+                                  : currentStatus === 'Delivered'
                                   ? 'bg-emerald-500'
                                   : currentStatus === 'Shipped'
                                   ? 'bg-blue-500 animate-pulse'
@@ -583,8 +726,32 @@ export default function OrdersManager() {
                                   : 'bg-amber-500 animate-pulse'
                               }`}
                             />
-                            {currentStatus}
+                            {isReturned ? 'Returned & Refunded' : currentStatus}
                           </span>
+
+                          {/* Rule 2 Return Request Badges */}
+                          {ord.returnStatus === 'Requested' && (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-800 border border-amber-300 animate-pulse mt-0.5">
+                              ● Return Requested
+                            </span>
+                          )}
+                          {ord.returnStatus === 'Rejected' && (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-red-100 text-red-800 border border-red-200 mt-0.5">
+                              ✕ Return Declined
+                            </span>
+                          )}
+
+                          {/* Delivered Review Badge */}
+                          {ord.reviewSubmitted && ord.review?.status === 'pending' && (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-100 text-rose-800 border border-rose-300 animate-pulse mt-0.5">
+                              ★ Review Pending
+                            </span>
+                          )}
+                          {ord.reviewSubmitted && ord.review?.status === 'approved' && (
+                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 mt-0.5">
+                              ✓ Review Live
+                            </span>
+                          )}
 
                           {/* Progress Stepper Mini */}
                           <div className="flex items-center gap-1 text-[9px] font-mono text-gray-400 mt-0.5">
@@ -594,7 +761,7 @@ export default function OrdersManager() {
                             <span>→</span>
                             <span
                               className={
-                                currentStatus === 'Shipped' || currentStatus === 'Delivered'
+                                currentStatus === 'Shipped' || currentStatus === 'Delivered' || isReturned
                                   ? 'text-blue-600 font-bold'
                                   : 'text-gray-400'
                               }
@@ -602,22 +769,35 @@ export default function OrdersManager() {
                               2.Shipped
                             </span>
                             <span>→</span>
-                            <span
-                              className={
-                                currentStatus === 'Delivered'
-                                  ? 'text-emerald-600 font-bold'
-                                  : 'text-gray-400'
-                              }
-                            >
-                              3.Delivered
-                            </span>
+                            {isReturned ? (
+                              <span className="text-purple-700 font-bold">
+                                3.Returned
+                              </span>
+                            ) : (
+                              <span
+                                className={
+                                  currentStatus === 'Delivered'
+                                    ? 'text-emerald-600 font-bold'
+                                    : 'text-gray-400'
+                                }
+                              >
+                                3.Delivered
+                              </span>
+                            )}
                           </div>
                         </div>
                       </td>
 
                       {/* STRICT ONE-WAY STATUS ACTION */}
                       <td className="py-3.5 px-4">
-                        {allowedTransitions.length > 0 ? (
+                        {isReturned ? (
+                          <div className="flex items-center gap-1.5 text-purple-700 text-[11px] font-bold">
+                            <svg className="w-3.5 h-3.5 text-purple-600" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span>Returned &amp; Refunded</span>
+                          </div>
+                        ) : allowedTransitions.length > 0 ? (
                           <div className="flex flex-wrap items-center gap-1.5">
                             {allowedTransitions.map((act) => (
                               <button
@@ -662,6 +842,90 @@ export default function OrdersManager() {
                 })}
               </tbody>
             </table>
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* PAGINATION CONTROLS FOOTER                                               */}
+        {/* ========================================================================= */}
+        {!loading && !error && totalOrdersCount > 0 && (
+          <div className="bg-gray-50/80 border-t border-gray-200 px-5 py-3.5 flex flex-col sm:flex-row items-center justify-between gap-3 text-[12.5px] text-gray-600">
+            {/* Left Side: Summary & Page Size */}
+            <div className="flex flex-wrap items-center gap-4">
+              <span>
+                Showing <strong className="font-bold text-gray-900">{startIndex + 1}</strong> to{' '}
+                <strong className="font-bold text-gray-900">{endIndex}</strong> of{' '}
+                <strong className="font-bold text-gray-900">{totalOrdersCount}</strong> orders
+              </span>
+
+              <div className="flex items-center gap-2 pl-3 border-l border-gray-300">
+                <span className="text-[11.5px] text-gray-500 font-medium">Rows per page:</span>
+                <select
+                  value={itemsPerPage}
+                  onChange={(e) => setItemsPerPage(Number(e.target.value))}
+                  className="bg-white border border-gray-300 rounded-[7px] px-2 py-1 text-[12px] font-bold text-gray-800 outline-none focus:border-[#ED2024] cursor-pointer shadow-2xs"
+                >
+                  {[5, 10, 20, 50].map((num) => (
+                    <option key={num} value={num}>
+                      {num}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Right Side: Page Navigation Buttons */}
+            <div className="flex items-center gap-1.5">
+              {/* Prev Button */}
+              <button
+                type="button"
+                disabled={validCurrentPage <= 1}
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                className="px-3 py-1.5 rounded-[8px] border border-gray-300 bg-white hover:bg-gray-100 text-[12px] font-bold text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer flex items-center gap-1 shadow-2xs"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+                <span>Prev</span>
+              </button>
+
+              {/* Numbered Page Buttons */}
+              <div className="flex items-center gap-1">
+                {getPageNumbers().map((p, idx) =>
+                  p === '...' ? (
+                    <span key={`ellipsis-${idx}`} className="px-1.5 text-gray-400 font-bold select-none text-[12px]">
+                      ...
+                    </span>
+                  ) : (
+                    <button
+                      key={`page-${p}`}
+                      type="button"
+                      onClick={() => setCurrentPage(p)}
+                      className={`w-7 h-7 rounded-[7px] text-[12px] font-bold transition-all cursor-pointer flex items-center justify-center ${
+                        validCurrentPage === p
+                          ? 'bg-[#ED2024] text-white shadow-xs'
+                          : 'bg-white hover:bg-gray-100 text-gray-700 border border-gray-300'
+                      }`}
+                    >
+                      {p}
+                    </button>
+                  )
+                )}
+              </div>
+
+              {/* Next Button */}
+              <button
+                type="button"
+                disabled={validCurrentPage >= totalPages}
+                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                className="px-3 py-1.5 rounded-[8px] border border-gray-300 bg-white hover:bg-gray-100 text-[12px] font-bold text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer flex items-center gap-1 shadow-2xs"
+              >
+                <span>Next</span>
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
           </div>
         )}
       </div>
@@ -866,7 +1130,9 @@ export default function OrdersManager() {
                   </h2>
                   <span
                     className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider ${
-                      selectedOrder.status === 'Delivered'
+                      selectedOrder.status === 'Returned' || selectedOrder.returnStatus === 'Approved'
+                        ? 'bg-purple-100 text-purple-800 border border-purple-300'
+                        : selectedOrder.status === 'Delivered'
                         ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                         : selectedOrder.status === 'Shipped'
                         ? 'bg-blue-50 text-blue-700 border border-blue-200'
@@ -875,7 +1141,9 @@ export default function OrdersManager() {
                         : 'bg-amber-50 text-amber-700 border border-amber-200'
                     }`}
                   >
-                    {selectedOrder.status || 'Confirmed'}
+                    {selectedOrder.status === 'Returned' || selectedOrder.returnStatus === 'Approved'
+                      ? 'Returned & Refunded'
+                      : selectedOrder.status || 'Confirmed'}
                   </span>
                 </div>
                 <div className="text-[12px] text-gray-500 mt-1">
@@ -966,6 +1234,253 @@ export default function OrdersManager() {
                   </div>
                 </div>
               </div>
+
+              {/* Customer Delivered Product Review Section */}
+              {(selectedOrder.reviewSubmitted || selectedOrder.review) && (
+                <div className="p-5 rounded-[16px] border bg-rose-50/70 border-rose-200 text-gray-900 space-y-3 shadow-xs">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-2">
+                      <span className="w-6 h-6 rounded-lg bg-[#ED2024] text-white flex items-center justify-center text-xs font-black">
+                        ★
+                      </span>
+                      <h4 className="text-[14px] font-extrabold uppercase tracking-wide text-gray-900">
+                        Customer Product Review &amp; Story
+                      </h4>
+                    </div>
+                    {selectedOrder.review?.status === 'approved' ? (
+                      <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-100 text-emerald-800 border border-emerald-300">
+                        ✓ Approved &amp; Live on /reviews
+                      </span>
+                    ) : (
+                      <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-100 text-amber-800 border border-amber-300">
+                        ⏳ Pending Admin Approval
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="p-4 rounded-[12px] bg-white border border-rose-100 space-y-2 text-[13px]">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-bold text-gray-900">{selectedOrder.customer?.name || 'Customer'}</span>
+                        <span className="text-gray-400">•</span>
+                        <span className="text-[11px] font-mono font-bold text-gray-600 bg-gray-100 px-2 py-0.5 rounded">
+                          {selectedOrder.review?.productName || 'LUMA DEVICE'} USER
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1 text-[#ED2024] text-sm">
+                        {'★'.repeat(selectedOrder.review?.stars || 5)}
+                        <span className="text-gray-500 text-[11.5px] font-bold ml-1">
+                          ({selectedOrder.review?.stars || 5}/5 Stars)
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="bg-gray-50 p-3 rounded-lg border border-gray-200 italic text-gray-800 text-[13px] leading-relaxed">
+                      "{selectedOrder.review?.message || 'Great experience!'}"
+                    </div>
+
+                    <div className="text-[11px] text-gray-400">
+                      Submitted on: {formatDateTime(selectedOrder.review?.submittedAt || selectedOrder.updatedAt)}
+                    </div>
+                  </div>
+
+                  {/* Approval Actions */}
+                  {selectedOrder.review?.status === 'pending' && (
+                    <div className="pt-2 flex flex-wrap items-center justify-between gap-3">
+                      <span className="text-[12px] text-gray-600">
+                        Click approve to instantly display this rating &amp; story in the public <strong>Real Stories</strong> carousel on <code>/reviews</code>.
+                      </span>
+                      <button
+                        type="button"
+                        disabled={approvingReview}
+                        onClick={() => handleApproveReview(selectedOrder)}
+                        className="px-4 py-2.5 rounded-[10px] bg-[#ED2024] hover:bg-[#d61b1f] text-white font-bold text-[12.5px] shadow-sm flex items-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
+                      >
+                        {approvingReview ? (
+                          <span className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        ) : (
+                          <span>✓</span>
+                        )}
+                        <span>Approve &amp; Publish to Real Stories</span>
+                      </button>
+                    </div>
+                  )}
+
+                  {reviewApproveMsg && (
+                    <div className="p-2.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-semibold">
+                      {reviewApproveMsg}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Return Request Review Section (Rule 2: 1-Week Return & Refund) */}
+              {selectedOrder.returnStatus && selectedOrder.returnStatus !== 'None' && (
+                <div
+                  className={`p-5 rounded-[16px] border ${
+                    selectedOrder.returnStatus === 'Requested'
+                      ? 'bg-amber-50/70 border-amber-300'
+                      : selectedOrder.returnStatus === 'Approved'
+                      ? 'bg-emerald-50/70 border-emerald-300'
+                      : 'bg-red-50/70 border-red-300'
+                  }`}
+                >
+                  <div className="flex items-center justify-between gap-3 mb-3">
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={`w-2.5 h-2.5 rounded-full ${
+                          selectedOrder.returnStatus === 'Requested'
+                            ? 'bg-amber-500 animate-pulse'
+                            : selectedOrder.returnStatus === 'Approved'
+                            ? 'bg-emerald-500'
+                            : 'bg-red-500'
+                        }`}
+                      />
+                      <h4 className="text-[14px] font-extrabold uppercase tracking-wide text-gray-900">
+                        {selectedOrder.returnStatus === 'Requested'
+                          ? 'Customer Return Request (Pending Admin Review)'
+                          : selectedOrder.returnStatus === 'Approved'
+                          ? 'Return Request Approved (Refund Issued)'
+                          : 'Return Request Declined'}
+                      </h4>
+                    </div>
+                    <span
+                      className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase ${
+                        selectedOrder.returnStatus === 'Requested'
+                          ? 'bg-amber-200 text-amber-900'
+                          : selectedOrder.returnStatus === 'Approved'
+                          ? 'bg-emerald-200 text-emerald-900'
+                          : 'bg-red-200 text-red-900'
+                      }`}
+                    >
+                      {selectedOrder.returnStatus}
+                    </span>
+                  </div>
+
+                  <div className="space-y-2.5 text-[13px] bg-white p-4 rounded-[12px] border border-gray-200 shadow-xs">
+                    <div>
+                      <span className="text-gray-500 text-[11px] uppercase font-bold tracking-wider block">
+                        Customer Reason for Return:
+                      </span>
+                      <span className="font-bold text-gray-900 text-[14px]">
+                        {selectedOrder.returnRequest?.reason || '—'}
+                      </span>
+                    </div>
+
+                    {selectedOrder.returnRequest?.comments && (
+                      <div>
+                        <span className="text-gray-500 text-[11px] uppercase font-bold tracking-wider block">
+                          Additional Details / Customer Explanation:
+                        </span>
+                        <p className="text-gray-700 bg-gray-50 p-2.5 rounded-md border border-gray-200 mt-1 whitespace-pre-wrap text-[12.5px]">
+                          {selectedOrder.returnRequest.comments}
+                        </p>
+                      </div>
+                    )}
+
+                    <div className="flex flex-wrap items-center gap-4 text-[11.5px] text-gray-500 pt-1 border-t border-gray-100">
+                      <div>
+                        Return Requested:{' '}
+                        <span className="font-medium text-gray-800">
+                          {formatDateTime(selectedOrder.returnRequest?.requestedAt)}
+                        </span>
+                      </div>
+                      {selectedOrder.deliveredAt && (
+                        <div>
+                          Item Delivered:{' '}
+                          <span className="font-medium text-gray-800">
+                            {formatDateTime(selectedOrder.deliveredAt)}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {selectedOrder.returnRequest?.adminNotes && (
+                      <div className="pt-2 border-t border-gray-100">
+                        <span className="text-gray-500 text-[11px] uppercase font-bold tracking-wider block">
+                          Admin Review Feedback:
+                        </span>
+                        <p className="text-red-700 bg-red-50 p-2 rounded-md border border-red-200 mt-1 text-[12px]">
+                          {selectedOrder.returnRequest.adminNotes}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Decision Controls for Admin */}
+                  {selectedOrder.returnStatus === 'Requested' && (
+                    <div className="mt-4 pt-3 border-t border-amber-200/80">
+                      <div className="text-[12px] text-amber-900 font-semibold mb-3">
+                        Review customer's reason above. If valid, approve to automatically refund the customer's payment to their card.
+                      </div>
+
+                      {!showRejectForm ? (
+                        <div className="flex flex-wrap items-center gap-3">
+                          <button
+                            type="button"
+                            disabled={reviewingReturn}
+                            onClick={() => handleReturnDecision(selectedOrder, 'approve')}
+                            className="px-4 py-2.5 rounded-[10px] bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[13px] shadow-sm flex items-center gap-2 transition-all cursor-pointer disabled:opacity-50"
+                          >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span>
+                              {reviewingReturn
+                                ? 'Processing Refund...'
+                                : `Approve Return & Issue Refund (${formatPrice(selectedOrder.totalAmount)} ${selectedOrder.currency || 'AED'})`}
+                            </span>
+                          </button>
+
+                          <button
+                            type="button"
+                            disabled={reviewingReturn}
+                            onClick={() => setShowRejectForm(true)}
+                            className="px-4 py-2.5 rounded-[10px] bg-white hover:bg-red-50 border border-red-300 text-red-600 font-bold text-[13px] transition-all cursor-pointer disabled:opacity-50"
+                          >
+                            ✕ Decline Return Request
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="bg-white p-3.5 rounded-[12px] border border-red-200 space-y-2.5">
+                          <label className="block text-[12px] font-bold text-gray-800">
+                            Reason for declining return:
+                          </label>
+                          <textarea
+                            rows={2}
+                            value={returnRejectNotes}
+                            onChange={(e) => setReturnRejectNotes(e.target.value)}
+                            placeholder="e.g. Return requested after 7-day period or item damaged..."
+                            className="w-full bg-gray-50 border border-gray-300 rounded-[8px] p-2.5 text-[12.5px] text-gray-900 focus:outline-none focus:border-red-500"
+                          />
+                          <div className="flex items-center gap-2">
+                            <button
+                              type="button"
+                              disabled={reviewingReturn}
+                              onClick={() =>
+                                handleReturnDecision(selectedOrder, 'reject', returnRejectNotes)
+                              }
+                              className="px-4 py-2 rounded-[8px] bg-red-600 hover:bg-red-700 text-white font-bold text-[12px] cursor-pointer disabled:opacity-50"
+                            >
+                              {reviewingReturn ? 'Submitting...' : 'Confirm Decline'}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setShowRejectForm(false);
+                                setReturnRejectNotes('');
+                              }}
+                              className="px-3 py-2 rounded-[8px] bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold text-[12px] cursor-pointer"
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
 
               {/* Payment & Gateway Refund Telemetry Section */}
               <div className="p-4 rounded-[14px] bg-gray-50 border border-gray-200">
@@ -1064,12 +1579,28 @@ export default function OrdersManager() {
                     ))}
                   </div>
                 ) : (
-                  <div className="p-3 rounded-[10px] bg-emerald-50 border border-emerald-200 text-emerald-800 text-[12px] flex items-center gap-2">
-                    <svg className="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <div
+                    className={`p-3 rounded-[10px] border text-[12px] flex items-center gap-2 ${
+                      selectedOrder.status === 'Returned' || selectedOrder.returnStatus === 'Approved'
+                        ? 'bg-purple-50 border-purple-200 text-purple-800'
+                        : selectedOrder.status === 'Cancelled'
+                        ? 'bg-red-50 border-red-200 text-red-800'
+                        : 'bg-emerald-50 border-emerald-200 text-emerald-800'
+                    }`}
+                  >
+                    <svg
+                      className="w-4 h-4 shrink-0"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      viewBox="0 0 24 24"
+                    >
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
                     <span>
-                      Order is in its final state ({selectedOrder.status}). As per policy, this status cannot be reverted or changed.
+                      {selectedOrder.status === 'Returned' || selectedOrder.returnStatus === 'Approved'
+                        ? 'Order has been Returned & Refunded. Product return was accepted and full payment has been refunded to the customer.'
+                        : `Order is in its final state (${selectedOrder.status}). As per policy, this status cannot be reverted or changed.`}
                     </span>
                   </div>
                 )}
