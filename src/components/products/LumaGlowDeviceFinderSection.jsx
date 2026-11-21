@@ -169,7 +169,7 @@ export default function LumaGlowDeviceFinderSection({
         </div>
 
         {/* ==================== CLEAN CAROUSEL: [ < ARROW ] [ 4-CARD VIEWPORT ] [ > ARROW ] ==================== */}
-        <div className="relative mt-8 sm:mt-12 lg:mt-16 2xl:mt-[calc(100*var(--u))] w-full">
+        <div className="relative mt-8 sm:mt-12 lg:mt-16 2xl:mt-[calc(100*var(--u))] w-full px-8 sm:px-11 md:px-12 lg:px-14 2xl:px-[calc(142*var(--u))]">
           
           {/* Previous Arrow Button (Left, vertically centered on Card Image Frame) */}
           <button
@@ -195,9 +195,9 @@ export default function LumaGlowDeviceFinderSection({
             />
           </button>
 
-          {/* Masked Viewport Window: padding gives room for arrows so cards never overlap them */}
+          {/* Masked Viewport Window: strictly clips at its boundary with ZERO padding so NO partial next card can ever peek */}
           <div
-            className="w-full overflow-hidden px-8 sm:px-11 md:px-12 lg:px-14 2xl:px-[calc(142*var(--u))]"
+            className="w-full overflow-hidden"
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
             onWheel={handleWheel}
