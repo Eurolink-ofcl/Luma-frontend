@@ -627,18 +627,7 @@ export default function QuizAssessmentsManager() {
             </div>
 
             {/* Modal Footer */}
-            <div className="p-4 bg-[#F8FAFC] border-t border-[#E2E8F0] flex items-center justify-between">
-              {selectedAssessment.userEmail ? (
-                <a
-                  href={`mailto:${selectedAssessment.userEmail}?subject=Your LUMA Light Assessment Match: ${selectedAssessment.recommendedProduct?.name || 'LUMA Surge'}`}
-                  className="text-xs font-semibold text-[#ED2024] hover:underline inline-flex items-center gap-1"
-                >
-                  ✉ Send Follow-up Email
-                </a>
-              ) : (
-                <span className="text-xs text-gray-400">Anonymous visitor</span>
-              )}
-
+            <div className="p-4 bg-[#F8FAFC] border-t border-[#E2E8F0] flex items-center justify-end">
               <button
                 type="button"
                 onClick={() => setSelectedAssessment(null)}
