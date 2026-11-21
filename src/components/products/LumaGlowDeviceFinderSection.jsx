@@ -12,6 +12,8 @@ export default function LumaGlowDeviceFinderSection({
   const { formatPrice } = useCurrency();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [visibleCount, setVisibleCount] = useState(4);
+  const [arrowTop, setArrowTop] = useState(null);
+  const firstCardFrameRef = useRef(null);
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
   const lastWheelTime = useRef(0);
@@ -61,6 +63,22 @@ export default function LumaGlowDeviceFinderSection({
   useEffect(() => {
     setCurrentIndex(0);
   }, [currentProductId]);
+
+  // Dynamically measure the Card Image Frame height so arrows are ALWAYS 100% vertically centered on the image frame
+  useEffect(() => {
+    const updateArrowPos = () => {
+      if (firstCardFrameRef.current) {
+        const height = firstCardFrameRef.current.offsetHeight;
+        if (height > 0) {
+          setArrowTop(height / 2);
+        }
+      }
+    };
+
+    updateArrowPos();
+    window.addEventListener('resize', updateArrowPos);
+    return () => window.removeEventListener('resize', updateArrowPos);
+  }, [displayProducts, visibleCount]);
 
   const handleNext = () => {
     if (safeIndex < maxIndex) {
@@ -118,7 +136,7 @@ export default function LumaGlowDeviceFinderSection({
       style={{ '--u': 'calc(100vw / 3840)' }}
       className="relative w-full bg-[#FFFFFF] text-[#000000] pt-16 sm:pt-20 md:pt-24 lg:pt-[calc(180*var(--u))] pb-20 sm:pb-24 md:pb-28 lg:pb-[calc(220*var(--u))] overflow-hidden font-['Manrope'] select-none"
     >
-      <div className="w-full max-w-[1720px] 2xl:max-w-none mx-auto px-4 sm:px-6 md:px-8 lg:px-10 2xl:px-[calc(200*var(--u))]">
+      <div className="w-full max-w-[1720px] 2xl:max-w-none mx-auto px-4 sm:px-6 md:px-8 lg:px-10 2xl:px-[calc(377*var(--u))]">
         
         {/* ==================== SECTION HEADER ==================== */}
         <div className="text-center flex flex-col items-center">
@@ -151,15 +169,20 @@ export default function LumaGlowDeviceFinderSection({
         </div>
 
         {/* ==================== CLEAN CAROUSEL: [ < ARROW ] [ 4-CARD VIEWPORT ] [ > ARROW ] ==================== */}
-        <div className="relative mt-8 sm:mt-12 lg:mt-16 2xl:mt-[calc(100*var(--u))] flex items-center justify-between w-full">
+        <div className="relative mt-8 sm:mt-12 lg:mt-16 2xl:mt-[calc(100*var(--u))] w-full">
           
-          {/* Previous Arrow Button (Left, clean placement outside cards) */}
+          {/* Previous Arrow Button (Left, vertically centered on Card Image Frame) */}
           <button
             type="button"
             onClick={handlePrev}
             disabled={isAtStart}
             aria-label="Previous products"
-            className={`shrink-0 w-[28px] sm:w-[36px] md:w-[44px] 2xl:w-[calc(50*var(--u))] h-[50px] sm:h-[64px] md:h-[76px] 2xl:h-[calc(92*var(--u))] flex items-center justify-center transition-all duration-200 z-20 ${
+            style={{
+              top: arrowTop ? `${arrowTop}px` : undefined,
+            }}
+            className={`absolute left-0 -translate-y-1/2 w-[28px] sm:w-[36px] md:w-[44px] 2xl:w-[calc(50*var(--u))] h-[50px] sm:h-[64px] md:h-[76px] 2xl:h-[calc(92*var(--u))] flex items-center justify-center transition-all duration-200 z-20 ${
+              arrowTop === null ? 'top-[35%] 2xl:top-[calc(371*var(--u))]' : ''
+            } ${
               isAtStart
                 ? 'opacity-20 cursor-not-allowed pointer-events-none'
                 : 'opacity-85 hover:opacity-100 hover:scale-110 drop-shadow cursor-pointer'
@@ -172,9 +195,9 @@ export default function LumaGlowDeviceFinderSection({
             />
           </button>
 
-          {/* Masked Viewport Window: overflow-hidden ensures NO half-cut cards ever peek on left or right */}
+          {/* Masked Viewport Window: padding gives room for arrows so cards never overlap them */}
           <div
-            className="w-full overflow-hidden mx-1.5 sm:mx-3 md:mx-4 lg:mx-6 2xl:mx-[calc(50*var(--u))]"
+            className="w-full overflow-hidden px-8 sm:px-11 md:px-12 lg:px-14 2xl:px-[calc(142*var(--u))]"
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
             onWheel={handleWheel}
@@ -186,7 +209,7 @@ export default function LumaGlowDeviceFinderSection({
                 transform: `translateX(-${safeIndex * (100 / visibleCount)}%)`,
               }}
             >
-              {displayProducts.map((product) => (
+              {displayProducts.map((product, index) => (
                 <div
                   key={product.id}
                   style={{
@@ -196,23 +219,28 @@ export default function LumaGlowDeviceFinderSection({
                 >
                   {/* Card Image Frame (Rectangle 23: 579x741 at 3840w, radius 53px, fill #F3F3F3) */}
                   <div
+                    ref={index === 0 ? firstCardFrameRef : null}
                     onClick={() => {
                       if (onNavigateProduct) onNavigateProduct(product.id || product.slug);
                     }}
-                    className={`relative w-full aspect-[579/741] rounded-[18px] sm:rounded-[24px] lg:rounded-[30px] 2xl:rounded-[calc(53*var(--u))] bg-[#F3F3F3] flex items-center justify-center overflow-hidden p-5 sm:p-6 2xl:p-0 group ${
+                    className={`relative w-full aspect-[579/741] rounded-[18px] sm:rounded-[24px] lg:rounded-[30px] 2xl:rounded-[calc(53*var(--u))] bg-[#F3F3F3] flex items-center justify-center overflow-hidden p-5 sm:p-6 lg:p-7 2xl:p-[calc(36*var(--u))] group shadow-xs ${
                       onNavigateProduct ? 'cursor-pointer' : ''
                     }`}
                   >
                     <img
                       src={product.image}
                       alt={product.eyebrow}
-                      style={{
-                        '--pw': `${product.imgW || 280}`,
-                        '--ph': `${product.imgH || 500}`,
-                        '--pl': `${product.imgLeft || 140}`,
-                        '--pt': `${product.imgTop || 120}`,
-                      }}
-                      className="max-h-[82%] w-auto object-contain 2xl:max-h-none 2xl:absolute 2xl:left-[calc(var(--pl)*var(--u))] 2xl:top-[calc(var(--pt)*var(--u))] 2xl:w-[calc(var(--pw)*var(--u))] 2xl:h-[calc(var(--ph)*var(--u))] select-none transition-transform duration-300 group-hover:scale-[1.04]"
+                      className={`w-auto object-contain select-none transition-transform duration-300 group-hover:scale-[1.04] ${
+                        product.id === 'luma-glow'
+                          ? 'max-w-[84%] max-h-[62%]'
+                          : product.id === 'luma-nova'
+                          ? 'max-h-[66%] max-w-[68%]'
+                          : product.id === 'luma-go'
+                          ? 'max-h-[72%] max-w-[70%]'
+                          : product.id === 'luma-surge'
+                          ? 'max-h-[80%] max-w-[72%]'
+                          : 'max-h-[85%] max-w-[75%]'
+                      }`}
                       draggable={false}
                     />
                   </div>
@@ -259,13 +287,18 @@ export default function LumaGlowDeviceFinderSection({
             </div>
           </div>
 
-          {/* Next Arrow Button (Right, clean placement outside cards) */}
+          {/* Next Arrow Button (Right, vertically centered on Card Image Frame) */}
           <button
             type="button"
             onClick={handleNext}
             disabled={isAtEnd}
             aria-label="Next products"
-            className={`shrink-0 w-[28px] sm:w-[36px] md:w-[44px] 2xl:w-[calc(50*var(--u))] h-[50px] sm:h-[64px] md:h-[76px] 2xl:h-[calc(92*var(--u))] flex items-center justify-center transition-all duration-200 z-20 ${
+            style={{
+              top: arrowTop ? `${arrowTop}px` : undefined,
+            }}
+            className={`absolute right-0 -translate-y-1/2 w-[28px] sm:w-[36px] md:w-[44px] 2xl:w-[calc(50*var(--u))] h-[50px] sm:h-[64px] md:h-[76px] 2xl:h-[calc(92*var(--u))] flex items-center justify-center transition-all duration-200 z-20 ${
+              arrowTop === null ? 'top-[35%] 2xl:top-[calc(371*var(--u))]' : ''
+            } ${
               isAtEnd
                 ? 'opacity-20 cursor-not-allowed pointer-events-none'
                 : 'opacity-85 hover:opacity-100 hover:scale-110 drop-shadow cursor-pointer'
