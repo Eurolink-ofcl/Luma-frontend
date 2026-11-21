@@ -137,9 +137,10 @@ export default function App() {
       setIsCheckoutOpen(true);
     }, 'Please sign in or create an account to proceed to checkout.');
   };
-  const [routeState, setRouteState] = useState(() =>
-    parseRoute(window.location.pathname)
-  );
+  const [routeState, setRouteState] = useState(() => ({
+    ...parseRoute(window.location.pathname),
+    hash: typeof window !== 'undefined' ? window.location.hash || '' : '',
+  }));
 
   const currentPage = routeState.page;
   const currentProductSlug = routeState.slug || 'luma-nova';
@@ -174,10 +175,17 @@ export default function App() {
 
   useEffect(() => {
     const handlePopState = () => {
-      setRouteState(parseRoute(window.location.pathname));
+      setRouteState({
+        ...parseRoute(window.location.pathname),
+        hash: window.location.hash || '',
+      });
     };
     window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
+    window.addEventListener('hashchange', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('hashchange', handlePopState);
+    };
   }, []);
 
   const handleNavigate = (page, hash = '') => {
@@ -224,16 +232,27 @@ export default function App() {
       hash = '';
     }
 
-    if (window.location.pathname !== targetPath || window.location.hash !== hash) {
-      window.history.pushState({}, '', `${targetPath}${hash}`);
-    }
-    setRouteState(newRoute);
+    const normalizedHash = hash ? (hash.startsWith('#') ? hash : `#${hash}`) : '';
 
-    if (hash) {
+    if (window.location.pathname !== targetPath || window.location.hash !== normalizedHash) {
+      window.history.pushState({}, '', `${targetPath}${normalizedHash}`);
+    }
+    setRouteState({ ...newRoute, hash: normalizedHash });
+
+    // Ensure components listening to hashchange are triggered immediately
+    try {
+      window.dispatchEvent(new Event('hashchange'));
+    } catch {
+      // ignore
+    }
+
+    if (normalizedHash) {
       setTimeout(() => {
-        const el = document.querySelector(hash);
+        const el = document.querySelector(normalizedHash);
         if (el) {
           el.scrollIntoView({ behavior: 'smooth' });
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         }
       }, 60);
     } else {
@@ -299,8 +318,9 @@ export default function App() {
           onUpdateCustomer={handleCustomerLogin}
           onLogout={handleCustomerLogout}
           onNavigate={handleNavigate}
-          onOpenLoginModal={() => setIsCustomerModalOpen(true)}
+          onOpenLoginModal={() => openAuthModal('Please sign in or register to access your account.')}
           onOpenCheckout={handleOpenCheckout}
+          routeHash={routeState.hash || (typeof window !== 'undefined' ? window.location.hash : '')}
         />
       ) : currentPage === 'community' ? (
         <CommunityPage onNavigateHome={(hash = '') => handleNavigate('home', hash)} />

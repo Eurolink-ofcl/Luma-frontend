@@ -733,6 +733,11 @@ export default function CustomersManager() {
                             <div className="text-[15px] font-extrabold text-gray-900">
                               {formatPrice(ord.totalAmount)} AED
                             </div>
+                            {ord.coupon?.code && (
+                              <div className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 mt-0.5">
+                                🏷️ {ord.coupon.code} (-{formatPrice(ord.coupon.discountAmount || 0)})
+                              </div>
+                            )}
                             <div className="text-[11px] text-gray-400 mt-0.5">
                               {ord.paymentMethod || 'Credit Card'}
                             </div>

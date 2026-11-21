@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { API_BASE_URL, resolveImageUrl } from '../../config/api';
 
 // Exact 8 Curved Position coordinates on 3840x1606 canvas (PSD: bbox y=3091..4697)

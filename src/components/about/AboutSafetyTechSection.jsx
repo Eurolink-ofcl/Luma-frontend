@@ -127,7 +127,7 @@ export default function AboutSafetyTechSection({ data }) {
               </h3>
 
               {/* Body: 30px at 3840w, Manrope-Regular, leading 40px, #FFFFFF */}
-              <p className="mt-2.5 sm:mt-3 lg:mt-[calc(26*var(--u))] text-[12.5px] sm:text-[14px] lg:text-[calc(30*var(--u))] font-normal tracking-[0.01em] text-[#FFFFFF] leading-relaxed lg:leading-[calc(40*var(--u))] max-w-[calc(680*var(--u))]">
+              <p className="mt-2.5 sm:mt-3 lg:mt-[calc(26*var(--u))] text-[13px] sm:text-[14px] lg:text-[calc(30*var(--u))] font-normal tracking-[0.01em] text-[#FFFFFF] leading-relaxed lg:leading-[calc(40*var(--u))] w-full max-w-none lg:max-w-[calc(680*var(--u))]">
                 {card.body}
               </p>
             </div>

@@ -20,6 +20,11 @@ export default function Navbar({
   const productsTimerRef = useRef(null);
   const productsMenuRef = useRef(null);
 
+  // Customer Account Menu State
+  const [isCustomerMenuOpen, setIsCustomerMenuOpen] = useState(false);
+  const customerTimerRef = useRef(null);
+  const customerMenuRef = useRef(null);
+
   const handleProductsEnter = () => {
     if (productsTimerRef.current) clearTimeout(productsTimerRef.current);
     setIsProductsDropdownOpen(true);
@@ -31,16 +36,31 @@ export default function Navbar({
     }, 220);
   };
 
-  // Close dropdown on click outside or Escape key
+  const handleCustomerEnter = () => {
+    if (customerTimerRef.current) clearTimeout(customerTimerRef.current);
+    setIsCustomerMenuOpen(true);
+  };
+
+  const handleCustomerLeave = () => {
+    customerTimerRef.current = setTimeout(() => {
+      setIsCustomerMenuOpen(false);
+    }, 250);
+  };
+
+  // Close dropdowns on click outside or Escape key
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (productsMenuRef.current && !productsMenuRef.current.contains(e.target)) {
         setIsProductsDropdownOpen(false);
       }
+      if (customerMenuRef.current && !customerMenuRef.current.contains(e.target)) {
+        setIsCustomerMenuOpen(false);
+      }
     };
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
         setIsProductsDropdownOpen(false);
+        setIsCustomerMenuOpen(false);
       }
     };
     document.addEventListener('click', handleClickOutside);
@@ -358,13 +378,26 @@ export default function Navbar({
 
           {/* Customer Account / Sign In Widget */}
           {customerUser ? (
-            <div className="relative group hidden sm:inline-flex items-center">
+            <div
+              ref={customerMenuRef}
+              onMouseEnter={handleCustomerEnter}
+              onMouseLeave={handleCustomerLeave}
+              className="relative hidden sm:inline-flex items-center"
+            >
               <button
                 type="button"
-                onClick={() => onOpenCustomerAccount && onOpenCustomerAccount('profile')}
-                className="flex items-center gap-2 py-1 px-2.5 sm:px-3 rounded-full bg-white/10 hover:bg-white/15 border border-white/20 text-white transition-all cursor-pointer hover:border-[#ED2024]/50"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsCustomerMenuOpen(!isCustomerMenuOpen);
+                }}
+                className={`flex items-center gap-2 py-1 px-2.5 sm:px-3 rounded-full border text-white transition-all cursor-pointer ${
+                  isCustomerMenuOpen
+                    ? 'bg-white/20 border-[#ED2024]'
+                    : 'bg-white/10 hover:bg-white/15 border-white/20 hover:border-[#ED2024]/50'
+                }`}
                 aria-label="Customer Account Profile & Orders"
-                title={`Signed in as ${customerUser.name} - Click to manage profile & orders`}
+                aria-expanded={isCustomerMenuOpen}
+                title={`Signed in as ${customerUser.name} - Click to open menu`}
               >
                 <div className="w-5 h-5 lg:w-[calc(30*var(--u))] lg:h-[calc(30*var(--u))] rounded-full bg-[#ED2024] text-white text-[10px] lg:text-[calc(18*var(--u))] font-bold flex items-center justify-center shrink-0">
                   {customerUser.name ? customerUser.name.charAt(0).toUpperCase() : 'M'}
@@ -373,52 +406,85 @@ export default function Navbar({
                   {customerUser.name?.split(' ')[0] || 'Member'}
                 </span>
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                <svg
+                  className={`w-3 h-3 text-white/60 transition-transform duration-200 ${
+                    isCustomerMenuOpen ? 'rotate-180 text-white' : ''
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
+                </svg>
               </button>
 
-              {/* Hover / Click Dropdown Menu */}
-              <div className="absolute top-[calc(100%+10px)] right-0 min-w-[220px] bg-[#121214]/98 backdrop-blur-xl border border-white/10 rounded-xl p-2.5 shadow-2xl opacity-0 invisible pointer-events-none group-hover:opacity-100 group-hover:visible group-hover:pointer-events-auto transition-all duration-200 z-50">
-                <div className="px-3 py-2 border-b border-white/10 mb-1.5">
-                  <p className="text-xs font-bold text-white truncate">{customerUser.name}</p>
-                  <p className="text-[11px] text-white/50 truncate mt-0.5">{customerUser.email}</p>
+              {/* Dropdown Menu with Seamless Invisible Bridge (Eliminates the Hover Gap) */}
+              <div
+                className={`absolute top-full right-0 pt-2 transition-all duration-200 z-50 ${
+                  isCustomerMenuOpen
+                    ? 'opacity-100 visible pointer-events-auto transform translate-y-0'
+                    : 'opacity-0 invisible pointer-events-none transform -translate-y-1'
+                }`}
+              >
+                {/* Invisible hover bridge to eliminate gap */}
+                <div className="absolute -top-3 left-0 right-0 h-3 bg-transparent" />
+
+                <div className="min-w-[230px] bg-[#121214]/98 backdrop-blur-xl border border-white/10 rounded-xl p-2.5 shadow-2xl">
+                  <div className="px-3 py-2 border-b border-white/10 mb-1.5">
+                    <p className="text-xs font-bold text-white truncate">{customerUser.name}</p>
+                    <p className="text-[11px] text-white/50 truncate mt-0.5">{customerUser.email}</p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsCustomerMenuOpen(false);
+                      onOpenCustomerAccount && onOpenCustomerAccount('profile');
+                    }}
+                    className="w-full text-left px-3 py-2 text-xs text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors flex items-center justify-between cursor-pointer"
+                  >
+                    <span>Update Profile</span>
+                    <span className="text-[10px] text-white/40">&rarr;</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsCustomerMenuOpen(false);
+                      onOpenCustomerAccount && onOpenCustomerAccount('cart');
+                    }}
+                    className="w-full text-left px-3 py-2 text-xs text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors flex items-center justify-between cursor-pointer"
+                  >
+                    <span>Add to Cart Products</span>
+                    <span className="text-[10px] text-white/40">&rarr;</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsCustomerMenuOpen(false);
+                      onOpenCustomerAccount && onOpenCustomerAccount('orders');
+                    }}
+                    className="w-full text-left px-3 py-2 text-xs text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors flex items-center justify-between cursor-pointer"
+                  >
+                    <span>Ordered Products &amp; Status</span>
+                    <span className="text-[10px] text-white/40">&rarr;</span>
+                  </button>
+
+                  <div className="h-[1px] bg-white/10 my-1.5" />
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setIsCustomerMenuOpen(false);
+                      onCustomerLogout && onCustomerLogout();
+                    }}
+                    className="w-full text-left px-3 py-2 text-xs font-medium text-red-400 hover:text-white hover:bg-[#ED2024] rounded-lg transition-all cursor-pointer flex items-center justify-between"
+                  >
+                    <span>Sign Out</span>
+                    <span>&rarr;</span>
+                  </button>
                 </div>
-
-                <button
-                  type="button"
-                  onClick={() => onOpenCustomerAccount && onOpenCustomerAccount('profile')}
-                  className="w-full text-left px-3 py-2 text-xs text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors flex items-center justify-between cursor-pointer"
-                >
-                  <span>Update Profile</span>
-                  <span className="text-[10px] text-white/40">&rarr;</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => onOpenCustomerAccount && onOpenCustomerAccount('cart')}
-                  className="w-full text-left px-3 py-2 text-xs text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors flex items-center justify-between cursor-pointer"
-                >
-                  <span>Add to Cart Products</span>
-                  <span className="text-[10px] text-white/40">&rarr;</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => onOpenCustomerAccount && onOpenCustomerAccount('orders')}
-                  className="w-full text-left px-3 py-2 text-xs text-white/80 hover:text-white hover:bg-white/10 rounded-lg transition-colors flex items-center justify-between cursor-pointer"
-                >
-                  <span>Ordered Products &amp; Status</span>
-                  <span className="text-[10px] text-white/40">&rarr;</span>
-                </button>
-
-                <div className="h-[1px] bg-white/10 my-1.5" />
-
-                <button
-                  type="button"
-                  onClick={onCustomerLogout}
-                  className="w-full text-left px-3 py-2 text-xs font-medium text-red-400 hover:text-white hover:bg-[#ED2024] rounded-lg transition-all cursor-pointer flex items-center justify-between"
-                >
-                  <span>Sign Out</span>
-                  <span>&rarr;</span>
-                </button>
               </div>
             </div>
           ) : (

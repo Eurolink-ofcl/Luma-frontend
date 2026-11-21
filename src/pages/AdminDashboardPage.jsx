@@ -7,6 +7,7 @@ import CustomersManager from '../components/admin/CustomersManager';
 import OrdersManager from '../components/admin/OrdersManager';
 import EnquiriesManager from '../components/admin/EnquiriesManager';
 import QuizAssessmentsManager from '../components/admin/QuizAssessmentsManager';
+import CouponsManager from '../components/admin/CouponsManager';
 
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ||
@@ -24,17 +25,19 @@ export default function AdminDashboardPage({ onNavigateHome, onNavigatePage, onL
   const [customerCount, setCustomerCount] = useState(null);
   const [enquiryCount, setEnquiryCount] = useState(null);
   const [quizCount, setQuizCount] = useState(null);
+  const [couponCount, setCouponCount] = useState(null);
 
   const fetchDashboardData = async () => {
     setLoading(true);
     setError(null);
 
     try {
-      const [dashRes, custRes, enqRes, quizRes] = await Promise.all([
+      const [dashRes, custRes, enqRes, quizRes, couponRes] = await Promise.all([
         fetch(`${API_BASE_URL}/admin/dashboard`),
         fetch(`${API_BASE_URL}/admin/customers`).catch(() => null),
         fetch(`${API_BASE_URL}/admin/enquiries`).catch(() => null),
         fetch(`${API_BASE_URL}/admin/quiz-assessments`).catch(() => null),
+        fetch(`${API_BASE_URL}/admin/coupons`).catch(() => null),
       ]);
 
       const data = await dashRes.json();
@@ -54,6 +57,13 @@ export default function AdminDashboardPage({ onNavigateHome, onNavigatePage, onL
         const quizData = await quizRes.json();
         if (quizData && quizData.stats) {
           setQuizCount(quizData.stats.newCount > 0 ? quizData.stats.newCount : quizData.stats.total);
+        }
+      }
+      if (couponRes && couponRes.ok) {
+        const couponData = await couponRes.json();
+        if (couponData && couponData.coupons) {
+          const activeCoupons = couponData.coupons.filter((c) => c.isActive);
+          setCouponCount(activeCoupons.length);
         }
       }
 
@@ -123,6 +133,16 @@ export default function AdminDashboardPage({ onNavigateHome, onNavigatePage, onL
       icon: (
         <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+        </svg>
+      ),
+    },
+    {
+      id: 'coupons',
+      label: 'Coupons',
+      badge: isDbConnected && couponCount !== null && couponCount > 0 ? couponCount : null,
+      icon: (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M15 5v2m0 4v2m0 4v2M5 5a2 2 0 00-2 2v3a2 2 0 110 4v3a2 2 0 002 2h14a2 2 0 002-2v-3a2 2 0 110-4V7a2 2 0 00-2-2H5z" />
         </svg>
       ),
     },
@@ -553,6 +573,11 @@ export default function AdminDashboardPage({ onNavigateHome, onNavigatePage, onL
             <OrdersManager />
           )}
 
+          {/* ==================== ACTIVE VIEW: COUPONS MANAGEMENT ==================== */}
+          {activeTab === 'coupons' && (
+            <CouponsManager />
+          )}
+
           {/* ==================== ACTIVE VIEW: ENQUIRIES MANAGEMENT ==================== */}
           {activeTab === 'enquiries' && (
             <EnquiriesManager onUnreadCountChange={setEnquiryCount} />
@@ -910,6 +935,8 @@ export default function AdminDashboardPage({ onNavigateHome, onNavigatePage, onL
             activeTab !== 'products' &&
             activeTab !== 'customers' &&
             activeTab !== 'orders' &&
+            activeTab !== 'coupons' &&
+            activeTab !== 'quiz-assessments' &&
             activeTab !== 'enquiries' && (
             <div className="py-8">
               <div className="flex items-center justify-between pb-6 border-b border-white/[0.06] mb-8">

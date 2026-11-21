@@ -14,18 +14,27 @@ export default function CustomerAccountPage({
   onNavigate,
   onOpenLoginModal,
   onOpenCheckout,
+  routeHash = '',
 }) {
   const { formatPrice } = useCurrency();
 
   // Determine active tab based on hash or default to 'profile'
-  const getInitialTab = () => {
-    const hash = window.location.hash.toLowerCase();
-    if (hash.includes('cart') || hash.includes('bag')) return 'cart';
-    if (hash.includes('order')) return 'orders';
+  const resolveTabFromHash = (hashString = '') => {
+    const raw = (hashString || (typeof window !== 'undefined' ? window.location.hash : '') || '').toLowerCase();
+    if (raw.includes('cart') || raw.includes('bag')) return 'cart';
+    if (raw.includes('order')) return 'orders';
+    if (raw.includes('profile')) return 'profile';
     return 'profile';
   };
 
-  const [activeTab, setActiveTab] = useState(getInitialTab);
+  const [activeTab, setActiveTab] = useState(() => resolveTabFromHash(routeHash));
+
+  // Sync active tab whenever routeHash prop changes
+  useEffect(() => {
+    if (routeHash) {
+      setActiveTab(resolveTabFromHash(routeHash));
+    }
+  }, [routeHash]);
 
   // Editable profile fields
   const [name, setName] = useState(customerUser?.name || '');
@@ -66,7 +75,7 @@ export default function CustomerAccountPage({
   // Update active tab if window hash changes
   useEffect(() => {
     const handleHashChange = () => {
-      setActiveTab(getInitialTab());
+      setActiveTab(resolveTabFromHash(window.location.hash));
     };
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
@@ -287,7 +296,16 @@ export default function CustomerAccountPage({
 
   const handleTabSwitch = (tab) => {
     setActiveTab(tab);
-    window.location.hash = tab;
+    if (onNavigate) {
+      onNavigate('account', `#${tab}`);
+    } else {
+      window.history.replaceState({}, '', `/account#${tab}`);
+      try {
+        window.dispatchEvent(new Event('hashchange'));
+      } catch {
+        // ignore
+      }
+    }
     setSuccessMessage('');
     setErrorMessage('');
   };
@@ -503,7 +521,7 @@ export default function CustomerAccountPage({
                 {/* TAB 1: UPDATE PROFILE DETAILS                             */}
                 {/* ========================================================= */}
                 {activeTab === 'profile' && (
-                  <div className="bg-white border border-gray-200/90 rounded-2xl p-6 sm:p-8 space-y-6 shadow-sm">
+                  <div id="profile" className="bg-white border border-gray-200/90 rounded-2xl p-6 sm:p-8 space-y-6 shadow-sm">
                     <div className="flex items-center justify-between pb-4 border-b border-gray-100">
                       <div>
                         <h2 className="text-lg font-bold text-gray-900">Profile &amp; Delivery Information</h2>
@@ -623,7 +641,7 @@ export default function CustomerAccountPage({
                 {/* TAB 2: ADD TO CART PRODUCTS                               */}
                 {/* ========================================================= */}
                 {activeTab === 'cart' && (
-                  <div className="bg-white border border-gray-200/90 rounded-2xl p-6 sm:p-8 space-y-6 shadow-sm">
+                  <div id="cart" className="bg-white border border-gray-200/90 rounded-2xl p-6 sm:p-8 space-y-6 shadow-sm">
                     <div className="flex items-center justify-between pb-4 border-b border-gray-100">
                       <div>
                         <h2 className="text-lg font-bold text-gray-900">Your Shopping Bag ({cartItems.length})</h2>
@@ -735,7 +753,7 @@ export default function CustomerAccountPage({
                 {/* TAB 3: ORDERED PRODUCTS & REAL STATUS                     */}
                 {/* ========================================================= */}
                 {activeTab === 'orders' && (
-                  <div className="bg-white border border-gray-200/90 rounded-2xl p-6 sm:p-8 space-y-6 shadow-sm">
+                  <div id="orders" className="bg-white border border-gray-200/90 rounded-2xl p-6 sm:p-8 space-y-6 shadow-sm">
                     <div className="flex items-center justify-between pb-4 border-b border-gray-100">
                       <div>
                         <h2 className="text-lg font-bold text-gray-900">Order History &amp; Tracking ({orders.length})</h2>
@@ -796,6 +814,11 @@ export default function CustomerAccountPage({
                                   <span className="text-sm font-bold text-gray-900 block mt-1.5">
                                     Total: {formatPrice(order.totalAmount)} {order.currency || 'AED'}
                                   </span>
+                                  {order.coupon?.code && (
+                                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200 mt-1">
+                                      🏷️ Coupon {order.coupon.code}: -{formatPrice(order.coupon.discountAmount || 0)} AED
+                                    </span>
+                                  )}
                                 </div>
                               </div>
 
@@ -984,7 +1007,7 @@ export default function CustomerAccountPage({
                               {/* ONLY ONE DELIVERED ORDER REVIEW SECTION */}
                               {order.status === 'Delivered' && !isReturned && (
                                 <div className="pt-3 border-t border-gray-200/70">
-                                  {order.reviewSubmitted || order.review?.message ? (
+                                  {Boolean(order.reviewSubmitted && order.review?.message?.trim()) ? (
                                     <div className="p-3.5 rounded-xl bg-rose-50/60 border border-rose-200 text-xs space-y-2">
                                       <div className="flex items-center justify-between">
                                         <span className="font-bold text-gray-900 flex items-center gap-1.5">

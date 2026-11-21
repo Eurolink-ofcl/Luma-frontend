@@ -692,6 +692,11 @@ export default function OrdersManager() {
                         <div className="font-black text-[15px] text-gray-900">
                           {formatPrice(ord.totalAmount)} {ord.currency || 'AED'}
                         </div>
+                        {ord.coupon?.code && (
+                          <div className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 mt-0.5">
+                            🏷️ {ord.coupon.code} (-{formatPrice(ord.coupon.discountAmount || 0)})
+                          </div>
+                        )}
                         <div className="text-[11px] text-gray-500">
                           {ord.paymentMethod || 'Credit Card'}
                         </div>
@@ -741,13 +746,13 @@ export default function OrdersManager() {
                             </span>
                           )}
 
-                          {/* Delivered Review Badge */}
-                          {ord.reviewSubmitted && ord.review?.status === 'pending' && (
+                          {/* Delivered Review Badge - only if delivered and customer genuinely submitted review */}
+                          {ord.status === 'Delivered' && ord.reviewSubmitted && ord.review?.message?.trim() && ord.review?.status === 'pending' && (
                             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-rose-100 text-rose-800 border border-rose-300 animate-pulse mt-0.5">
                               ★ Review Pending
                             </span>
                           )}
-                          {ord.reviewSubmitted && ord.review?.status === 'approved' && (
+                          {ord.status === 'Delivered' && ord.reviewSubmitted && ord.review?.message?.trim() && ord.review?.status === 'approved' && (
                             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 mt-0.5">
                               ✓ Review Live
                             </span>
@@ -1225,6 +1230,29 @@ export default function OrdersManager() {
                     <div className="p-4 text-center text-gray-400 text-[12px]">No item details found</div>
                   )}
 
+                  {/* Receipt Breakdown */}
+                  {selectedOrder.coupon?.code && (
+                    <div className="p-3.5 bg-gray-50/70 border-t border-gray-200 space-y-1 text-xs">
+                      {selectedOrder.subtotal > 0 && (
+                        <div className="flex items-center justify-between text-gray-500">
+                          <span>Items Subtotal:</span>
+                          <span className="font-semibold text-gray-700">
+                            {formatPrice(selectedOrder.subtotal)} {selectedOrder.currency || 'AED'}
+                          </span>
+                        </div>
+                      )}
+                      <div className="flex items-center justify-between text-emerald-700 font-semibold">
+                        <span className="flex items-center gap-1.5">
+                          <span>🏷️</span>
+                          <span>Coupon ({selectedOrder.coupon.code}):</span>
+                        </span>
+                        <span className="font-bold">
+                          - {formatPrice(selectedOrder.coupon.discountAmount || 0)} {selectedOrder.currency || 'AED'}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
                   {/* Receipt Subtotal */}
                   <div className="p-4 bg-gray-50 flex items-center justify-between text-[14px] font-black border-t border-gray-200">
                     <span className="text-gray-600">Grand Total:</span>
@@ -1235,8 +1263,8 @@ export default function OrdersManager() {
                 </div>
               </div>
 
-              {/* Customer Delivered Product Review Section */}
-              {(selectedOrder.reviewSubmitted || selectedOrder.review) && (
+              {/* Customer Delivered Product Review Section - ONLY display if order was Delivered and customer actually submitted a review */}
+              {Boolean(selectedOrder.status === 'Delivered' && selectedOrder.reviewSubmitted && selectedOrder.review?.message?.trim()) && (
                 <div className="p-5 rounded-[16px] border bg-rose-50/70 border-rose-200 text-gray-900 space-y-3 shadow-xs">
                   <div className="flex items-center justify-between gap-3">
                     <div className="flex items-center gap-2">
@@ -1264,7 +1292,7 @@ export default function OrdersManager() {
                         <span className="font-bold text-gray-900">{selectedOrder.customer?.name || 'Customer'}</span>
                         <span className="text-gray-400">•</span>
                         <span className="text-[11px] font-mono font-bold text-gray-600 bg-gray-100 px-2 py-0.5 rounded">
-                          {selectedOrder.review?.productName || 'LUMA DEVICE'} USER
+                          {selectedOrder.review?.productName || selectedOrder.items?.[0]?.name || 'LUMA DEVICE'} USER
                         </span>
                       </div>
                       <div className="flex items-center gap-1 text-[#ED2024] text-sm">
@@ -1276,7 +1304,7 @@ export default function OrdersManager() {
                     </div>
 
                     <div className="bg-gray-50 p-3 rounded-lg border border-gray-200 italic text-gray-800 text-[13px] leading-relaxed">
-                      "{selectedOrder.review?.message || 'Great experience!'}"
+                      "{selectedOrder.review?.message}"
                     </div>
 
                     <div className="text-[11px] text-gray-400">
