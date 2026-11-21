@@ -1,8 +1,15 @@
 import React, { useState } from 'react';
 
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
+    ? 'https://astro.bloodme.in/luma-api/api'
+    : 'http://localhost:5000/api');
+
 export default function Footer({ onOpenCart, onNavigate, data }) {
   const [email, setEmail] = useState('');
-  const [subscribed, setSubscribed] = useState(false);
+  const [subStatus, setSubStatus] = useState('idle'); // 'idle' | 'loading' | 'success' | 'existing' | 'error'
+  const [feedbackMsg, setFeedbackMsg] = useState('');
 
   const newsletterHeading = data?.newsletterHeading || "LET'S CONNECT";
   const newsletterSubtitle = data?.newsletterSubtitle || 'Stay updated with upcoming LUMA products and news or simply get in touch.';
@@ -17,13 +24,44 @@ export default function Footer({ onOpenCart, onNavigate, data }) {
   const socialInstagram = data?.socialInstagram || 'https://instagram.com/lumaredlight';
   const socialTiktok = data?.socialTiktok || 'https://tiktok.com/@lumaredlight';
 
-  const handleSubscribe = (e) => {
+  const handleSubscribe = async (e) => {
     e.preventDefault();
-    if (email.trim()) {
-      setSubscribed(true);
-      setTimeout(() => setSubscribed(false), 4000);
-      setEmail('');
+    if (!email.trim() || subStatus === 'loading') return;
+
+    setSubStatus('loading');
+    setFeedbackMsg('');
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/newsletter/subscribe`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim(), source: 'footer' }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        if (data.isExisting) {
+          setSubStatus('existing');
+          setFeedbackMsg(data.message || "You're already subscribed to our newsletter!");
+        } else {
+          setSubStatus('success');
+          setFeedbackMsg(data.message || 'Thank you for subscribing to LUMA monthly newsletter!');
+          setEmail('');
+        }
+      } else {
+        setSubStatus('error');
+        setFeedbackMsg(data.message || 'Failed to subscribe. Please try again.');
+      }
+    } catch (err) {
+      setSubStatus('error');
+      setFeedbackMsg('Network error. Please try again later.');
     }
+
+    setTimeout(() => {
+      setSubStatus('idle');
+      setFeedbackMsg('');
+    }, 5000);
   };
 
   return (
@@ -62,11 +100,41 @@ export default function Footer({ onOpenCart, onNavigate, data }) {
                 />
                 <button
                   type="submit"
-                  className="w-[96px] sm:w-[110px] lg:w-[calc(267*var(--u))] h-full bg-[#0A0A0A] hover:bg-[#ED2024] text-[#FFFFFF] text-[13px] sm:text-[14px] lg:text-[calc(38*var(--u))] font-semibold uppercase tracking-normal rounded-[6px] lg:rounded-[calc(15*var(--u))] transition-colors cursor-pointer shrink-0 flex items-center justify-center"
+                  disabled={subStatus === 'loading'}
+                  className={`w-[96px] sm:w-[110px] lg:w-[calc(267*var(--u))] h-full text-[#FFFFFF] text-[12px] sm:text-[13px] lg:text-[calc(34*var(--u))] font-semibold uppercase tracking-normal rounded-[6px] lg:rounded-[calc(15*var(--u))] transition-colors cursor-pointer shrink-0 flex items-center justify-center ${
+                    subStatus === 'success'
+                      ? 'bg-[#16a34a] hover:bg-[#15803d]'
+                      : subStatus === 'existing'
+                      ? 'bg-[#d97706] hover:bg-[#b45309]'
+                      : subStatus === 'error'
+                      ? 'bg-[#ED2024]'
+                      : 'bg-[#0A0A0A] hover:bg-[#ED2024]'
+                  } ${subStatus === 'loading' ? 'opacity-75 cursor-wait' : ''}`}
                 >
-                  {subscribed ? 'SENT ✓' : 'SEND'}
+                  {subStatus === 'loading'
+                    ? 'SENDING...'
+                    : subStatus === 'success'
+                    ? 'SENT ✓'
+                    : subStatus === 'existing'
+                    ? 'SUBSCRIBED ✓'
+                    : 'SEND'}
                 </button>
               </div>
+
+              {/* Feedback Message */}
+              {feedbackMsg && (
+                <p
+                  className={`mt-2 text-[11px] sm:text-[12px] lg:text-[calc(28*var(--u))] font-medium tracking-normal ${
+                    subStatus === 'success'
+                      ? 'text-[#16a34a]'
+                      : subStatus === 'existing'
+                      ? 'text-[#d97706]'
+                      : 'text-[#ED2024]'
+                  }`}
+                >
+                  {feedbackMsg}
+                </p>
+              )}
             </form>
           </div>
         </div>

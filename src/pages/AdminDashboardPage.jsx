@@ -8,6 +8,7 @@ import OrdersManager from '../components/admin/OrdersManager';
 import EnquiriesManager from '../components/admin/EnquiriesManager';
 import QuizAssessmentsManager from '../components/admin/QuizAssessmentsManager';
 import CouponsManager from '../components/admin/CouponsManager';
+import NewsletterManager from '../components/admin/NewsletterManager';
 
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ||
@@ -26,18 +27,20 @@ export default function AdminDashboardPage({ onNavigateHome, onNavigatePage, onL
   const [enquiryCount, setEnquiryCount] = useState(null);
   const [quizCount, setQuizCount] = useState(null);
   const [couponCount, setCouponCount] = useState(null);
+  const [subscriberCount, setSubscriberCount] = useState(null);
 
   const fetchDashboardData = async () => {
     setLoading(true);
     setError(null);
 
     try {
-      const [dashRes, custRes, enqRes, quizRes, couponRes] = await Promise.all([
+      const [dashRes, custRes, enqRes, quizRes, couponRes, newsRes] = await Promise.all([
         fetch(`${API_BASE_URL}/admin/dashboard`),
         fetch(`${API_BASE_URL}/admin/customers`).catch(() => null),
         fetch(`${API_BASE_URL}/admin/enquiries`).catch(() => null),
         fetch(`${API_BASE_URL}/admin/quiz-assessments`).catch(() => null),
         fetch(`${API_BASE_URL}/admin/coupons`).catch(() => null),
+        fetch(`${API_BASE_URL}/admin/newsletter/subscribers?limit=1`).catch(() => null),
       ]);
 
       const data = await dashRes.json();
@@ -64,6 +67,12 @@ export default function AdminDashboardPage({ onNavigateHome, onNavigatePage, onL
         if (couponData && couponData.coupons) {
           const activeCoupons = couponData.coupons.filter((c) => c.isActive);
           setCouponCount(activeCoupons.length);
+        }
+      }
+      if (newsRes && newsRes.ok) {
+        const newsData = await newsRes.json();
+        if (newsData && newsData.stats && typeof newsData.stats.active === 'number') {
+          setSubscriberCount(newsData.stats.active);
         }
       }
 
@@ -187,6 +196,16 @@ export default function AdminDashboardPage({ onNavigateHome, onNavigatePage, onL
       icon: (
         <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+        </svg>
+      ),
+    },
+    {
+      id: 'newsletter',
+      label: 'Newsletter',
+      badge: isDbConnected && subscriberCount !== null && subscriberCount > 0 ? subscriberCount : null,
+      icon: (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
         </svg>
       ),
     },
@@ -588,6 +607,11 @@ export default function AdminDashboardPage({ onNavigateHome, onNavigatePage, onL
             <QuizAssessmentsManager />
           )}
 
+          {/* ==================== ACTIVE VIEW: NEWSLETTER SUBSCRIBERS ==================== */}
+          {activeTab === 'newsletter' && (
+            <NewsletterManager onSubscribersCountChange={setSubscriberCount} />
+          )}
+
           {/* ==================== ACTIVE VIEW: DASHBOARD ==================== */}
           {activeTab === 'dashboard' && (
             <div>
@@ -937,7 +961,8 @@ export default function AdminDashboardPage({ onNavigateHome, onNavigatePage, onL
             activeTab !== 'orders' &&
             activeTab !== 'coupons' &&
             activeTab !== 'quiz-assessments' &&
-            activeTab !== 'enquiries' && (
+            activeTab !== 'enquiries' &&
+            activeTab !== 'newsletter' && (
             <div className="py-8">
               <div className="flex items-center justify-between pb-6 border-b border-white/[0.06] mb-8">
                 <div>
