@@ -139,7 +139,7 @@ export default function Navbar({
               <a
                 href="/"
                 onClick={(e) => handlePageNav(e, 'home')}
-                className={`relative py-2 lg:text-[calc(26*var(--u))] font-medium tracking-[0.05em] uppercase transition-colors group whitespace-nowrap ${
+                className={`relative py-2 font-['Manrope'] lg:text-[calc(26*var(--u))] font-medium tracking-[0.05em] uppercase transition-colors group whitespace-nowrap ${
                   currentPage === 'home' ? 'text-[#ED2024]' : 'text-[#FFFFFF] hover:text-white'
                 }`}
               >
@@ -156,7 +156,7 @@ export default function Navbar({
               <a
                 href="/about"
                 onClick={(e) => handlePageNav(e, 'about')}
-                className={`relative py-2 lg:text-[calc(26*var(--u))] font-medium tracking-[0.05em] uppercase transition-colors group whitespace-nowrap ${
+                className={`relative py-2 font-['Manrope'] lg:text-[calc(26*var(--u))] font-medium tracking-[0.05em] uppercase transition-colors group whitespace-nowrap ${
                   currentPage === 'about' ? 'text-[#ED2024]' : 'text-[#FFFFFF] hover:text-white'
                 }`}
               >
@@ -182,7 +182,7 @@ export default function Navbar({
                     e.preventDefault();
                     setIsProductsDropdownOpen((prev) => !prev);
                   }}
-                  className={`relative py-2 lg:text-[calc(26*var(--u))] font-medium tracking-[0.05em] uppercase transition-colors flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
+                  className={`relative py-2 font-['Manrope'] lg:text-[calc(26*var(--u))] font-medium tracking-[0.05em] uppercase transition-colors flex items-center gap-1.5 whitespace-nowrap cursor-pointer ${
                     currentPage === 'products' ||
                     currentPage === 'product-detail' ||
                     currentPage === 'luma-glow' ||
@@ -334,7 +334,7 @@ export default function Navbar({
               <a
                 href="/reviews"
                 onClick={(e) => handlePageNav(e, 'reviews')}
-                className={`relative py-2 lg:text-[calc(26*var(--u))] font-medium tracking-[0.05em] uppercase transition-colors group whitespace-nowrap ${
+                className={`relative py-2 font-['Manrope'] lg:text-[calc(26*var(--u))] font-medium tracking-[0.05em] uppercase transition-colors group whitespace-nowrap ${
                   currentPage === 'reviews' ? 'text-[#ED2024]' : 'text-[#FFFFFF] hover:text-white'
                 }`}
               >
@@ -351,7 +351,7 @@ export default function Navbar({
               <a
                 href="/community"
                 onClick={(e) => handlePageNav(e, 'community')}
-                className={`relative py-2 lg:text-[calc(26*var(--u))] font-medium tracking-[0.05em] uppercase transition-colors group whitespace-nowrap ${
+                className={`relative py-2 font-['Manrope'] lg:text-[calc(26*var(--u))] font-medium tracking-[0.05em] uppercase transition-colors group whitespace-nowrap ${
                   currentPage === 'community' ? 'text-[#ED2024]' : 'text-[#FFFFFF] hover:text-white'
                 }`}
               >
@@ -368,7 +368,7 @@ export default function Navbar({
               <a
                 href="/contact"
                 onClick={(e) => handlePageNav(e, 'contact')}
-                className={`relative py-2 lg:text-[calc(26*var(--u))] font-medium tracking-[0.05em] uppercase transition-colors group whitespace-nowrap ${
+                className={`relative py-2 font-['Manrope'] lg:text-[calc(26*var(--u))] font-medium tracking-[0.05em] uppercase transition-colors group whitespace-nowrap ${
                   currentPage === 'contact' ? 'text-[#ED2024]' : 'text-[#FFFFFF] hover:text-white'
                 }`}
               >
