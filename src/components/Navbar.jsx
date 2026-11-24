@@ -128,9 +128,9 @@ export default function Navbar({
           />
         </a>
 
-        {/* Center: Main Navigation Menu (Desktop) - PSD x=1267..2574 */}
+        {/* Center: Main Navigation Menu (Desktop) - Balanced equally between Logo and Actions */}
         <nav
-          className="hidden lg:flex items-center justify-center absolute left-1/2 -translate-x-1/2 pointer-events-auto"
+          className="hidden lg:flex items-center justify-center mx-auto pointer-events-auto"
           aria-label="Primary Navigation"
         >
           <ul className="luma-navbar-links flex items-center lg:gap-[calc(114*var(--u))]">
@@ -384,7 +384,7 @@ export default function Navbar({
         </nav>
 
         {/* Right: Actions (PSD x=2861..3630) */}
-        <div className="luma-navbar-actions flex items-center gap-3 sm:gap-4 lg:gap-[calc(48*var(--u))] shrink-0 ml-auto">
+        <div className="luma-navbar-actions flex items-center gap-3 sm:gap-4 lg:gap-[calc(48*var(--u))] shrink-0 ml-auto lg:ml-0">
           {/* CTA Button: GET YOUR PANEL (PSD Rectangle 44: w=266, h=63, font 26px Manrope-Medium, tracking 0) */}
           <a
             href="/#get-panel"
