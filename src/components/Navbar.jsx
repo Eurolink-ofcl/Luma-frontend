@@ -134,6 +134,24 @@ export default function Navbar({
           aria-label="Primary Navigation"
         >
           <ul className="luma-navbar-links flex items-center lg:gap-[calc(114*var(--u))]">
+            {/* HOME Navigation Link */}
+            <li>
+              <a
+                href="/"
+                onClick={(e) => handlePageNav(e, 'home')}
+                className={`relative py-2 lg:text-[calc(26*var(--u))] font-medium tracking-[0.05em] uppercase transition-colors group whitespace-nowrap ${
+                  currentPage === 'home' ? 'text-[#ED2024]' : 'text-[#FFFFFF] hover:text-white'
+                }`}
+              >
+                HOME
+                <span
+                  className={`absolute bottom-0 left-0 h-[2px] bg-[#EC2024] transition-all duration-300 rounded ${
+                    currentPage === 'home' ? 'w-full' : 'w-0 group-hover:w-full'
+                  }`}
+                />
+              </a>
+            </li>
+
             <li>
               <a
                 href="/about"

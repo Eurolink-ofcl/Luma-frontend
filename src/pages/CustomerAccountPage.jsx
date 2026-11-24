@@ -61,6 +61,10 @@ export default function CustomerAccountPage({
   const [returnModalOrder, setReturnModalOrder] = useState(null);
   const [returnReason, setReturnReason] = useState('Device is defective / malfunctioning');
   const [returnComments, setReturnComments] = useState('');
+  const [returnMediaFile, setReturnMediaFile] = useState(null);
+  const [returnMediaPreview, setReturnMediaPreview] = useState(null);
+  const [returnMediaType, setReturnMediaType] = useState(null); // 'image' | 'video'
+  const [returnMediaError, setReturnMediaError] = useState('');
   const [returnLoading, setReturnLoading] = useState(false);
   const [returnError, setReturnError] = useState('');
 
@@ -218,7 +222,54 @@ export default function CustomerAccountPage({
     setReturnModalOrder(order);
     setReturnReason('Device is defective / malfunctioning');
     setReturnComments('');
+    setReturnMediaFile(null);
+    setReturnMediaPreview(null);
+    setReturnMediaType(null);
+    setReturnMediaError('');
     setReturnError('');
+  };
+
+  const handleMediaSelect = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setReturnMediaError('');
+
+    // Check size limit (max 50MB)
+    const maxBytes = 50 * 1024 * 1024;
+    if (file.size > maxBytes) {
+      setReturnMediaError('File exceeds 50MB limit. Please select a smaller photo or video.');
+      return;
+    }
+
+    const isVid = file.type.startsWith('video/') || /\.(mp4|webm|mov|ogg)$/i.test(file.name);
+    const isImg = file.type.startsWith('image/') || /\.(png|jpe?g|webp|gif|svg)$/i.test(file.name);
+
+    if (!isVid && !isImg) {
+      setReturnMediaError('Please select a valid image (PNG, JPG, WebP) or video (MP4, MOV, WebM).');
+      return;
+    }
+
+    const type = isVid ? 'video' : 'image';
+    const previewUrl = URL.createObjectURL(file);
+
+    setReturnMediaFile(file);
+    setReturnMediaType(type);
+    setReturnMediaPreview(previewUrl);
+  };
+
+  const handleClearMedia = () => {
+    if (returnMediaPreview) {
+      try {
+        URL.revokeObjectURL(returnMediaPreview);
+      } catch (err) {
+        // Ignore revoke errors
+      }
+    }
+    setReturnMediaFile(null);
+    setReturnMediaPreview(null);
+    setReturnMediaType(null);
+    setReturnMediaError('');
   };
 
   const handleReturnRequest = async () => {
@@ -229,7 +280,42 @@ export default function CustomerAccountPage({
     }
     setReturnLoading(true);
     setReturnError('');
+
     try {
+      let uploadedMediaUrl = null;
+      let uploadedMediaType = null;
+
+      // Upload media proof if provided
+      if (returnMediaFile) {
+        const base64Data = await new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = (err) => reject(err);
+          reader.readAsDataURL(returnMediaFile);
+        });
+
+        const uploadPayload = {
+          filename: returnMediaFile.name,
+          file: base64Data,
+          image: returnMediaType === 'image' ? base64Data : undefined,
+          video: returnMediaType === 'video' ? base64Data : undefined,
+        };
+
+        const uploadRes = await fetch(`${API_BASE_URL}/orders/upload`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(uploadPayload),
+        });
+
+        const uploadResult = await uploadRes.json();
+        if (uploadRes.ok && uploadResult.success && uploadResult.url) {
+          uploadedMediaUrl = uploadResult.url;
+          uploadedMediaType = uploadResult.isVideo ? 'video' : 'image';
+        } else {
+          console.warn('Media upload notice:', uploadResult.message);
+        }
+      }
+
       const res = await fetch(`${API_BASE_URL}/orders/${returnModalOrder._id}/return-request`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -237,6 +323,8 @@ export default function CustomerAccountPage({
           email: customerUser.email,
           reason: returnReason.trim(),
           comments: returnComments.trim(),
+          mediaUrl: uploadedMediaUrl,
+          mediaType: uploadedMediaType,
         }),
       });
       const data = await res.json();
@@ -244,6 +332,7 @@ export default function CustomerAccountPage({
         throw new Error(data.message || 'Failed to submit return request.');
       }
       setSuccessMessage(data.message || 'Return request submitted successfully.');
+      handleClearMedia();
       setReturnModalOrder(null);
       await fetchCustomerRealData(customerUser.email);
     } catch (err) {
@@ -936,6 +1025,21 @@ export default function CustomerAccountPage({
                                           <strong>Your Comments:</strong> {order.returnRequest?.comments}
                                         </p>
                                       )}
+                                      {order.returnRequest?.mediaUrl && (
+                                        <div className="pt-1 flex items-center gap-2 text-xs">
+                                          <span className="font-semibold text-gray-700">Uploaded Evidence:</span>
+                                          <a
+                                            href={order.returnRequest.mediaUrl}
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="font-bold text-[#ED2024] hover:underline inline-flex items-center gap-1 bg-white px-2 py-0.5 rounded border border-gray-200"
+                                          >
+                                            <span>{order.returnRequest.mediaType === 'video' ? '🎬' : '📷'}</span>
+                                            <span>View {order.returnRequest.mediaType === 'video' ? 'Video' : 'Photo'}</span>
+                                            <span className="text-[10px]">↗</span>
+                                          </a>
+                                        </div>
+                                      )}
                                       <p className="text-[11px] text-gray-500 pt-0.5">
                                         Submitted on {new Date(order.returnRequest?.requestedAt || order.updatedAt).toLocaleDateString()}. Store administration is reviewing your return reason. If approved, an automated refund of <strong>{formatPrice(order.totalAmount)} {order.currency || 'AED'}</strong> will be credited to your payment method.
                                       </p>
@@ -1266,6 +1370,81 @@ export default function CustomerAccountPage({
                 placeholder="Explain the reason or issue for the store admin..."
                 className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-xl px-3.5 py-2 text-xs text-gray-900 outline-none shadow-2xs resize-none leading-relaxed"
               />
+            </div>
+
+            {/* Optional Photo or Video Evidence */}
+            <div className="space-y-1.5">
+              <label className="text-[11.5px] font-bold text-gray-700 uppercase tracking-wide flex items-center justify-between">
+                <span>Photo or Video Evidence (Optional)</span>
+                <span className="text-[10.5px] font-normal text-gray-400 lowercase">Max 50MB</span>
+              </label>
+
+              {!returnMediaFile ? (
+                <label className="border-2 border-dashed border-gray-300 hover:border-[#ED2024] bg-gray-50/70 hover:bg-red-50/20 rounded-xl p-3 flex flex-col items-center justify-center cursor-pointer transition-colors group">
+                  <input
+                    type="file"
+                    accept="image/*,video/*"
+                    onChange={handleMediaSelect}
+                    className="hidden"
+                  />
+                  <div className="w-8 h-8 rounded-full bg-gray-200/80 group-hover:bg-[#ED2024]/10 text-gray-500 group-hover:text-[#ED2024] flex items-center justify-center mb-1 transition-colors">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      />
+                    </svg>
+                  </div>
+                  <p className="text-xs font-semibold text-gray-700 group-hover:text-[#ED2024] transition-colors">
+                    Click to attach photo or video proof
+                  </p>
+                  <p className="text-[10.5px] text-gray-400 mt-0.5">
+                    PNG, JPG, WebP, MP4, MOV or WebM
+                  </p>
+                </label>
+              ) : (
+                <div className="relative rounded-xl border border-gray-200 bg-gray-50 p-2.5 flex items-center gap-3">
+                  {returnMediaType === 'image' && returnMediaPreview ? (
+                    <img
+                      src={returnMediaPreview}
+                      alt="Evidence preview"
+                      className="w-12 h-12 rounded-lg object-cover border border-gray-200 bg-white shrink-0"
+                    />
+                  ) : returnMediaType === 'video' && returnMediaPreview ? (
+                    <div className="w-12 h-12 rounded-lg bg-black flex items-center justify-center shrink-0 overflow-hidden">
+                      <video src={returnMediaPreview} className="w-full h-full object-cover" />
+                    </div>
+                  ) : null}
+
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-semibold text-gray-800 truncate">
+                      {returnMediaFile.name}
+                    </p>
+                    <p className="text-[10.5px] text-gray-400 mt-0.5">
+                      {(returnMediaFile.size / (1024 * 1024)).toFixed(2)} MB • {returnMediaType === 'video' ? 'Video' : 'Photo'}
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleClearMedia}
+                    className="p-1.5 text-gray-400 hover:text-red-600 rounded-lg transition-colors cursor-pointer"
+                    title="Remove attachment"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              )}
+
+              {returnMediaError && (
+                <p className="text-[11.5px] text-red-600 font-medium">
+                  {returnMediaError}
+                </p>
+              )}
             </div>
 
             <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-gray-100">

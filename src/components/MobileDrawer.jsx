@@ -76,6 +76,7 @@ export default function MobileDrawer({
             {/* Nav list */}
             <ul className="flex flex-col gap-5 mt-8">
               {[
+                { label: 'HOME', href: '/', page: 'home', hash: '' },
                 { label: 'ABOUT LUMA', href: '/about', page: 'about', hash: '' },
                 {
                   label: 'OUR PRODUCTS',

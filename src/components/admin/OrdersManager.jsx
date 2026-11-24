@@ -6,7 +6,7 @@ const API_BASE_URL =
     ? 'https://astro.bloodme.in/luma-api/api'
     : 'http://localhost:5000/api');
 
-export default function OrdersManager() {
+export default function OrdersManager({ onOrderUpdated }) {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -106,7 +106,7 @@ export default function OrdersManager() {
     ).length;
     const shipped = orders.filter((o) => o.status === 'Shipped').length;
     const delivered = orders.filter(
-      (o) => o.status === 'Delivered' && o.returnStatus !== 'Approved'
+      (o) => o.status === 'Delivered' && o.returnStatus !== 'Approved' && o.returnStatus !== 'Requested'
     ).length;
     const returned = orders.filter(
       (o) => o.status === 'Returned' || o.returnStatus === 'Approved'
@@ -186,6 +186,8 @@ export default function OrdersManager() {
         if (selectedOrder && (selectedOrder._id || selectedOrder.id) === (order._id || order.id)) {
           setSelectedOrder(data.order);
         }
+
+        if (onOrderUpdated) onOrderUpdated();
 
         setStatusConfirm(null);
         if (newStatus === 'Cancelled') {
@@ -267,6 +269,8 @@ export default function OrdersManager() {
       if (selectedOrder && (selectedOrder._id || selectedOrder.id) === (order._id || order.id)) {
         setSelectedOrder(data.order);
       }
+
+      if (onOrderUpdated) onOrderUpdated();
 
       setShowRejectForm(false);
       setReturnRejectNotes('');
@@ -493,12 +497,42 @@ export default function OrdersManager() {
         </div>
       </div>
 
+      {/* Return Request Action Alert Banner (When customer requests a return) */}
+      {metrics.returns > 0 && (
+        <div className="mt-5 p-4 rounded-[16px] bg-gradient-to-r from-amber-50 to-orange-50 border-2 border-amber-300 text-amber-900 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 animate-fadeIn">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-amber-500 text-white flex items-center justify-center font-bold text-xl shrink-0 shadow-xs">
+              ⚠️
+            </div>
+            <div>
+              <div className="font-extrabold text-[14px] text-amber-950 flex items-center gap-2">
+                <span>{metrics.returns} Return {metrics.returns === 1 ? 'Request' : 'Requests'} Awaiting Review</span>
+                <span className="px-2 py-0.5 rounded-full bg-amber-200 text-amber-900 text-[10px] font-bold uppercase tracking-wider">
+                  Action Required
+                </span>
+              </div>
+              <p className="text-[12px] text-amber-800 mt-0.5">
+                Customers submitted return reasons &amp; proof. Review evidence to approve (with automated refund) or decline.
+              </p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => setStatusFilter('Returns')}
+            className="px-4 py-2.5 bg-amber-600 hover:bg-amber-700 text-white text-[12px] font-bold uppercase tracking-wider rounded-xl transition-all cursor-pointer shrink-0 shadow-sm flex items-center gap-2"
+          >
+            <span>Review Return Requests ({metrics.returns})</span>
+            <span>→</span>
+          </button>
+        </div>
+      )}
+
       {/* ========================================================================= */}
       {/* Status Filter Tabs & Search Bar                                          */}
       {/* ========================================================================= */}
       <div className="mt-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
         {/* Status Filter Tabs */}
-        <div className="flex items-center gap-1.5 p-1 bg-white rounded-[12px] border border-gray-200 shadow-sm overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        <div className="flex flex-wrap items-center gap-1.5 p-1 bg-white rounded-[12px] border border-gray-200 shadow-sm">
           {[
             { id: 'all', label: 'All Orders', count: metrics.total },
             { id: 'Confirmed', label: 'Confirmed', count: metrics.confirmed },
@@ -506,9 +540,10 @@ export default function OrdersManager() {
             { id: 'Delivered', label: 'Delivered', count: metrics.delivered },
             { id: 'Returned', label: 'Returned', count: metrics.returned },
             { id: 'Cancelled', label: 'Cancelled', count: metrics.cancelled },
-            { id: 'Returns', label: 'Return Requests', count: metrics.returns },
+            { id: 'Returns', label: 'Return Requests', count: metrics.returns, isReturnTab: true },
           ].map((tab) => {
             const isActive = statusFilter === tab.id;
+            const hasPendingReturns = tab.isReturnTab && tab.count > 0;
             return (
               <button
                 key={tab.id}
@@ -517,13 +552,19 @@ export default function OrdersManager() {
                 className={`px-3.5 py-1.5 rounded-[9px] text-[12px] font-bold transition-all cursor-pointer whitespace-nowrap flex items-center gap-2 ${
                   isActive
                     ? 'bg-[#ED2024] text-white shadow-sm'
+                    : hasPendingReturns
+                    ? 'bg-amber-50 text-amber-900 border border-amber-300 hover:bg-amber-100'
                     : 'text-gray-600 hover:text-black hover:bg-gray-100'
                 }`}
               >
                 <span>{tab.label}</span>
                 <span
                   className={`px-1.5 py-0.5 rounded-full text-[10px] font-mono ${
-                    isActive ? 'bg-white/20 text-white' : 'bg-gray-100 text-gray-600'
+                    isActive
+                      ? 'bg-white/20 text-white'
+                      : hasPendingReturns
+                      ? 'bg-amber-500 text-white font-extrabold animate-pulse'
+                      : 'bg-gray-100 text-gray-600'
                   }`}
                 >
                   {tab.count}
@@ -705,41 +746,43 @@ export default function OrdersManager() {
                       {/* Current Status Badge */}
                       <td className="py-3.5 px-4">
                         <div className="flex flex-col gap-1 items-start">
-                          <span
-                            className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-[0.04em] ${
-                              isReturned
-                                ? 'bg-purple-100 text-purple-800 border border-purple-300'
-                                : currentStatus === 'Delivered'
-                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
-                                : currentStatus === 'Shipped'
-                                ? 'bg-blue-50 text-blue-700 border border-blue-200'
-                                : currentStatus === 'Cancelled'
-                                ? 'bg-red-50 text-red-700 border border-red-200'
-                                : 'bg-amber-50 text-amber-700 border border-amber-200'
-                            }`}
-                          >
+                          {ord.returnStatus === 'Requested' ? (
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-extrabold uppercase tracking-[0.04em] bg-amber-100 text-amber-900 border border-amber-300 shadow-2xs">
+                              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
+                              Return Requested
+                            </span>
+                          ) : (
                             <span
-                              className={`w-1.5 h-1.5 rounded-full ${
+                              className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold uppercase tracking-[0.04em] ${
                                 isReturned
-                                  ? 'bg-purple-600'
+                                  ? 'bg-purple-100 text-purple-800 border border-purple-300'
                                   : currentStatus === 'Delivered'
-                                  ? 'bg-emerald-500'
+                                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
                                   : currentStatus === 'Shipped'
-                                  ? 'bg-blue-500 animate-pulse'
+                                  ? 'bg-blue-50 text-blue-700 border border-blue-200'
                                   : currentStatus === 'Cancelled'
-                                  ? 'bg-red-500'
-                                  : 'bg-amber-500 animate-pulse'
+                                  ? 'bg-red-50 text-red-700 border border-red-200'
+                                  : 'bg-amber-50 text-amber-700 border border-amber-200'
                               }`}
-                            />
-                            {isReturned ? 'Returned & Refunded' : currentStatus}
-                          </span>
-
-                          {/* Rule 2 Return Request Badges */}
-                          {ord.returnStatus === 'Requested' && (
-                            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-amber-100 text-amber-800 border border-amber-300 animate-pulse mt-0.5">
-                              ● Return Requested
+                            >
+                              <span
+                                className={`w-1.5 h-1.5 rounded-full ${
+                                  isReturned
+                                    ? 'bg-purple-600'
+                                    : currentStatus === 'Delivered'
+                                    ? 'bg-emerald-500'
+                                    : currentStatus === 'Shipped'
+                                    ? 'bg-blue-500 animate-pulse'
+                                    : currentStatus === 'Cancelled'
+                                    ? 'bg-red-500'
+                                    : 'bg-amber-500 animate-pulse'
+                                }`}
+                              />
+                              {isReturned ? 'Returned & Refunded' : currentStatus}
                             </span>
                           )}
+
+                          {/* Rule 2 Return Request Badges */}
                           {ord.returnStatus === 'Rejected' && (
                             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-red-100 text-red-800 border border-red-200 mt-0.5">
                               ✕ Return Declined
@@ -774,7 +817,11 @@ export default function OrdersManager() {
                               2.Shipped
                             </span>
                             <span>→</span>
-                            {isReturned ? (
+                            {ord.returnStatus === 'Requested' ? (
+                              <span className="text-amber-700 font-extrabold animate-pulse">
+                                3.Return Requested
+                              </span>
+                            ) : isReturned ? (
                               <span className="text-purple-700 font-bold">
                                 3.Returned
                               </span>
@@ -795,7 +842,16 @@ export default function OrdersManager() {
 
                       {/* STRICT ONE-WAY STATUS ACTION */}
                       <td className="py-3.5 px-4">
-                        {isReturned ? (
+                        {ord.returnStatus === 'Requested' ? (
+                          <button
+                            type="button"
+                            onClick={() => setSelectedOrder(ord)}
+                            className="px-3 py-1.5 rounded-[8px] bg-amber-500 hover:bg-amber-600 text-white text-[11.5px] font-bold shadow-xs transition-all cursor-pointer flex items-center gap-1.5 animate-pulse"
+                          >
+                            <span>⚠️</span>
+                            <span>Review Return {ord.returnRequest?.mediaUrl ? '(Proof Attached)' : ''}</span>
+                          </button>
+                        ) : isReturned ? (
                           <div className="flex items-center gap-1.5 text-purple-700 text-[11px] font-bold">
                             <svg className="w-3.5 h-3.5 text-purple-600" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -1403,6 +1459,50 @@ export default function OrdersManager() {
                         <p className="text-gray-700 bg-gray-50 p-2.5 rounded-md border border-gray-200 mt-1 whitespace-pre-wrap text-[12.5px]">
                           {selectedOrder.returnRequest.comments}
                         </p>
+                      </div>
+                    )}
+
+                    {selectedOrder.returnRequest?.mediaUrl && (
+                      <div className="pt-2 border-t border-gray-100">
+                        <span className="text-gray-500 text-[11px] uppercase font-bold tracking-wider block mb-1.5">
+                          Customer Uploaded Proof ({selectedOrder.returnRequest.mediaType === 'video' ? 'Video' : 'Photo'}):
+                        </span>
+                        {selectedOrder.returnRequest.mediaType === 'video' ? (
+                          <div className="rounded-xl overflow-hidden border border-gray-200 bg-black max-w-md shadow-xs">
+                            <video
+                              src={selectedOrder.returnRequest.mediaUrl}
+                              controls
+                              className="w-full max-h-[260px] object-contain"
+                            />
+                            <div className="p-2 bg-gray-900 text-right">
+                              <a
+                                href={selectedOrder.returnRequest.mediaUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-[11px] font-semibold text-white/80 hover:text-white inline-flex items-center gap-1"
+                              >
+                                Open Video In New Tab ↗
+                              </a>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="rounded-xl overflow-hidden border border-gray-200 bg-gray-50 max-w-sm group relative shadow-xs">
+                            <img
+                              src={selectedOrder.returnRequest.mediaUrl}
+                              alt="Return evidence"
+                              className="w-full max-h-[260px] object-contain"
+                            />
+                            <a
+                              href={selectedOrder.returnRequest.mediaUrl}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="absolute bottom-2 right-2 px-2.5 py-1 bg-black/75 hover:bg-black text-white text-[11px] font-semibold rounded-md backdrop-blur-xs transition-colors flex items-center gap-1 shadow-md"
+                            >
+                              <span>View Full Size</span>
+                              <span className="text-[10px]">↗</span>
+                            </a>
+                          </div>
+                        )}
                       </div>
                     )}
 

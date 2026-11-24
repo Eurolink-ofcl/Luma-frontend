@@ -103,8 +103,10 @@ export default function AdminDashboardPage({ onNavigateHome, onNavigatePage, onL
   };
 
   useEffect(() => {
-    fetchDashboardData();
-  }, []);
+    if (activeTab === 'dashboard') {
+      fetchDashboardData();
+    }
+  }, [activeTab]);
 
   const isDbConnected = Boolean(dashboardData?.database?.connected);
   const stats = dashboardData?.stats;
@@ -138,7 +140,16 @@ export default function AdminDashboardPage({ onNavigateHome, onNavigatePage, onL
     {
       id: 'orders',
       label: 'Orders',
-      badge: isDbConnected ? stats?.totalOrders : null,
+      badge:
+        stats?.pendingReturns > 0
+          ? `${stats.pendingReturns} Return`
+          : isDbConnected
+          ? stats?.totalOrders
+          : null,
+      badgeClass:
+        stats?.pendingReturns > 0
+          ? 'bg-amber-500 text-white animate-pulse font-extrabold shadow-sm'
+          : undefined,
       icon: (
         <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
@@ -395,7 +406,9 @@ export default function AdminDashboardPage({ onNavigateHome, onNavigatePage, onL
                     {item.badge !== null && item.badge !== undefined && (
                       <span
                         className={`text-[10px] px-2 py-0.5 rounded-full font-bold ${
-                          isActive
+                          item.badgeClass
+                            ? item.badgeClass
+                            : isActive
                             ? 'bg-white text-[#ED2024]'
                             : 'bg-[#ED2024] text-white'
                         }`}
@@ -589,7 +602,7 @@ export default function AdminDashboardPage({ onNavigateHome, onNavigatePage, onL
 
           {/* ==================== ACTIVE VIEW: ORDERS MANAGEMENT ==================== */}
           {activeTab === 'orders' && (
-            <OrdersManager />
+            <OrdersManager onOrderUpdated={fetchDashboardData} />
           )}
 
           {/* ==================== ACTIVE VIEW: COUPONS MANAGEMENT ==================== */}
