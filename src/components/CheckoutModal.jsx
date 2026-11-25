@@ -57,7 +57,7 @@ export default function CheckoutModal({
   const [country, setCountry] = useState('United Arab Emirates');
 
   // Coupon states
-  const [availableCoupons, setAvailableCoupons] = useState(FALLBACK_COUPONS);
+  const [availableCoupons, setAvailableCoupons] = useState([]);
   const [loadingCoupons, setLoadingCoupons] = useState(false);
   const [couponInput, setCouponInput] = useState('');
   const [appliedCoupon, setAppliedCoupon] = useState(null);
@@ -92,14 +92,13 @@ export default function CheckoutModal({
         try {
           const res = await fetch(`${API_BASE_URL}/coupons`);
           const data = await res.json();
-          if (res.ok && data.success && Array.isArray(data.coupons) && data.coupons.length > 0) {
+          if (res.ok && data.success && Array.isArray(data.coupons)) {
             setAvailableCoupons(data.coupons);
           } else {
-            setAvailableCoupons(FALLBACK_COUPONS);
+            setAvailableCoupons([]);
           }
         } catch {
-          // Graceful fallback to default coupons
-          setAvailableCoupons(FALLBACK_COUPONS);
+          setAvailableCoupons([]);
         } finally {
           setLoadingCoupons(false);
         }
@@ -127,6 +126,11 @@ export default function CheckoutModal({
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen, onClose]);
+
+  // Only display coupons where admin checked "Display to customer in checkout available offers list"
+  const displayableCoupons = (availableCoupons || []).filter(
+    (c) => c.displayToCustomer === true && c.isActive !== false
+  );
 
   if (!isOpen) return null;
 
@@ -611,41 +615,102 @@ export default function CheckoutModal({
                     </button>
                   </div>
                 ) : (
-                  /* Code Input Field & Apply Button */
-                  <div className="flex items-center gap-2">
-                    <div className="relative flex-1">
-                      <input
-                        type="text"
-                        value={couponInput}
-                        onChange={(e) => {
-                          setCouponInput(e.target.value.toUpperCase());
-                          if (couponError) setCouponError('');
-                        }}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            e.preventDefault();
-                            handleApplyCoupon();
-                          }
-                        }}
-                        placeholder="Enter coupon code (e.g. LUMA10)"
-                        className="w-full px-3.5 py-2.5 text-xs bg-black/40 border border-white/10 rounded-lg text-white font-mono placeholder-white/30 focus:outline-none focus:border-[#ED2024] uppercase tracking-wider"
-                      />
+                  /* Code Input Field & Apply Button + Available Offers */
+                  <div className="space-y-2.5">
+                    <div className="flex items-center gap-2">
+                      <div className="relative flex-1">
+                        <input
+                          type="text"
+                          value={couponInput}
+                          onChange={(e) => {
+                            setCouponInput(e.target.value.toUpperCase());
+                            if (couponError) setCouponError('');
+                          }}
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault();
+                              handleApplyCoupon();
+                            }
+                          }}
+                          placeholder="Enter coupon code (e.g. LUMA10)"
+                          className="w-full px-3.5 py-2.5 text-xs bg-black/40 border border-white/10 rounded-lg text-white font-mono placeholder-white/30 focus:outline-none focus:border-[#ED2024] uppercase tracking-wider"
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleApplyCoupon()}
+                        disabled={isValidatingCoupon || !couponInput.trim()}
+                        className="px-4 py-2.5 bg-[#ED2024] hover:bg-[#d61b1f] disabled:opacity-40 text-white text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors cursor-pointer shrink-0 shadow-md shadow-[#ED2024]/20 flex items-center gap-1.5"
+                      >
+                        {isValidatingCoupon ? (
+                          <>
+                            <span className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                            <span>Applying...</span>
+                          </>
+                        ) : (
+                          <span>Apply</span>
+                        )}
+                      </button>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => handleApplyCoupon()}
-                      disabled={isValidatingCoupon || !couponInput.trim()}
-                      className="px-4 py-2.5 bg-[#ED2024] hover:bg-[#d61b1f] disabled:opacity-40 text-white text-[11px] font-bold uppercase tracking-wider rounded-lg transition-colors cursor-pointer shrink-0 shadow-md shadow-[#ED2024]/20 flex items-center gap-1.5"
-                    >
-                      {isValidatingCoupon ? (
-                        <>
-                          <span className="w-3 h-3 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                          <span>Applying...</span>
-                        </>
-                      ) : (
-                        <span>Apply</span>
-                      )}
-                    </button>
+
+                    {/* Available Offers List (Only coupons marked 'Display to customer in checkout' by Admin) */}
+                    {displayableCoupons.length > 0 && (
+                      <div className="pt-2 border-t border-white/5 space-y-1.5">
+                        <div className="text-[10.5px] font-bold text-white/50 uppercase tracking-wider flex items-center gap-1">
+                          <span>✨</span>
+                          <span>Available Offers (Tap to Apply):</span>
+                        </div>
+                        <div className="flex flex-col gap-1.5 max-h-[140px] overflow-y-auto pr-1">
+                          {displayableCoupons.map((c) => {
+                            const meetsMin = !c.minOrderAmount || subtotal >= c.minOrderAmount;
+                            return (
+                              <button
+                                key={c.code || c._id}
+                                type="button"
+                                onClick={() => {
+                                  setCouponInput(c.code);
+                                  handleApplyCoupon(c.code);
+                                }}
+                                disabled={isValidatingCoupon}
+                                className={`w-full p-2.5 rounded-lg border text-left transition-all cursor-pointer flex items-center justify-between gap-2.5 group ${
+                                  meetsMin
+                                    ? 'bg-white/[0.03] hover:bg-[#ED2024]/10 border-white/10 hover:border-[#ED2024]/50'
+                                    : 'bg-white/[0.01] border-white/5 opacity-60 hover:opacity-100'
+                                }`}
+                              >
+                                <div className="flex items-center gap-2 min-w-0">
+                                  <span className="px-2 py-0.5 rounded font-mono font-black text-[11px] bg-black/60 border border-dashed border-[#ED2024]/60 text-[#ED2024] shrink-0 group-hover:scale-105 transition-transform">
+                                    {c.code}
+                                  </span>
+                                  <div className="min-w-0">
+                                    <div className="text-[11.5px] font-bold text-white truncate group-hover:text-[#ED2024] transition-colors">
+                                      {c.discountType === 'percentage'
+                                        ? `${c.discountValue}% OFF`
+                                        : `${formatPrice(c.discountValue)} AED OFF`}
+                                      {c.title ? ` · ${c.title}` : ''}
+                                    </div>
+                                    {c.minOrderAmount > 0 && (
+                                      <div className={`text-[10px] truncate ${meetsMin ? 'text-white/40' : 'text-amber-400 font-medium'}`}>
+                                        Min. Order: AED {formatPrice(c.minOrderAmount)}
+                                        {!meetsMin && ` (Add AED ${formatPrice(c.minOrderAmount - subtotal)} more)`}
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+
+                                <span className={`px-2.5 py-1 rounded text-[10px] font-bold uppercase shrink-0 transition-colors ${
+                                  meetsMin
+                                    ? 'bg-[#ED2024]/20 text-[#ED2024] group-hover:bg-[#ED2024] group-hover:text-white'
+                                    : 'bg-white/5 text-white/40'
+                                }`}>
+                                  Apply
+                                </span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
 
