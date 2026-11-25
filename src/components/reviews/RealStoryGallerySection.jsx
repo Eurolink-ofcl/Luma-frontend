@@ -301,16 +301,17 @@ export default function RealStoryGallerySection({ data }) {
   return (
     <section
       id="real-story"
+      style={{ '--u': 'calc(100vw / 3840)' }}
       className="relative w-full bg-[#FFFFFF] text-[#000000] overflow-hidden font-['Manrope'] select-none py-14 sm:py-18 md:py-22"
     >
       <div className="w-full max-w-[1560px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
-        {/* Section Header: REAL STORY + Red Brand Bar (matches exact LUMA-REVIEW-PAGE design) */}
-        <div className="w-full flex flex-col items-center justify-center text-center px-4 mb-10 sm:mb-14 md:mb-16">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extralight uppercase tracking-[0.02em] text-[#131313] leading-none">
+        {/* Section Header: REAL STORY + Red Brand Bar */}
+        <div className="w-full flex flex-col items-center justify-center text-center px-4 mb-8 sm:mb-12 lg:mb-[calc(60*var(--u))]">
+          <h2 className="text-[26px] sm:text-[36px] md:text-[46px] lg:text-[calc(80*var(--u))] font-extralight uppercase tracking-[0.02em] text-[#131313] leading-none">
             {title}
           </h2>
           <div
-            className="mt-3 sm:mt-4 lg:mt-5 w-[60px] sm:w-[85px] lg:w-[150px] h-[8px] sm:h-[12px] lg:h-[16px] rounded-full bg-[#ED2024]"
+            className="mt-3 sm:mt-4 lg:mt-[calc(47*var(--u))] w-[60px] sm:w-[85px] lg:w-[calc(150*var(--u))] h-[8px] sm:h-[12px] lg:h-[calc(20*var(--u))] rounded-full bg-[#ED2124]"
             aria-hidden="true"
           />
         </div>
