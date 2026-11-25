@@ -483,7 +483,7 @@ export default function CouponsManager() {
               <thead className="bg-gray-50 border-b border-gray-200 text-[11px] font-bold uppercase tracking-[0.08em] text-gray-500">
                 <tr>
                   <th className="py-3.5 px-4">Coupon Code</th>
-                  <th className="py-3.5 px-4">Description / Offer Details</th>
+                  <th className="py-3.5 px-4">Checkout Visibility</th>
                   <th className="py-3.5 px-4 text-center">Discount Value</th>
                   <th className="py-3.5 px-4 text-center">Min Subtotal</th>
                   <th className="py-3.5 px-4 text-center">Validity / Expiry</th>
@@ -512,18 +512,21 @@ export default function CouponsManager() {
                       </div>
                     </td>
 
-                    {/* Title & Description */}
+                    {/* Checkout Visibility & Details */}
                     <td className="py-4 px-4 max-w-xs">
-                      <div className="font-bold text-gray-900">{coupon.title}</div>
+                      {coupon.displayToCustomer ? (
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] text-[11px] font-bold bg-blue-50 text-blue-700 border border-blue-200">
+                          👁️ Shown in Available Offers Modal
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[6px] text-[11px] font-medium bg-gray-100 text-gray-600 border border-gray-200">
+                          🔒 Code Only (Hidden in Offers Modal)
+                        </span>
+                      )}
                       {coupon.description && (
-                        <div className="text-xs text-gray-500 mt-0.5 line-clamp-1">
+                        <div className="text-[11px] text-gray-500 mt-1 line-clamp-1">
                           {coupon.description}
                         </div>
-                      )}
-                      {coupon.displayToCustomer && (
-                        <span className="inline-flex items-center gap-1 mt-1 px-1.5 py-0.5 rounded text-[10px] font-semibold bg-blue-50 text-blue-700 border border-blue-200">
-                          👁️ Displayed in Customer Checkout
-                        </span>
                       )}
                     </td>
 
@@ -694,20 +697,6 @@ export default function CouponsManager() {
                     <option value="fixed">Fixed Amount (AED) Off</option>
                   </select>
                 </div>
-              </div>
-
-              {/* Description */}
-              <div>
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-600 mb-1">
-                  Customer Description (Shown during checkout)
-                </label>
-                <input
-                  type="text"
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  placeholder="e.g. Instant savings applied to your cart subtotal"
-                  className="w-full px-3 py-2 text-xs bg-gray-50 border border-gray-300 rounded-[8px] focus:bg-white focus:border-[#ED2024] focus:outline-none"
-                />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
