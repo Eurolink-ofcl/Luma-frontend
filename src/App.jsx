@@ -1,4 +1,4 @@
-﻿const API_BASE_URL =
+const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ||
   (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
     ? `${window.location.origin}/api`
@@ -6,6 +6,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAuth } from './context/AuthContext';
+import { useCart } from './context/CartContext';
 import TopBanner from './components/TopBanner';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -99,7 +100,7 @@ function parseRoute(pathname) {
 }
 
 export default function App() {
-  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { isCartOpen, setIsCartOpen, openCart, closeCart, addToCart } = useCart();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const [homeContent, setHomeContent] = useState(null);
   const [adminUser, setAdminUser] = useState(() => {
@@ -306,7 +307,7 @@ export default function App() {
       </div>
 
       {currentPage === 'about' ? (
-        <AboutPage onNavigateHome={(hash = '') => handleNavigate('home', hash)} />
+        <AboutPage onNavigateHome={(hash = '') => handleNavigate('home', hash)} onOpenCart={openCart} />
       ) : currentPage === 'cart' || currentPage === 'bag' ? (
         <CartPage
           onNavigate={handleNavigate}
@@ -398,12 +399,12 @@ export default function App() {
       )}
 
       {/* Shared Footer & Connect */}
-      <Footer onOpenCart={() => setIsCartOpen(true)} onNavigate={handleNavigate} data={homeContent?.footerConnect} />
+      <Footer onOpenCart={openCart} onNavigate={handleNavigate} data={homeContent?.footerConnect} />
 
       {/* Shopping Bag Slide-Over Drawer */}
       <CartDrawer
         isOpen={isCartOpen}
-        onClose={() => setIsCartOpen(false)}
+        onClose={closeCart}
         onOpenCheckout={handleOpenCheckout}
         onNavigate={handleNavigate}
       />

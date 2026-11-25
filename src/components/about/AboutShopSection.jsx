@@ -1,4 +1,4 @@
-﻿const API_BASE_URL =
+const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ||
   (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
     ? `${window.location.origin}/api`
@@ -6,6 +6,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useCurrency } from '../../context/CurrencyContext';
+import { useCart } from '../../context/CartContext';
 
 const defaultAboutProducts = [
   {
@@ -73,10 +74,12 @@ const defaultAboutProducts = [
   },
 ];
 
-export default function AboutShopSection({ onNavigateHome, data }) {
+export default function AboutShopSection({ onNavigateHome, onOpenCart, data }) {
   const { formatPrice } = useCurrency();
+  const { addToCart, openCart } = useCart();
   const [productsList, setProductsList] = useState(defaultAboutProducts);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [addedId, setAddedId] = useState(null);
 
   // Attempt to sync full live catalog from API if available
   useEffect(() => {
@@ -346,11 +349,28 @@ export default function AboutShopSection({ onNavigateHome, data }) {
                 <button
                   type="button"
                   onClick={() => {
-                    if (onNavigateHome) onNavigateHome('#products');
+                    const item = {
+                      id: product.id || product.slug || `prod-${product.eyebrow || 'about'}`,
+                      slug: product.id || product.slug || 'luma-glow',
+                      name: `${product.titleLine1 || ''} ${product.titleLine2 || ''}`.trim() || product.eyebrow || 'LUMA Red Light Therapy',
+                      price: Number(product.price) || 1299,
+                      image: product.image || '/assets/about/product-glow-mask.png',
+                      variant: 'Standard Clinical Edition',
+                    };
+                    addToCart(item, 1);
+                    if (typeof onOpenCart === 'function') {
+                      onOpenCart();
+                    } else {
+                      openCart();
+                    }
+                    setAddedId(product.id);
+                    setTimeout(() => setAddedId(null), 1800);
                   }}
-                  className="mt-3 sm:mt-4 lg:mt-[calc(36*var(--u))] w-[130px] h-[36px] sm:w-[140px] sm:h-[38px] lg:w-[calc(261*var(--u))] lg:h-[calc(66*var(--u))] rounded-[6px] lg:rounded-[calc(10*var(--u))] bg-[#010101] hover:bg-[#222222] text-[#FFFFFF] text-[11px] sm:text-[12px] lg:text-[calc(30*var(--u))] font-semibold uppercase tracking-[0.05em] flex items-center justify-center transition-colors cursor-pointer"
+                  className={`mt-3 sm:mt-4 lg:mt-[calc(36*var(--u))] w-[130px] h-[36px] sm:w-[140px] sm:h-[38px] lg:w-[calc(261*var(--u))] lg:h-[calc(66*var(--u))] rounded-[6px] lg:rounded-[calc(10*var(--u))] ${
+                    addedId === product.id ? 'bg-[#ED2024] text-[#FFFFFF]' : 'bg-[#010101] hover:bg-[#222222] text-[#FFFFFF]'
+                  } text-[11px] sm:text-[12px] lg:text-[calc(30*var(--u))] font-semibold uppercase tracking-[0.05em] flex items-center justify-center transition-all cursor-pointer shadow-sm`}
                 >
-                  ADD TO BAG
+                  {addedId === product.id ? 'ADDED ✓' : 'ADD TO BAG'}
                 </button>
               </div>
             ))}

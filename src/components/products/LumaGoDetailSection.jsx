@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useCurrency } from '../../context/CurrencyContext';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
+import { resolveImageUrl } from '../../config/api';
 
 const HERO_IMAGES = [
   {
@@ -32,7 +33,7 @@ const HERO_IMAGES = [
 
 export default function LumaGoDetailSection({ product, onOpenCart, onBuyNow }) {
   const { formatPrice } = useCurrency();
-  const { addToCart, buyNow } = useCart();
+  const { addToCart, buyNow, openCart } = useCart();
   const { customerUser, openAuthModal } = useAuth();
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [openAccordion, setOpenAccordion] = useState('spec');
@@ -40,6 +41,29 @@ export default function LumaGoDetailSection({ product, onOpenCart, onBuyNow }) {
   const toggleAccordion = (id) => {
     setOpenAccordion((prev) => (prev === id ? null : id));
   };
+
+  // Derive images list: prioritize CMS images array, fallback to single image, or HERO_IMAGES only if no CMS data
+  const heroImages =
+    Array.isArray(product?.images) && product.images.length > 0
+      ? product.images.map((img, idx) => ({
+          id: `cms-img-${idx}`,
+          src: resolveImageUrl(img),
+          fallback: resolveImageUrl(img),
+          alt: `${product?.name || 'LUMA GO'} View ${idx + 1}`,
+        }))
+      : product?.image
+      ? [
+          {
+            id: 'cms-img-main',
+            src: resolveImageUrl(product.image),
+            fallback: resolveImageUrl(product.image),
+            alt: product?.name || 'LUMA GO',
+          },
+        ]
+      : HERO_IMAGES;
+
+  const safeActiveIndex = Math.min(activeImageIndex, Math.max(0, heroImages.length - 1));
+  const currentImage = heroImages[safeActiveIndex] || heroImages[0];
 
   // Eyebrow & Titles
   const eyebrow = product?.eyebrow || 'LUMA GO';
@@ -142,34 +166,36 @@ export default function LumaGoDetailSection({ product, onOpenCart, onBuyNow }) {
           
           {/* ==================== LEFT COLUMN: PRODUCT IMAGE GALLERY ==================== */}
           <div className="flex flex-col items-center w-full">
-            <div className="relative w-full max-w-[420px] sm:max-w-[480px] md:max-w-[540px] lg:max-w-none 2xl:w-[calc(918*var(--u))] aspect-[918/1144] rounded-[24px] sm:rounded-[32px] 2xl:rounded-[calc(50*var(--u))] overflow-hidden bg-[#F5F5F5] shadow-lg border border-black/5">
-              <picture>
-                <source srcSet={HERO_IMAGES[activeImageIndex].src} type="image/webp" />
-                <img
-                  src={HERO_IMAGES[activeImageIndex].fallback}
-                  alt={HERO_IMAGES[activeImageIndex].alt}
-                  className="w-full h-full object-cover transition-opacity duration-300"
-                  draggable={false}
-                />
-              </picture>
+            <div className="relative w-full max-w-[420px] sm:max-w-[480px] md:max-w-[540px] lg:max-w-none 2xl:w-[calc(918*var(--u))] aspect-[918/1144] rounded-[24px] sm:rounded-[32px] 2xl:rounded-[calc(50*var(--u))] overflow-hidden bg-[#F5F5F5] shadow-lg border border-black/5 flex items-center justify-center">
+              <img
+                src={currentImage?.src || currentImage?.fallback}
+                alt={currentImage?.alt || 'LUMA GO'}
+                className="w-full h-full object-cover transition-opacity duration-300"
+                draggable={false}
+                onError={(e) => {
+                  e.target.src = '/assets/products/luma-go.png';
+                }}
+              />
             </div>
 
-            {/* Thumbnail Indicators (PSD Ellipse 6 / copy / copy 2 / copy 3: 20x20 at 3840w, gap 10px) */}
-            <div className="mt-4 sm:mt-5 2xl:mt-[calc(40*var(--u))] flex items-center justify-center gap-2.5 sm:gap-3 2xl:gap-[calc(10*var(--u))]">
-              {HERO_IMAGES.map((img, idx) => (
-                <button
-                  key={img.id}
-                  type="button"
-                  onClick={() => setActiveImageIndex(idx)}
-                  aria-label={`Show view ${idx + 1}`}
-                  className={`transition-all duration-200 cursor-pointer rounded-full ${
-                    activeImageIndex === idx
-                      ? 'w-[10px] h-[10px] sm:w-[12px] sm:h-[12px] 2xl:w-[calc(20*var(--u))] 2xl:h-[calc(20*var(--u))] bg-[#ED2024] scale-110'
-                      : 'w-[8px] h-[8px] sm:w-[10px] sm:h-[10px] 2xl:w-[calc(20*var(--u))] 2xl:h-[calc(20*var(--u))] bg-[#D1D1D1] hover:bg-[#A0A0A0]'
-                  }`}
-                />
-              ))}
-            </div>
+            {/* Thumbnail Indicators matching exact CMS images count */}
+            {heroImages.length > 1 && (
+              <div className="mt-4 sm:mt-5 2xl:mt-[calc(40*var(--u))] flex items-center justify-center gap-2.5 sm:gap-3 2xl:gap-[calc(10*var(--u))]">
+                {heroImages.map((img, idx) => (
+                  <button
+                    key={img.id || idx}
+                    type="button"
+                    onClick={() => setActiveImageIndex(idx)}
+                    aria-label={`Show view ${idx + 1}`}
+                    className={`transition-all duration-200 cursor-pointer rounded-full ${
+                      safeActiveIndex === idx
+                        ? 'w-[10px] h-[10px] sm:w-[12px] sm:h-[12px] 2xl:w-[calc(20*var(--u))] 2xl:h-[calc(20*var(--u))] bg-[#ED2024] scale-110'
+                        : 'w-[8px] h-[8px] sm:w-[10px] sm:h-[10px] 2xl:w-[calc(20*var(--u))] 2xl:h-[calc(20*var(--u))] bg-[#D1D1D1] hover:bg-[#A0A0A0]'
+                    }`}
+                  />
+                ))}
+              </div>
+            )}
           </div>
 
           {/* ==================== RIGHT COLUMN: DETAILS & ACCORDION ==================== */}
@@ -222,7 +248,10 @@ export default function LumaGoDetailSection({ product, onOpenCart, onBuyNow }) {
                       variant: 'Portable Targeted Panel',
                     };
                     const added = addToCart(item, 1);
-                    if (added && onOpenCart) onOpenCart();
+                    if (added) {
+                      if (onOpenCart) onOpenCart();
+                      else openCart();
+                    }
                   }}
                   className="flex-1 sm:flex-none w-auto sm:w-[155px] xl:w-[170px] 2xl:w-[calc(327*var(--u))] h-[42px] sm:h-[48px] xl:h-[50px] 2xl:h-[calc(86*var(--u))] rounded-[6px] 2xl:rounded-[calc(10*var(--u))] bg-[#333333] hover:bg-[#222222] active:scale-[0.98] text-[#FFFFFF] text-[12px] sm:text-[13px] xl:text-[14px] 2xl:text-[calc(32*var(--u))] font-semibold uppercase tracking-[0.05em] flex items-center justify-center transition-all cursor-pointer leading-none shadow-sm"
                 >
@@ -240,7 +269,7 @@ export default function LumaGoDetailSection({ product, onOpenCart, onBuyNow }) {
                       image: product?.image || '/assets/products/luma-go.png',
                       variant: 'Portable Targeted Panel',
                     };
-                    buyNow(item, onBuyNow || onOpenCart, 1);
+                    buyNow(item, onBuyNow || onOpenCart || openCart, 1);
                   }}
                   className="flex-1 sm:flex-none w-auto sm:w-[155px] xl:w-[170px] 2xl:w-[calc(327*var(--u))] h-[42px] sm:h-[48px] xl:h-[50px] 2xl:h-[calc(86*var(--u))] rounded-[6px] 2xl:rounded-[calc(10*var(--u))] bg-[#ED2024] hover:bg-[#d4191d] active:scale-[0.98] text-[#FFFFFF] text-[12px] sm:text-[13px] xl:text-[14px] 2xl:text-[calc(32*var(--u))] font-semibold uppercase tracking-[0.05em] flex items-center justify-center transition-all cursor-pointer leading-none shadow-md"
                 >
@@ -248,22 +277,22 @@ export default function LumaGoDetailSection({ product, onOpenCart, onBuyNow }) {
                 </button>
               </div>
 
-              {/* Guest Authentication Notice */}
-              {!customerUser && (
+              {/* Delivery & Authentication Helper */}
+              {!customerUser ? (
                 <p className="text-[11px] sm:text-[11.5px] 2xl:text-[calc(22*var(--u))] text-gray-500 flex items-center gap-1.5 mt-1">
-                  <span className="text-[#ED2024] font-bold">🔒</span>
+                  <span className="text-[#ED2024] font-bold">✓</span>
                   <span>
-                    Sign in required to buy or add to bag.{' '}
+                    Free global delivery & 3-year warranty included.{' '}
                     <button
                       type="button"
-                      onClick={() => openAuthModal('Please sign in or create an account to purchase products or add them to your cart.')}
+                      onClick={() => openAuthModal('Please sign in or create an account to view and manage your orders.')}
                       className="text-[#ED2024] font-semibold underline hover:no-underline cursor-pointer"
                     >
                       Sign In
                     </button>
                   </span>
                 </p>
-              )}
+              ) : null}
             </div>
 
             {/* 3 Mini Trust Guarantee Badges Row */}

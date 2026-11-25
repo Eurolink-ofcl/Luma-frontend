@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useCurrency } from '../../context/CurrencyContext';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
+import { resolveImageUrl } from '../../config/api';
 
 const CAROUSEL_SLIDES = [
   {
@@ -49,7 +50,7 @@ const COLOR_OPTIONS = [
 
 export default function LumaGlowDetailSection({ product, onOpenCart, onBuyNow }) {
   const { formatPrice } = useCurrency();
-  const { addToCart, buyNow } = useCart();
+  const { addToCart, buyNow, openCart } = useCart();
   const { customerUser, openAuthModal } = useAuth();
   const [activeSlide, setActiveSlide] = useState(0);
   const [selectedColor, setSelectedColor] = useState('black');
@@ -75,7 +76,27 @@ export default function LumaGlowDetailSection({ product, onOpenCart, onBuyNow })
     }
   };
 
-  const currentSlide = CAROUSEL_SLIDES[activeSlide] || CAROUSEL_SLIDES[0];
+  const slides =
+    Array.isArray(product?.images) && product.images.length > 0
+      ? product.images.map((img, idx) => ({
+          id: `cms-img-${idx}`,
+          image: resolveImageUrl(img),
+          fallback: resolveImageUrl(img),
+          alt: `${product?.name || 'LUMA GLOW'} View ${idx + 1}`,
+        }))
+      : product?.image
+      ? [
+          {
+            id: 'cms-img-main',
+            image: resolveImageUrl(product.image),
+            fallback: resolveImageUrl(product.image),
+            alt: product?.name || 'LUMA GLOW',
+          },
+        ]
+      : CAROUSEL_SLIDES;
+
+  const safeSlideIndex = Math.min(activeSlide, Math.max(0, slides.length - 1));
+  const currentSlide = slides[safeSlideIndex] || slides[0];
 
   // Eyebrow & Titles
   const eyebrow = product?.eyebrow || 'LUMA GLOW';
@@ -143,34 +164,36 @@ export default function LumaGlowDetailSection({ product, onOpenCart, onBuyNow })
           {/* ==================== LEFT COLUMN: IMAGE CAROUSEL & SWATCHES ==================== */}
           <div className="flex flex-col items-center w-full max-w-[460px] 2xl:max-w-none 2xl:w-[calc(918*var(--u))] mx-auto lg:mx-0">
             {/* Main Rounded Showcase Frame matching PSD Rectangle 70 copy (918x1144, r=50px) */}
-            <div className="relative w-full aspect-[918/1144] rounded-[20px] sm:rounded-[30px] 2xl:rounded-[calc(50*var(--u))] overflow-hidden bg-[#F7F7F7] shadow-sm">
-              <picture>
-                <source srcSet={currentSlide.image} type="image/webp" />
-                <img
-                  src={currentSlide.fallback}
-                  alt={currentSlide.alt}
-                  className="w-full h-full object-cover transition-opacity duration-300 pointer-events-none"
-                  draggable={false}
-                />
-              </picture>
+            <div className="relative w-full aspect-[918/1144] rounded-[20px] sm:rounded-[30px] 2xl:rounded-[calc(50*var(--u))] overflow-hidden bg-[#F7F7F7] shadow-sm flex items-center justify-center">
+              <img
+                src={currentSlide?.image || currentSlide?.fallback}
+                alt={currentSlide?.alt || 'LUMA GLOW'}
+                className="w-full h-full object-cover transition-opacity duration-300 pointer-events-none"
+                draggable={false}
+                onError={(e) => {
+                  e.target.src = '/assets/about/product-glow-mask.png';
+                }}
+              />
             </div>
 
-            {/* Carousel Pagination Dots matching PSD (y=1775, 4 dots of 20x20px, gap 10px) */}
-            <div className="flex items-center justify-center gap-2.5 2xl:gap-[calc(10*var(--u))] mt-5 sm:mt-7 2xl:mt-[calc(106*var(--u))]">
-              {CAROUSEL_SLIDES.map((slide, idx) => (
-                <button
-                  key={slide.id}
-                  type="button"
-                  onClick={() => setActiveSlide(idx)}
-                  aria-label={`Slide ${idx + 1}`}
-                  className={`w-2.5 h-2.5 2xl:w-[calc(20*var(--u))] 2xl:h-[calc(20*var(--u))] rounded-full transition-all cursor-pointer ${
-                    activeSlide === idx
-                      ? 'bg-[#ED2024]'
-                      : 'bg-[#D9D9D9] hover:bg-[#B3B3B3]'
-                  }`}
-                />
-              ))}
-            </div>
+            {/* Carousel Pagination Dots */}
+            {slides.length > 1 && (
+              <div className="flex items-center justify-center gap-2.5 2xl:gap-[calc(10*var(--u))] mt-5 sm:mt-7 2xl:mt-[calc(106*var(--u))]">
+                {slides.map((slide, idx) => (
+                  <button
+                    key={slide.id || idx}
+                    type="button"
+                    onClick={() => setActiveSlide(idx)}
+                    aria-label={`Slide ${idx + 1}`}
+                    className={`w-2.5 h-2.5 2xl:w-[calc(20*var(--u))] 2xl:h-[calc(20*var(--u))] rounded-full transition-all cursor-pointer ${
+                      safeSlideIndex === idx
+                        ? 'bg-[#ED2024]'
+                        : 'bg-[#D9D9D9] hover:bg-[#B3B3B3]'
+                    }`}
+                  />
+                ))}
+              </div>
+            )}
 
             {/* Color Swatch Selector Circles matching PSD GREY COLOUR BUTTON & BLCK COLOUR */}
             <div className="flex items-center justify-center gap-5 sm:gap-7 2xl:gap-[calc(67*var(--u))] mt-5 sm:mt-6 2xl:mt-[calc(83*var(--u))]">
@@ -251,7 +274,10 @@ export default function LumaGlowDetailSection({ product, onOpenCart, onBuyNow })
                       variant: activeColor?.name || 'Obsidian Black',
                     };
                     const added = addToCart(item, 1, activeColor?.name);
-                    if (added && onOpenCart) onOpenCart();
+                    if (added) {
+                      if (onOpenCart) onOpenCart();
+                      else openCart();
+                    }
                   }}
                   className="flex-1 sm:flex-none w-auto sm:w-[155px] xl:w-[170px] 2xl:w-[calc(327*var(--u))] h-[42px] sm:h-[48px] xl:h-[50px] 2xl:h-[calc(86*var(--u))] rounded-[6px] 2xl:rounded-[calc(10*var(--u))] bg-[#333333] hover:bg-[#222222] active:scale-[0.98] text-[#FFFFFF] text-[12px] sm:text-[13px] xl:text-[14px] 2xl:text-[calc(32*var(--u))] font-semibold uppercase tracking-[0.05em] flex items-center justify-center transition-all cursor-pointer leading-none shadow-sm"
                 >
@@ -271,7 +297,7 @@ export default function LumaGlowDetailSection({ product, onOpenCart, onBuyNow })
                       image: product?.image || '/assets/glow/glow-1.jpg',
                       variant: activeColor?.name || 'Obsidian Black',
                     };
-                    buyNow(item, onBuyNow || onOpenCart, 1, activeColor?.name);
+                    buyNow(item, onBuyNow || onOpenCart || openCart, 1, activeColor?.name);
                   }}
                   className="flex-1 sm:flex-none w-auto sm:w-[155px] xl:w-[170px] 2xl:w-[calc(327*var(--u))] h-[42px] sm:h-[48px] xl:h-[50px] 2xl:h-[calc(86*var(--u))] rounded-[6px] 2xl:rounded-[calc(10*var(--u))] bg-[#ED2024] hover:bg-[#d4191d] active:scale-[0.98] text-[#FFFFFF] text-[12px] sm:text-[13px] xl:text-[14px] 2xl:text-[calc(32*var(--u))] font-semibold uppercase tracking-[0.05em] flex items-center justify-center transition-all cursor-pointer leading-none shadow-md"
                 >
@@ -279,22 +305,22 @@ export default function LumaGlowDetailSection({ product, onOpenCart, onBuyNow })
                 </button>
               </div>
 
-              {/* Guest Authentication Notice */}
-              {!customerUser && (
+              {/* Delivery & Authentication Helper */}
+              {!customerUser ? (
                 <p className="text-[11px] sm:text-[11.5px] 2xl:text-[calc(22*var(--u))] text-gray-500 flex items-center gap-1.5 mt-1">
-                  <span className="text-[#ED2024] font-bold">🔒</span>
+                  <span className="text-[#ED2024] font-bold">✓</span>
                   <span>
-                    Sign in required to buy or add to bag.{' '}
+                    Free global delivery & 3-year warranty included.{' '}
                     <button
                       type="button"
-                      onClick={() => openAuthModal('Please sign in or create an account to purchase products or add them to your cart.')}
+                      onClick={() => openAuthModal('Please sign in or create an account to view and manage your orders.')}
                       className="text-[#ED2024] font-semibold underline hover:no-underline cursor-pointer"
                     >
                       Sign In
                     </button>
                   </span>
                 </p>
-              )}
+              ) : null}
             </div>
 
             {/* 3 Mini Trust Guarantee Badges Row */}

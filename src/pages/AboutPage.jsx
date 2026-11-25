@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import AboutHero from '../components/about/AboutHero';
 import AboutIntroSection from '../components/about/AboutIntroSection';
 import AboutBasicsSection from '../components/about/AboutBasicsSection';
@@ -13,7 +13,7 @@ const API_BASE_URL =
     ? `${window.location.origin}/api`
     : 'http://localhost:5000/api');
 
-export default function AboutPage({ onNavigateHome }) {
+export default function AboutPage({ onNavigateHome, onOpenCart }) {
   const [pageContent, setPageContent] = useState(null);
 
   // Fetch dynamic CMS content from MongoDB
@@ -58,7 +58,7 @@ export default function AboutPage({ onNavigateHome }) {
       </div>
 
       {/* 7th Section: Doctor Advisory + Ready When You Are / Find Your Device */}
-      <AboutShopSection onNavigateHome={onNavigateHome} data={pageContent?.shopCta} />
+      <AboutShopSection onNavigateHome={onNavigateHome} onOpenCart={onOpenCart} data={pageContent?.shopCta} />
     </div>
   );
 }

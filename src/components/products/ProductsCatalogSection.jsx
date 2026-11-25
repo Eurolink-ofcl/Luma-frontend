@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCurrency } from '../../context/CurrencyContext';
 import { useCart } from '../../context/CartContext';
 
@@ -119,7 +119,7 @@ export default function ProductsCatalogSection({
   const [activeCategory, setActiveCategory] = useState('all');
   const [liveProducts, setLiveProducts] = useState(null);
   const { formatPrice } = useCurrency();
-  const { addToCart } = useCart();
+  const { addToCart, openCart } = useCart();
 
   // Fetch live products from MongoDB Atlas
   useEffect(() => {
@@ -332,7 +332,10 @@ export default function ProductsCatalogSection({
                           variant: 'Standard Clinical Edition',
                         };
                         const added = addToCart(item, 1);
-                        if (added && onOpenCart) onOpenCart();
+                        if (added) {
+                          if (onOpenCart) onOpenCart();
+                          else openCart();
+                        }
                       }}
                       className="w-[140px] h-[40px] sm:w-[155px] sm:h-[44px] lg:w-[calc(327*var(--u))] lg:h-[calc(86*var(--u))] rounded-[6px] lg:rounded-[calc(10*var(--u))] bg-[#ED2024] hover:bg-[#d4191d] text-[#FFFFFF] text-[12px] sm:text-[13px] lg:text-[calc(32*var(--u))] font-semibold uppercase tracking-[0.05em] flex items-center justify-center transition-colors cursor-pointer"
                     >

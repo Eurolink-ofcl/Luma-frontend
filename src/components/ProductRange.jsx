@@ -334,8 +334,11 @@ export default function ProductRange({ onAddToCart, onNavigate, data }) {
                         <button
                           type="button"
                           onClick={() => {
-                            const targetSlug = product.slug || product.id;
-                            if (onNavigate) {
+                            const isAddBtn = /add/i.test(btnText || '');
+                            if (isAddBtn && onAddToCart) {
+                              onAddToCart(product);
+                            } else if (onNavigate) {
+                              const targetSlug = product.slug || product.id;
                               onNavigate(targetSlug);
                             } else if (onAddToCart) {
                               onAddToCart(product);

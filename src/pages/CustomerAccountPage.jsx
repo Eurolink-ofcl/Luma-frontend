@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCurrency } from '../context/CurrencyContext';
 import { resolveImageUrl } from '../config/api';
 

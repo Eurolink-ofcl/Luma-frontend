@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { useCurrency } from '../../context/CurrencyContext';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
+import { resolveImageUrl } from '../../config/api';
 
 export default function ProductDetailHeroSection({ product, onOpenCart, onBuyNow }) {
   const { formatPrice } = useCurrency();
-  const { addToCart, buyNow } = useCart();
+  const { addToCart, buyNow, openCart } = useCart();
   const { customerUser, openAuthModal } = useAuth();
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [selectedColor, setSelectedColor] = useState('grey'); // 'grey' | 'black'
@@ -15,25 +16,35 @@ export default function ProductDetailHeroSection({ product, onOpenCart, onBuyNow
     setOpenAccordion((prev) => (prev === id ? null : id));
   };
 
-  // Derive images list
+  // Derive images list: prioritize CMS images array, fallback to single image, or clean fallback
   const heroImages =
-    product?.images && product.images.length > 0
+    Array.isArray(product?.images) && product.images.length > 0
       ? product.images.map((img, idx) => ({
           id: `hero-${idx}`,
-          src: img,
-          fallback: img,
+          src: resolveImageUrl(img),
+          fallback: resolveImageUrl(img),
           alt: `${product.name || 'LUMA'} Product View ${idx + 1}`,
         }))
+      : product?.image
+      ? [
+          {
+            id: 'hero-main',
+            src: resolveImageUrl(product.image),
+            fallback: resolveImageUrl(product.image),
+            alt: product?.name || 'LUMA Device',
+          },
+        ]
       : [
           {
             id: 'hero-main',
-            src: product?.image || '/assets/nova/nova-hero-main.webp',
-            fallback: product?.image || '/assets/nova/nova-hero-main.jpg',
+            src: '/assets/nova/nova-hero-main.webp',
+            fallback: '/assets/nova/nova-hero-main.jpg',
             alt: product?.name || 'LUMA Device',
           },
         ];
 
-  const currentImage = heroImages[activeImageIndex] || heroImages[0];
+  const safeActiveIndex = Math.min(activeImageIndex, Math.max(0, heroImages.length - 1));
+  const currentImage = heroImages[safeActiveIndex] || heroImages[0];
 
   // Pricing formatting - reactive to selected currency
   const currentPriceFormatted = product?.price
@@ -138,7 +149,7 @@ export default function ProductDetailHeroSection({ product, onOpenCart, onBuyNow
                     onClick={() => setActiveImageIndex(idx)}
                     aria-label={`Show view ${idx + 1}`}
                     className={`transition-all duration-200 cursor-pointer rounded-full ${
-                      activeImageIndex === idx
+                      safeActiveIndex === idx
                         ? 'w-[10px] h-[10px] sm:w-[12px] sm:h-[12px] 2xl:w-[calc(20*var(--u))] 2xl:h-[calc(20*var(--u))] bg-[#ED2024] scale-110'
                         : 'w-[8px] h-[8px] sm:w-[10px] sm:h-[10px] 2xl:w-[calc(20*var(--u))] 2xl:h-[calc(20*var(--u))] bg-[#D1D1D1] hover:bg-[#A0A0A0]'
                     }`}
@@ -231,7 +242,10 @@ export default function ProductDetailHeroSection({ product, onOpenCart, onBuyNow
                       variant: selectedColor === 'grey' ? 'Space Grey' : 'Matte Obsidian',
                     };
                     const added = addToCart(item, 1, selectedColor);
-                    if (added && onOpenCart) onOpenCart();
+                    if (added) {
+                      if (onOpenCart) onOpenCart();
+                      else openCart();
+                    }
                   }}
                   className="flex-1 sm:flex-none w-auto sm:w-[155px] xl:w-[170px] 2xl:w-[calc(327*var(--u))] h-[42px] sm:h-[48px] xl:h-[50px] 2xl:h-[calc(86*var(--u))] rounded-[6px] 2xl:rounded-[calc(10*var(--u))] bg-[#333333] hover:bg-[#222222] active:scale-[0.98] text-[#FFFFFF] text-[12px] sm:text-[13px] xl:text-[14px] 2xl:text-[calc(32*var(--u))] font-semibold uppercase tracking-[0.05em] flex items-center justify-center transition-all cursor-pointer leading-none shadow-sm"
                 >
@@ -249,7 +263,7 @@ export default function ProductDetailHeroSection({ product, onOpenCart, onBuyNow
                       image: (Array.isArray(product?.images) && product?.images[0]) || product?.image || '/assets/nova/nova-hero-main.webp',
                       variant: selectedColor === 'grey' ? 'Space Grey' : 'Matte Obsidian',
                     };
-                    buyNow(item, onBuyNow || onOpenCart, 1, selectedColor);
+                    buyNow(item, onBuyNow || onOpenCart || openCart, 1, selectedColor);
                   }}
                   className="flex-1 sm:flex-none w-auto sm:w-[155px] xl:w-[170px] 2xl:w-[calc(327*var(--u))] h-[42px] sm:h-[48px] xl:h-[50px] 2xl:h-[calc(86*var(--u))] rounded-[6px] 2xl:rounded-[calc(10*var(--u))] bg-[#ED2024] hover:bg-[#d4191d] active:scale-[0.98] text-[#FFFFFF] text-[12px] sm:text-[13px] xl:text-[14px] 2xl:text-[calc(32*var(--u))] font-semibold uppercase tracking-[0.05em] flex items-center justify-center transition-all cursor-pointer leading-none shadow-md"
                 >
@@ -257,22 +271,22 @@ export default function ProductDetailHeroSection({ product, onOpenCart, onBuyNow
                 </button>
               </div>
 
-              {/* Guest Authentication Notice */}
-              {!customerUser && (
+              {/* Delivery & Authentication Helper */}
+              {!customerUser ? (
                 <p className="text-[11px] sm:text-[11.5px] 2xl:text-[calc(22*var(--u))] text-gray-500 flex items-center gap-1.5 mt-1">
-                  <span className="text-[#ED2024] font-bold">🔒</span>
+                  <span className="text-[#ED2024] font-bold">✓</span>
                   <span>
-                    Sign in required to buy or add to bag.{' '}
+                    Free global delivery & 3-year warranty included.{' '}
                     <button
                       type="button"
-                      onClick={() => openAuthModal('Please sign in or create an account to purchase products or add them to your cart.')}
+                      onClick={() => openAuthModal('Please sign in or create an account to view and manage your orders.')}
                       className="text-[#ED2024] font-semibold underline hover:no-underline cursor-pointer"
                     >
                       Sign In
                     </button>
                   </span>
                 </p>
-              )}
+              ) : null}
             </div>
 
             {/* 3 Mini Trust Guarantee Badges Row */}

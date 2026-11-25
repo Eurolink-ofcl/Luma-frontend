@@ -1,4 +1,4 @@
-﻿const API_BASE_URL =
+const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ||
   (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
     ? `${window.location.origin}/api`
@@ -11,20 +11,22 @@ const CartContext = createContext();
 
 export function CartProvider({ children }) {
   const { customerUser, requireAuth } = useAuth();
+  const [isCartOpen, setIsCartOpen] = useState(false);
+
+  const openCart = useCallback(() => setIsCartOpen(true), []);
+  const closeCart = useCallback(() => setIsCartOpen(false), []);
 
   const getStorageKey = useCallback(() => {
-    return customerUser?.email ? `luma_cart_${customerUser.email.toLowerCase()}` : null;
+    return customerUser?.email ? `luma_cart_${customerUser.email.toLowerCase()}` : 'luma_cart_guest';
   }, [customerUser]);
 
   const [cartItems, setCartItems] = useState(() => {
     try {
-      const userKey = customerUser?.email ? `luma_cart_${customerUser.email.toLowerCase()}` : null;
-      if (userKey) {
-        const stored = localStorage.getItem(userKey);
-        if (stored) {
-          const parsed = JSON.parse(stored);
-          if (Array.isArray(parsed)) return parsed;
-        }
+      const userKey = customerUser?.email ? `luma_cart_${customerUser.email.toLowerCase()}` : 'luma_cart_guest';
+      const stored = localStorage.getItem(userKey);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) return parsed;
       }
     } catch (e) {
       console.warn('Error reading cart from localStorage:', e);
@@ -32,9 +34,21 @@ export function CartProvider({ children }) {
     return [];
   });
 
-  // When customer logs in or out, switch active cart
+  // When customer logs in or out, switch active cart and auto-merge any guest items
   useEffect(() => {
     if (!customerUser) {
+      try {
+        const guestStored = localStorage.getItem('luma_cart_guest');
+        if (guestStored) {
+          const parsed = JSON.parse(guestStored);
+          if (Array.isArray(parsed)) {
+            setCartItems(parsed);
+            return;
+          }
+        }
+      } catch (e) {
+        console.warn('Error loading guest cart:', e);
+      }
       setCartItems([]);
       return;
     }
@@ -42,17 +56,50 @@ export function CartProvider({ children }) {
     try {
       const userKey = `luma_cart_${customerUser.email.toLowerCase()}`;
       const stored = localStorage.getItem(userKey);
+      let userCart = [];
       if (stored) {
         const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed)) {
-          setCartItems(parsed);
-          return;
-        }
+        if (Array.isArray(parsed)) userCart = parsed;
       } else if (Array.isArray(customerUser.cart) && customerUser.cart.length > 0) {
-        setCartItems(customerUser.cart);
-        return;
+        userCart = customerUser.cart;
       }
-      setCartItems([]);
+
+      // Check if there was a guest cart before signing in, and merge it
+      const guestStored = localStorage.getItem('luma_cart_guest');
+      if (guestStored) {
+        try {
+          const guestItems = JSON.parse(guestStored);
+          if (Array.isArray(guestItems) && guestItems.length > 0) {
+            guestItems.forEach((gItem) => {
+              const existingIdx = userCart.findIndex(
+                (u) => u.id === gItem.id || (u.slug && gItem.slug && u.slug === gItem.slug)
+              );
+              if (existingIdx > -1) {
+                userCart[existingIdx].quantity =
+                  (userCart[existingIdx].quantity || 1) + (gItem.quantity || 1);
+              } else {
+                userCart.push(gItem);
+              }
+            });
+            localStorage.removeItem('luma_cart_guest');
+          }
+        } catch {
+          // ignore
+        }
+      }
+
+      setCartItems(userCart);
+      localStorage.setItem(userKey, JSON.stringify(userCart));
+
+      // Background sync to MongoDB
+      fetch(`${API_BASE_URL}/customer/cart`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: customerUser.email,
+          cartItems: userCart,
+        }),
+      }).catch(() => {});
     } catch (e) {
       console.warn('Error loading user cart on auth change:', e);
       setCartItems([]);
@@ -66,8 +113,8 @@ export function CartProvider({ children }) {
 
     try {
       localStorage.setItem(key, JSON.stringify(cartItems));
-      
-      // Optional background sync with backend MongoDB
+
+      // Sync with backend MongoDB if logged in
       if (customerUser?.email) {
         fetch(`${API_BASE_URL}/customer/cart`, {
           method: 'POST',
@@ -85,79 +132,78 @@ export function CartProvider({ children }) {
 
   /**
    * Adds an item to the cart.
-   * If user is not logged in, blocks addition and triggers AuthModal.
+   * Works immediately anywhere across the site for logged in customers and guests alike.
    */
   const addToCart = useCallback((product, quantity = 1, variant = '') => {
-    return requireAuth(() => {
-      setCartItems((prev) => {
-        const existingIdx = prev.findIndex(
-          (item) =>
-            (product.id && item.id === product.id) ||
-            (product._id && item.id === product._id) ||
-            (item.slug && product.slug && item.slug === product.slug && (!variant || item.variant === variant))
-        );
+    setCartItems((prev) => {
+      const existingIdx = prev.findIndex(
+        (item) =>
+          (product.id && item.id === product.id) ||
+          (product._id && item.id === product._id) ||
+          (item.slug && product.slug && item.slug === product.slug && (!variant || item.variant === variant))
+      );
 
-        if (existingIdx > -1) {
-          const updated = [...prev];
-          updated[existingIdx] = {
-            ...updated[existingIdx],
-            quantity: updated[existingIdx].quantity + quantity,
-          };
-          return updated;
-        }
-
-        const newItem = {
-          id: product.id || product._id || `cart-${Date.now()}`,
-          slug: product.slug || '',
-          name: product.name || product.title || 'LUMA Red Light Device',
-          variant: variant || product.variant || 'Standard Clinical Edition',
-          price: Number(product.price) || 0,
-          quantity: Math.max(1, quantity),
-          image: product.image || product.thumbnail || '/assets/products/list-product-1.jpg',
+      if (existingIdx > -1) {
+        const updated = [...prev];
+        updated[existingIdx] = {
+          ...updated[existingIdx],
+          quantity: updated[existingIdx].quantity + quantity,
         };
+        return updated;
+      }
 
-        return [...prev, newItem];
-      });
-      return true;
-    }, 'Please sign in or create an account to add items to your cart.');
-  }, [requireAuth]);
-
-  /**
-   * Buy Now action:
-   * If user is not logged in, blocks and triggers AuthModal.
-   * If logged in, adds item to cart and executes onProceedToCheckout([item]).
-   */
-  const buyNow = useCallback((product, onProceedToCheckout, quantity = 1, variant = '') => {
-    return requireAuth(() => {
-      const item = {
+      const newItem = {
         id: product.id || product._id || `cart-${Date.now()}`,
         slug: product.slug || '',
-        name: product.name || product.title || 'LUMA Red Light Device',
+        name: product.name || product.title || product.eyebrow || 'LUMA Red Light Device',
         variant: variant || product.variant || 'Standard Clinical Edition',
         price: Number(product.price) || 0,
         quantity: Math.max(1, quantity),
         image: product.image || product.thumbnail || '/assets/products/list-product-1.jpg',
       };
 
-      setCartItems((prev) => {
-        const existingIdx = prev.findIndex((i) => i.id === item.id || (i.slug && i.slug === item.slug));
-        if (existingIdx > -1) {
-          const updated = [...prev];
-          updated[existingIdx] = {
-            ...updated[existingIdx],
-            quantity: updated[existingIdx].quantity + quantity,
-          };
-          return updated;
-        }
-        return [...prev, item];
-      });
+      return [...prev, newItem];
+    });
+    return true;
+  }, []);
 
-      if (typeof onProceedToCheckout === 'function') {
-        onProceedToCheckout([item]);
+  /**
+   * Buy Now action:
+   * Adds item to cart, then opens checkout (prompting login if guest).
+   */
+  const buyNow = useCallback((product, onProceedToCheckout, quantity = 1, variant = '') => {
+    const item = {
+      id: product.id || product._id || `cart-${Date.now()}`,
+      slug: product.slug || '',
+      name: product.name || product.title || product.eyebrow || 'LUMA Red Light Device',
+      variant: variant || product.variant || 'Standard Clinical Edition',
+      price: Number(product.price) || 0,
+      quantity: Math.max(1, quantity),
+      image: product.image || product.thumbnail || '/assets/products/list-product-1.jpg',
+    };
+
+    setCartItems((prev) => {
+      const existingIdx = prev.findIndex((i) => i.id === item.id || (i.slug && i.slug === item.slug));
+      if (existingIdx > -1) {
+        const updated = [...prev];
+        updated[existingIdx] = {
+          ...updated[existingIdx],
+          quantity: updated[existingIdx].quantity + quantity,
+        };
+        return updated;
       }
-      return true;
-    }, 'Please sign in or create an account to purchase this product.');
-  }, [requireAuth]);
+      return [...prev, item];
+    });
+
+    if (typeof onProceedToCheckout === 'function') {
+      requireAuth(() => {
+        onProceedToCheckout([item]);
+      }, 'Please sign in or create an account to proceed with your order.');
+    } else {
+      openCart();
+    }
+    return true;
+  }, [requireAuth, openCart]);
 
   const updateQuantity = useCallback((id, newQty) => {
     setCartItems((prev) => {
@@ -194,6 +240,10 @@ export function CartProvider({ children }) {
         cartItems,
         cartCount,
         cartSubtotal,
+        isCartOpen,
+        setIsCartOpen,
+        openCart,
+        closeCart,
         addToCart,
         buyNow,
         updateQuantity,

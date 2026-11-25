@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect, useMemo } from 'react';
 import { ALL_CATALOG_FINDER_PRODUCTS, getFinderProductsFor } from './deviceFinderData';
 import { useCurrency } from '../../context/CurrencyContext';
+import { useCart } from '../../context/CartContext';
 
 export default function LumaGlowDeviceFinderSection({
   products: initialProducts,
@@ -10,7 +11,9 @@ export default function LumaGlowDeviceFinderSection({
   onOpenCart,
 }) {
   const { formatPrice } = useCurrency();
+  const { addToCart, openCart } = useCart();
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [addedId, setAddedId] = useState(null);
   const [visibleCount, setVisibleCount] = useState(4);
   const [arrowTop, setArrowTop] = useState(null);
   const firstCardFrameRef = useRef(null);
@@ -272,15 +275,28 @@ export default function LumaGlowDeviceFinderSection({
                   <button
                     type="button"
                     onClick={() => {
-                      if (onOpenCart) {
+                      const item = {
+                        id: product.id || product.slug,
+                        slug: product.slug || product.id,
+                        name: `${product.titleLine1 || ''} ${product.titleLine2 || ''}`.trim() || product.eyebrow || 'LUMA Red Light Panel',
+                        price: Number(product.price) || 1200,
+                        image: product.image,
+                        variant: 'Standard Clinical Edition',
+                      };
+                      addToCart(item, 1);
+                      if (typeof onOpenCart === 'function') {
                         onOpenCart();
-                      } else if (onNavigateProduct) {
-                        onNavigateProduct(product.id || product.slug);
+                      } else {
+                        openCart();
                       }
+                      setAddedId(product.id || product.slug);
+                      setTimeout(() => setAddedId(null), 1800);
                     }}
-                    className="mt-3 sm:mt-3.5 2xl:mt-[calc(36*var(--u))] w-[110px] sm:w-[120px] md:w-[130px] h-[34px] sm:h-[36px] md:h-[38px] 2xl:w-[calc(261*var(--u))] 2xl:h-[calc(66*var(--u))] rounded-[6px] 2xl:rounded-[calc(10*var(--u))] bg-[#010101] hover:bg-[#222222] text-[#FFFFFF] text-[10px] sm:text-[11px] md:text-[12px] 2xl:text-[calc(30*var(--u))] font-semibold uppercase tracking-[0.05em] flex items-center justify-center transition-colors cursor-pointer"
+                    className={`mt-3 sm:mt-3.5 2xl:mt-[calc(36*var(--u))] w-[110px] sm:w-[120px] md:w-[130px] h-[34px] sm:h-[36px] md:h-[38px] 2xl:w-[calc(261*var(--u))] 2xl:h-[calc(66*var(--u))] rounded-[6px] 2xl:rounded-[calc(10*var(--u))] ${
+                      addedId === (product.id || product.slug) ? 'bg-[#ED2024] text-[#FFFFFF]' : 'bg-[#010101] hover:bg-[#222222] text-[#FFFFFF]'
+                    } text-[10px] sm:text-[11px] md:text-[12px] 2xl:text-[calc(30*var(--u))] font-semibold uppercase tracking-[0.05em] flex items-center justify-center transition-all cursor-pointer shadow-sm`}
                   >
-                    ADD TO BAG
+                    {addedId === (product.id || product.slug) ? 'ADDED ✓' : 'ADD TO BAG'}
                   </button>
                 </div>
               ))}
