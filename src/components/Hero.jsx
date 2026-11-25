@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { resolveImageUrl } from '../config/api';
 
 export default function Hero({ data }) {
   const [activeSlide, setActiveSlide] = useState(0);
@@ -15,7 +16,7 @@ export default function Hero({ data }) {
   const exploreBtnLink = data?.exploreBtnLink || '#about';
   const findPanelBtnText = data?.findPanelBtnText || 'FIND YOUR PANEL';
   const findPanelBtnLink = data?.findPanelBtnLink || '#assessment-quiz';
-  const bgImage = data?.bgImage || '/assets/hero-bg.jpg';
+  const bgImage = resolveImageUrl(data?.bgImage) || data?.bgImage || '/assets/hero-bg.jpg';
 
   return (
     <main
