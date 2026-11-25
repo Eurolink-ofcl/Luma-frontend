@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useCurrency } from '../context/CurrencyContext';
+import { resolveImageUrl } from '../config/api';
 
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ||
@@ -1029,7 +1030,7 @@ export default function CustomerAccountPage({
                                         <div className="pt-1 flex items-center gap-2 text-xs">
                                           <span className="font-semibold text-gray-700">Uploaded Evidence:</span>
                                           <a
-                                            href={order.returnRequest.mediaUrl}
+                                            href={resolveImageUrl(order.returnRequest.mediaUrl)}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="font-bold text-[#ED2024] hover:underline inline-flex items-center gap-1 bg-white px-2 py-0.5 rounded border border-gray-200"

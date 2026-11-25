@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
+import { resolveImageUrl } from '../../config/api';
 
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ||
@@ -1470,13 +1471,13 @@ export default function OrdersManager({ onOrderUpdated }) {
                         {selectedOrder.returnRequest.mediaType === 'video' ? (
                           <div className="rounded-xl overflow-hidden border border-gray-200 bg-black max-w-md shadow-xs">
                             <video
-                              src={selectedOrder.returnRequest.mediaUrl}
+                              src={resolveImageUrl(selectedOrder.returnRequest.mediaUrl)}
                               controls
                               className="w-full max-h-[260px] object-contain"
                             />
                             <div className="p-2 bg-gray-900 text-right">
                               <a
-                                href={selectedOrder.returnRequest.mediaUrl}
+                                href={resolveImageUrl(selectedOrder.returnRequest.mediaUrl)}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="text-[11px] font-semibold text-white/80 hover:text-white inline-flex items-center gap-1"
@@ -1488,12 +1489,12 @@ export default function OrdersManager({ onOrderUpdated }) {
                         ) : (
                           <div className="rounded-xl overflow-hidden border border-gray-200 bg-gray-50 max-w-sm group relative shadow-xs">
                             <img
-                              src={selectedOrder.returnRequest.mediaUrl}
+                              src={resolveImageUrl(selectedOrder.returnRequest.mediaUrl)}
                               alt="Return evidence"
                               className="w-full max-h-[260px] object-contain"
                             />
                             <a
-                              href={selectedOrder.returnRequest.mediaUrl}
+                              href={resolveImageUrl(selectedOrder.returnRequest.mediaUrl)}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="absolute bottom-2 right-2 px-2.5 py-1 bg-black/75 hover:bg-black text-white text-[11px] font-semibold rounded-md backdrop-blur-xs transition-colors flex items-center gap-1 shadow-md"
