@@ -304,21 +304,15 @@ export default function RealStoryGallerySection({ data }) {
       className="relative w-full bg-[#FFFFFF] text-[#000000] overflow-hidden font-['Manrope'] select-none py-14 sm:py-18 md:py-22"
     >
       <div className="w-full max-w-[1560px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
-        {/* Section Header: REAL STORY + Red Brand Bar */}
-        <div className="text-center mb-10 sm:mb-12 md:mb-14">
-          <span className="text-[11px] sm:text-[12px] font-bold tracking-[0.2em] uppercase text-[#ED2024] block mb-2.5">
-            COMMUNITY VOICES &amp; EXPERIENCES
-          </span>
+        {/* Section Header: REAL STORY + Red Brand Bar (matches exact LUMA-REVIEW-PAGE design) */}
+        <div className="w-full flex flex-col items-center justify-center text-center px-4 mb-10 sm:mb-14 md:mb-16">
           <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extralight uppercase tracking-[0.02em] text-[#131313] leading-none">
             {title}
           </h2>
           <div
-            className="mt-4 sm:mt-5 w-20 sm:w-28 md:w-36 h-2 sm:h-2.5 rounded-full bg-[#ED2024] mx-auto"
+            className="mt-3 sm:mt-4 lg:mt-5 w-[60px] sm:w-[85px] lg:w-[150px] h-[8px] sm:h-[12px] lg:h-[16px] rounded-full bg-[#ED2024]"
             aria-hidden="true"
           />
-          <p className="mt-3.5 sm:mt-4 text-xs sm:text-sm text-[#71717A] uppercase tracking-[0.12em] font-medium max-w-xl mx-auto">
-            Authentic customer reviews, clinical protocols &amp; recovery transformations
-          </p>
         </div>
 
         {/* Carousel Container with Flanking Left & Right Arrow Buttons */}
