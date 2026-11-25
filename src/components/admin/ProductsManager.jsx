@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import ImageUploadField from './ImageUploadField';
 
 const API_BASE_URL =
@@ -948,19 +948,6 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
               <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
             </svg>
             <span>Refresh</span>
-          </button>
-
-          <button
-            type="button"
-            onClick={handleSeedDefaults}
-            disabled={seeding || loading}
-            className="px-3.5 py-2 rounded-[9px] bg-white hover:bg-gray-50 border border-gray-300 text-gray-700 shadow-sm text-[12px] font-medium transition-colors cursor-pointer flex items-center gap-1.5"
-            title="Seed / Reset 7 official LUMA catalog products"
-          >
-            <svg className="w-3.5 h-3.5 text-[#ED2024]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-            </svg>
-            <span>{seeding ? 'Seeding...' : 'Seed LUMA Catalog'}</span>
           </button>
 
           <button
