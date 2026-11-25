@@ -1,7 +1,7 @@
-const API_BASE_URL =
+﻿const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ||
   (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
-    ? 'https://astro.bloodme.in/luma-api/api'
+    ? `${window.location.origin}/api`
     : 'http://localhost:5000/api');
 
 import React, { useState, useEffect } from 'react';

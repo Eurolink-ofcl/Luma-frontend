@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import ReviewHero from '../components/reviews/ReviewHero';
 import RealStoriesSection from '../components/reviews/RealStoriesSection';
 import RealStoryGallerySection from '../components/reviews/RealStoryGallerySection';
@@ -10,7 +10,7 @@ import TrustGuarantees from '../components/TrustGuarantees';
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ||
   (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
-    ? 'https://astro.bloodme.in/luma-api/api'
+    ? `${window.location.origin}/api`
     : 'http://localhost:5000/api');
 
 export default function ReviewsPage({ onNavigateHome }) {

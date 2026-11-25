@@ -1,9 +1,10 @@
 import React from 'react';
+import { resolveImageUrl } from '../../config/api.js';
 
 export default function AboutHero({ data }) {
   const eyebrow = data?.eyebrow || 'ABOUT';
   const title = data?.title || 'LUMA';
-  const bannerImage = data?.bannerImage || '/assets/about/hero-bg.jpg';
+  const bannerImage = resolveImageUrl(data?.bannerImage) || '/assets/about/hero-bg.jpg';
 
   return (
     <section
@@ -18,6 +19,11 @@ export default function AboutHero({ data }) {
           alt="About LUMA Red Light Therapy"
           className="w-full h-full object-cover object-right lg:object-center block"
           draggable={false}
+          onError={(e) => {
+            if (!e.currentTarget.src.includes('/assets/about/hero-bg.jpg')) {
+              e.currentTarget.src = '/assets/about/hero-bg.jpg';
+            }
+          }}
         />
       </div>
 

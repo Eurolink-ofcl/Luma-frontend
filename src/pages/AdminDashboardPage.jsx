@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import ContentManagement from '../components/admin/ContentManagement';
 import AboutCmsEditor from '../components/admin/AboutCmsEditor';
 import CommunityCmsEditor from '../components/admin/CommunityCmsEditor';
@@ -13,7 +13,7 @@ import NewsletterManager from '../components/admin/NewsletterManager';
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ||
   (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
-    ? 'https://astro.bloodme.in/luma-api/api'
+    ? `${window.location.origin}/api`
     : 'http://localhost:5000/api');
 
 export default function AdminDashboardPage({ onNavigateHome, onNavigatePage, onLogout, adminUser }) {

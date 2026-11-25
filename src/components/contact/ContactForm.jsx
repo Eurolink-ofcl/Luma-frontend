@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+﻿import React, { useState, useRef, useEffect } from 'react';
 
 const ENQUIRY_SUBJECTS = [
   'General Enquiry',
@@ -11,7 +11,7 @@ const ENQUIRY_SUBJECTS = [
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ||
   (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
-    ? 'https://astro.bloodme.in/luma-api/api'
+    ? `${window.location.origin}/api`
     : 'http://localhost:5000/api');
 
 export default function ContactForm() {
