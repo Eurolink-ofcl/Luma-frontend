@@ -302,149 +302,149 @@ export default function RealStoryGallerySection({ data }) {
     <section
       id="real-story"
       style={{ '--u': 'calc(100vw / 3840)' }}
-      className="relative w-full bg-[#FFFFFF] text-[#000000] overflow-hidden font-['Manrope'] select-none py-14 sm:py-18 md:py-22"
+      className="relative w-full bg-[#FFFFFF] text-[#000000] overflow-hidden font-['Manrope'] select-none pt-12 sm:pt-16 md:pt-20 lg:pt-[calc(169*var(--u))] pb-12 sm:pb-16 md:pb-20 lg:pb-[calc(111*var(--u))]"
     >
-      <div className="w-full max-w-[1560px] mx-auto px-4 sm:px-6 md:px-8 lg:px-12">
-        {/* Section Header: REAL STORY + Red Brand Bar */}
-        <div className="w-full flex flex-col items-center justify-center text-center px-4 mb-8 sm:mb-12 lg:mb-[calc(60*var(--u))]">
-          <h2 className="text-[26px] sm:text-[36px] md:text-[46px] lg:text-[calc(80*var(--u))] font-extralight uppercase tracking-[0.02em] text-[#131313] leading-none">
-            {title}
-          </h2>
-          <div
-            className="mt-3 sm:mt-4 lg:mt-[calc(47*var(--u))] w-[60px] sm:w-[85px] lg:w-[calc(150*var(--u))] h-[8px] sm:h-[12px] lg:h-[calc(20*var(--u))] rounded-full bg-[#ED2124]"
-            aria-hidden="true"
+      {/* Section Header: Title + Red Pill Bar (matches exact RealStoriesSection layout) */}
+      <div className="w-full flex flex-col items-center justify-center text-center px-4">
+        <h2 className="text-[26px] sm:text-[36px] md:text-[46px] lg:text-[calc(80*var(--u))] font-extralight uppercase tracking-[0.02em] text-[#131313] leading-none">
+          {title}
+        </h2>
+        <div
+          className="mt-3 sm:mt-4 lg:mt-[calc(47*var(--u))] w-[60px] sm:w-[85px] lg:w-[calc(150*var(--u))] h-[8px] sm:h-[12px] lg:h-[calc(20*var(--u))] rounded-full bg-[#ED2124]"
+          aria-hidden="true"
+        />
+      </div>
+
+      {/* Cards Container with Left/Right Navigation Arrows (matches exact RealStoriesSection spacing & width) */}
+      <div
+        onTouchStart={handleTouchStart}
+        onTouchEnd={handleTouchEnd}
+        className="relative w-full max-w-[3840px] mx-auto mt-8 sm:mt-12 md:mt-16 lg:mt-[calc(165*var(--u))] px-4 sm:px-8 lg:px-[calc(377*var(--u))]"
+      >
+        {/* Carousel Left Navigation Arrow */}
+        <button
+          type="button"
+          onClick={handlePrev}
+          disabled={isAtStart}
+          aria-label="Previous slide"
+          style={{ left: 'calc(377 * var(--u))' }}
+          className={`flex items-center justify-center absolute left-2 sm:left-4 lg:left-[calc(377*var(--u))] top-1/2 -translate-y-1/2 z-20 w-6 h-10 sm:w-8 sm:h-14 lg:w-[calc(77*var(--u))] lg:h-[calc(129*var(--u))] transition-all duration-300 focus:outline-none select-none ${
+            isAtStart
+              ? 'opacity-20 cursor-not-allowed pointer-events-none'
+              : 'opacity-90 hover:opacity-100 hover:scale-105 active:scale-95 cursor-pointer'
+          }`}
+        >
+          <img
+            src="/assets/reviews/arrow-left.png"
+            alt="Previous"
+            className="w-full h-full object-contain pointer-events-none select-none"
+            draggable={false}
           />
-        </div>
+        </button>
 
-        {/* Carousel Container with Flanking Left & Right Arrow Buttons */}
-        <div className="relative w-full px-5 sm:px-8 md:px-10 lg:px-12">
-          {/* Previous Arrow Button (Left) - Frameless chevron matching PSD */}
-          <button
-            type="button"
-            onClick={handlePrev}
-            disabled={isAtStart}
-            aria-label="Previous slide"
-            className={`absolute left-0 top-1/2 -translate-y-1/2 z-20 w-4 h-7 sm:w-6 sm:h-11 md:w-7 md:h-13 lg:w-8 lg:h-14 flex items-center justify-center transition-all duration-300 focus:outline-none select-none ${
-              isAtStart
-                ? 'opacity-20 cursor-not-allowed pointer-events-none'
-                : 'opacity-85 hover:opacity-100 hover:scale-110 active:scale-95 cursor-pointer'
-            }`}
-          >
-            <img
-              src="/assets/reviews/arrow-left.png"
-              alt="Previous"
-              className="w-full h-full object-contain pointer-events-none select-none"
-              draggable={false}
-            />
-          </button>
+        {/* Carousel Right Navigation Arrow */}
+        <button
+          type="button"
+          onClick={handleNext}
+          disabled={isAtEnd}
+          aria-label="Next slide"
+          style={{ right: 'calc(377 * var(--u))' }}
+          className={`flex items-center justify-center absolute right-2 sm:right-4 lg:right-[calc(377*var(--u))] top-1/2 -translate-y-1/2 z-20 w-6 h-10 sm:w-8 sm:h-14 lg:w-[calc(77*var(--u))] lg:h-[calc(129*var(--u))] transition-all duration-300 focus:outline-none select-none ${
+            isAtEnd
+              ? 'opacity-20 cursor-not-allowed pointer-events-none'
+              : 'opacity-90 hover:opacity-100 hover:scale-105 active:scale-95 cursor-pointer'
+          }`}
+        >
+          <img
+            src="/assets/reviews/arrow-right.png"
+            alt="Next"
+            className="w-full h-full object-contain pointer-events-none select-none"
+            draggable={false}
+          />
+        </button>
 
-          {/* Cards Viewport Window */}
+        {/* Reviews Cards Sliding Track (matches exact RealStoriesSection max-w-[1440px] lg:max-w-[calc(2801*var(--u))]) */}
+        <div className="w-full max-w-[1440px] lg:max-w-[calc(2801*var(--u))] mx-auto px-0 overflow-hidden">
           <div
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
-            className="w-full overflow-hidden rounded-[24px]"
+            className="flex w-full transition-transform duration-700 ease-out will-change-transform"
+            style={{ transform: `translateX(-${activeSlide * 100}%)` }}
           >
-            {/* Sliding Track */}
-            <div
-              className="flex w-full transition-transform duration-500 ease-out will-change-transform"
-              style={{ transform: `translateX(-${activeSlide * 100}%)` }}
-            >
-              {slides.map((slide, sIdx) => (
-                <div key={slide.id || sIdx} className="w-full shrink-0">
-                  {/* Clean 4-Card Responsive Grid */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
-                    {slide.cards.map((card, cIdx) => {
-                      const imgSrc = card.photo || card.thumbnail || card.fallbackImage;
+            {slides.map((slide, sIdx) => (
+              <div key={slide.id || sIdx} className="w-full min-w-full shrink-0">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-x-[calc(50*var(--u))] justify-items-center">
+                  {slide.cards.map((card, cIdx) => {
+                    const imgSrc = card.photo || card.thumbnail || card.fallbackImage;
 
-                      return (
-                        <button
-                          key={card.id || `${sIdx}-${cIdx}`}
-                          type="button"
-                          onClick={() =>
-                            setSelectedCard({
-                              ...card,
-                              modalImage: imgSrc,
-                            })
-                          }
-                          aria-label={`View story: ${card.title}`}
-                          className="group/card relative w-full h-[350px] sm:h-[390px] md:h-[430px] lg:h-[470px] rounded-[22px] overflow-hidden bg-[#121215] border border-gray-200/70 hover:border-[#ED2024] shadow-md hover:shadow-2xl hover:shadow-[#ED2024]/20 transition-all duration-300 transform hover:-translate-y-1.5 cursor-pointer text-left select-none focus:outline-none"
-                        >
-                          {/* High-Resolution Background Photo */}
-                          <img
-                            src={imgSrc}
-                            alt={card.title}
-                            loading="lazy"
-                            onError={(e) => {
-                              e.currentTarget.onerror = null;
-                              e.currentTarget.src = card.fallbackImage || '/assets/reviews/cards/card-2-luma-mask.png';
-                            }}
-                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover/card:scale-106"
-                            draggable={false}
-                          />
+                    return (
+                      <button
+                        key={card.id || `${sIdx}-${cIdx}`}
+                        type="button"
+                        onClick={() =>
+                          setSelectedCard({
+                            ...card,
+                            modalImage: imgSrc,
+                          })
+                        }
+                        aria-label={`View story: ${card.title}`}
+                        className="group/card relative w-full h-[360px] sm:h-[400px] md:h-[440px] lg:h-[calc(880*var(--u))] rounded-[20px] sm:rounded-[26px] lg:rounded-[calc(40*var(--u))] overflow-hidden bg-[#121215] border border-gray-200/70 hover:border-[#ED2024] shadow-md hover:shadow-2xl hover:shadow-[#ED2024]/20 transition-all duration-300 transform hover:-translate-y-1.5 cursor-pointer text-left select-none focus:outline-none"
+                      >
+                        {/* High-Resolution Background Photo */}
+                        <img
+                          src={imgSrc}
+                          alt={card.title}
+                          loading="lazy"
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src = card.fallbackImage || '/assets/reviews/cards/card-2-luma-mask.png';
+                          }}
+                          className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover/card:scale-106"
+                          draggable={false}
+                        />
 
-                          {/* Subtle Bottom Vignette for the Read More button */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent group-hover/card:from-black/70 transition-colors" />
+                        {/* Subtle Bottom Vignette for the Read More button */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent group-hover/card:from-black/70 transition-colors" />
 
-                          {/* Play Button Indicator for Video Cards */}
-                          {card.type === 'video' && (
-                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-                              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-black/60 backdrop-blur-sm border border-white/30 text-white flex items-center justify-center shadow-xl group-hover/card:scale-110 group-hover/card:bg-[#ED2024] group-hover/card:border-[#ED2024] transition-all duration-300">
-                                <svg className="w-5 h-5 fill-current ml-0.5" viewBox="0 0 24 24">
-                                  <path d="M8 5v14l11-7z" />
-                                </svg>
-                              </div>
+                        {/* Play Button Indicator for Video Cards */}
+                        {card.type === 'video' && (
+                          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+                            <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-[calc(90*var(--u))] lg:h-[calc(90*var(--u))] rounded-full bg-black/60 backdrop-blur-sm border border-white/30 text-white flex items-center justify-center shadow-xl group-hover/card:scale-110 group-hover/card:bg-[#ED2024] group-hover/card:border-[#ED2024] transition-all duration-300">
+                              <svg className="w-5 h-5 lg:w-[calc(30*var(--u))] lg:h-[calc(30*var(--u))] fill-current ml-0.5" viewBox="0 0 24 24">
+                                <path d="M8 5v14l11-7z" />
+                              </svg>
                             </div>
-                          )}
-
-                          {/* Clean "Read More" Button at Bottom */}
-                          <div className="absolute bottom-4 sm:bottom-5 left-1/2 -translate-x-1/2 z-20">
-                            <span className="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-[11px] sm:text-[12px] font-semibold bg-white text-black shadow-lg flex items-center gap-1.5 whitespace-nowrap group-hover/card:bg-[#ED2024] group-hover/card:text-white group-hover/card:scale-105 transition-all duration-200">
-                              <span>Read More</span>
-                              <span className="font-bold text-[#ED2024] group-hover/card:text-white transition-colors">→</span>
-                            </span>
                           </div>
-                        </button>
-                      );
-                    })}
-                  </div>
+                        )}
+
+                        {/* Clean "Read More" Button at Bottom */}
+                        <div className="absolute bottom-4 sm:bottom-5 lg:bottom-[calc(40*var(--u))] left-1/2 -translate-x-1/2 z-20">
+                          <span className="px-4 py-2 sm:px-5 sm:py-2.5 lg:px-[calc(35*var(--u))] lg:py-[calc(18*var(--u))] rounded-full text-[11px] sm:text-[12px] lg:text-[calc(22*var(--u))] font-semibold bg-white text-black shadow-lg flex items-center gap-1.5 whitespace-nowrap group-hover/card:bg-[#ED2024] group-hover/card:text-white group-hover/card:scale-105 transition-all duration-200">
+                            <span>Read More</span>
+                            <span className="font-bold text-[#ED2024] group-hover/card:text-white transition-colors">→</span>
+                          </span>
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
-
-          {/* Next Arrow Button (Right) - Frameless chevron matching PSD */}
-          <button
-            type="button"
-            onClick={handleNext}
-            disabled={isAtEnd}
-            aria-label="Next slide"
-            className={`absolute right-0 top-1/2 -translate-y-1/2 z-20 w-4 h-7 sm:w-6 sm:h-11 md:w-7 md:h-13 lg:w-8 lg:h-14 flex items-center justify-center transition-all duration-300 focus:outline-none select-none ${
-              isAtEnd
-                ? 'opacity-20 cursor-not-allowed pointer-events-none'
-                : 'opacity-85 hover:opacity-100 hover:scale-110 active:scale-95 cursor-pointer'
-            }`}
-          >
-            <img
-              src="/assets/reviews/arrow-right.png"
-              alt="Next"
-              className="w-full h-full object-contain pointer-events-none select-none"
-              draggable={false}
-            />
-          </button>
         </div>
+      </div>
 
-        {/* Round Navigation Dots (Matches exact PSD 4-dot roundnav style) */}
-        <div className="flex items-center justify-center gap-2.5 sm:gap-3 mt-8 sm:mt-10">
+      {/* Pagination Controls - matches exact RealStoriesSection styling */}
+      <div className="w-full flex items-center justify-center gap-3 sm:gap-4 lg:gap-[calc(10*var(--u))] mt-8 sm:mt-12 md:mt-14 lg:mt-[calc(182*var(--u))]">
+        <div className="flex items-center gap-2 sm:gap-2.5 lg:gap-[calc(10*var(--u))]">
           {Array.from({ length: totalSlides }).map((_, idx) => (
             <button
               key={idx}
               type="button"
               onClick={() => setActiveSlide(idx)}
               aria-label={`Go to slide ${idx + 1}`}
-              className={`rounded-full transition-all duration-300 cursor-pointer ${
+              className={`w-[8px] sm:w-[10px] lg:w-[calc(20*var(--u))] h-[8px] sm:h-[10px] lg:h-[calc(20*var(--u))] rounded-full transition-all duration-300 cursor-pointer ${
                 activeSlide === idx
-                  ? 'w-3.5 h-3.5 bg-[#ED2024] scale-125 shadow-sm shadow-[#ED2024]/40 ring-4 ring-[#ED2024]/20'
-                  : 'w-2.5 h-2.5 bg-[#CBD5E1] hover:bg-[#94A3B8]'
+                  ? 'bg-[#ED2124] scale-125 shadow-sm'
+                  : 'bg-[#C0C0C0] hover:bg-[#888888]'
               }`}
             />
           ))}
