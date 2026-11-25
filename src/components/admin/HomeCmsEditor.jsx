@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import ImageUploadField from './ImageUploadField';
 
 const API_BASE_URL =
@@ -424,6 +424,37 @@ export default function HomeCmsEditor({ onOpenLivePage }) {
     setPageData((prev) => {
       const items = [...(prev?.faqsSection?.items || [])];
       items[index] = { ...items[index], [key]: value };
+      return {
+        ...prev,
+        faqsSection: {
+          ...(prev?.faqsSection || {}),
+          items,
+        },
+      };
+    });
+  };
+
+  const handleAddFaqItem = () => {
+    setPageData((prev) => {
+      const items = [...(prev?.faqsSection?.items || [])];
+      items.push({
+        id: Date.now(),
+        question: '',
+        answer: '',
+      });
+      return {
+        ...prev,
+        faqsSection: {
+          ...(prev?.faqsSection || {}),
+          items,
+        },
+      };
+    });
+  };
+
+  const handleRemoveFaqItem = (index) => {
+    setPageData((prev) => {
+      const items = (prev?.faqsSection?.items || []).filter((_, i) => i !== index);
       return {
         ...prev,
         faqsSection: {
@@ -2847,26 +2878,57 @@ export default function HomeCmsEditor({ onOpenLivePage }) {
 
             {/* FAQ Q&As */}
             <div className="space-y-3">
-              <label className="block text-[12px] font-bold text-[#64748B] uppercase tracking-wider">
-                Published Questions &amp; Answers ({faqItems.length})
-              </label>
+              <div className="flex items-center justify-between pb-1">
+                <label className="block text-[12px] font-bold text-[#64748B] uppercase tracking-wider">
+                  Published Questions &amp; Answers ({faqItems.length})
+                </label>
+                <button
+                  type="button"
+                  onClick={handleAddFaqItem}
+                  className="px-3.5 py-1.5 rounded-[8px] bg-[#ED2024] hover:bg-[#d4191d] text-white text-[11.5px] font-bold uppercase tracking-wider flex items-center gap-1.5 transition-colors cursor-pointer shadow-xs"
+                >
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2.5" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
+                  </svg>
+                  <span>+ Add FAQ</span>
+                </button>
+              </div>
+
               {faqItems.map((faq, idx) => (
-                <div key={faq.id || idx} className="p-3.5 rounded-[10px] bg-[#F8FAFC] border border-[#E2E8F0] space-y-2">
-                  <span className="text-[11px] font-bold text-[#ED2024]">Q{idx + 1}</span>
+                <div key={faq.id || idx} className="p-4 rounded-[12px] bg-[#F8FAFC] border border-[#E2E8F0] space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold text-[#ED2024]">Q{idx + 1}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveFaqItem(idx)}
+                      className="text-gray-400 hover:text-rose-600 text-[11px] font-semibold transition-colors cursor-pointer flex items-center gap-1 px-1.5 py-0.5 rounded hover:bg-rose-50"
+                      title="Remove this FAQ"
+                    >
+                      ✕ Remove
+                    </button>
+                  </div>
                   <input
                     type="text"
                     value={faq.question || ''}
+                    placeholder="Enter question..."
                     onChange={(e) => updateFaqItem(idx, 'question', e.target.value)}
-                    className="w-full bg-white border border-[#E2E8F0] focus:border-[#ED2024] rounded-[6px] px-3 py-1.5 text-[13px] font-bold text-[#1E293B] outline-none shadow-xs"
+                    className="w-full bg-white border border-[#E2E8F0] focus:border-[#ED2024] rounded-[6px] px-3 py-2 text-[13px] font-bold text-[#1E293B] outline-none shadow-xs"
                   />
                   <textarea
                     rows={2}
                     value={faq.answer || ''}
+                    placeholder="Enter answer..."
                     onChange={(e) => updateFaqItem(idx, 'answer', e.target.value)}
                     className="w-full bg-white border border-[#E2E8F0] focus:border-[#ED2024] rounded-[6px] p-2.5 text-[12.5px] text-[#475569] outline-none shadow-xs"
                   />
                 </div>
               ))}
+
+              {faqItems.length === 0 && (
+                <div className="p-8 text-center border border-dashed border-gray-300 rounded-[12px] text-gray-500 text-xs">
+                  No FAQs currently published. Click <strong>+ Add FAQ</strong> above to add one.
+                </div>
+              )}
             </div>
           </div>
         )}
