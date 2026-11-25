@@ -49,6 +49,8 @@ export default function CustomerAccountPage({
   const [saving, setSaving] = useState(false);
   const [cartItems, setCartItems] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [ordersCurrentPage, setOrdersCurrentPage] = useState(1);
+  const [ordersPerPage, setOrdersPerPage] = useState(5);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -842,23 +844,48 @@ export default function CustomerAccountPage({
                 {/* ========================================================= */}
                 {/* TAB 3: ORDERED PRODUCTS & REAL STATUS                     */}
                 {/* ========================================================= */}
-                {activeTab === 'orders' && (
-                  <div id="orders" className="bg-white border border-gray-200/90 rounded-2xl p-6 sm:p-8 space-y-6 shadow-sm">
-                    <div className="flex items-center justify-between pb-4 border-b border-gray-100">
-                      <div>
-                        <h2 className="text-lg font-bold text-gray-900">Order History &amp; Tracking ({orders.length})</h2>
-                        <p className="text-xs text-gray-500 mt-0.5">
-                          View your placed orders and delivery status.
-                        </p>
-                      </div>
-                      <span className="text-[11px] text-emerald-700 font-semibold bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
-                        Live Tracking
-                      </span>
-                    </div>
+                {activeTab === 'orders' && (() => {
+                  const totalOrders = orders.length;
+                  const ordersTotalPages = Math.max(1, Math.ceil(totalOrders / ordersPerPage));
+                  const validOrdersPage = Math.min(ordersCurrentPage, ordersTotalPages);
+                  const ordersStartIndex = (validOrdersPage - 1) * ordersPerPage;
+                  const ordersEndIndex = Math.min(ordersStartIndex + ordersPerPage, totalOrders);
+                  const paginatedOrders = orders.slice(ordersStartIndex, ordersStartIndex + ordersPerPage);
 
-                    {orders.length > 0 ? (
-                      <div className="space-y-4">
-                        {orders.map((order) => {
+                  const getOrdersPageNumbers = () => {
+                    const pages = [];
+                    if (ordersTotalPages <= 5) {
+                      for (let i = 1; i <= ordersTotalPages; i++) pages.push(i);
+                    } else {
+                      if (validOrdersPage <= 3) {
+                        pages.push(1, 2, 3, '...', ordersTotalPages);
+                      } else if (validOrdersPage >= ordersTotalPages - 2) {
+                        pages.push(1, '...', ordersTotalPages - 2, ordersTotalPages - 1, ordersTotalPages);
+                      } else {
+                        pages.push(1, '...', validOrdersPage, '...', ordersTotalPages);
+                      }
+                    }
+                    return pages;
+                  };
+
+                  return (
+                    <div id="orders" className="bg-white border border-gray-200/90 rounded-2xl p-6 sm:p-8 space-y-6 shadow-sm">
+                      <div className="flex items-center justify-between pb-4 border-b border-gray-100">
+                        <div>
+                          <h2 className="text-lg font-bold text-gray-900">Order History &amp; Tracking ({totalOrders})</h2>
+                          <p className="text-xs text-gray-500 mt-0.5">
+                            View your placed orders and delivery status.
+                          </p>
+                        </div>
+                        <span className="text-[11px] text-emerald-700 font-semibold bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
+                          Live Tracking
+                        </span>
+                      </div>
+
+                      {totalOrders > 0 ? (
+                        <>
+                          <div className="space-y-4">
+                            {paginatedOrders.map((order) => {
                           const isReturned =
                             order.status === 'Returned' || order.returnStatus === 'Approved';
                           const displayStatus = isReturned
@@ -1174,8 +1201,89 @@ export default function CustomerAccountPage({
                             </div>
                           );
                         })}
-                      </div>
-                    ) : (
+                          </div>
+
+                          {/* Pagination Footer Controls */}
+                          {totalOrders > 0 && (
+                            <div className="pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500">
+                              <div className="flex items-center gap-2">
+                                <span>
+                                  Showing <strong className="text-gray-900">{ordersStartIndex + 1}</strong>–<strong className="text-gray-900">{ordersEndIndex}</strong> of <strong className="text-gray-900">{totalOrders}</strong> orders
+                                </span>
+                                <span className="text-gray-300">|</span>
+                                <div className="flex items-center gap-1.5">
+                                  <span>Per page:</span>
+                                  <select
+                                    value={ordersPerPage}
+                                    onChange={(e) => {
+                                      setOrdersPerPage(Number(e.target.value));
+                                      setOrdersCurrentPage(1);
+                                    }}
+                                    className="bg-white border border-gray-200 rounded-lg px-2 py-0.5 text-xs font-semibold text-gray-800 outline-none focus:border-[#ED2024] cursor-pointer"
+                                  >
+                                    {[3, 5, 10, 20].map((num) => (
+                                      <option key={num} value={num}>
+                                        {num}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
+                              </div>
+
+                              {ordersTotalPages > 1 && (
+                                <div className="flex items-center gap-1.5">
+                                  <button
+                                    type="button"
+                                    disabled={validOrdersPage <= 1}
+                                    onClick={() => setOrdersCurrentPage((p) => Math.max(1, p - 1))}
+                                    className="px-2.5 py-1.5 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 text-xs font-semibold text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer flex items-center gap-1"
+                                  >
+                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                                    </svg>
+                                    <span>Prev</span>
+                                  </button>
+
+                                  <div className="flex items-center gap-1">
+                                    {getOrdersPageNumbers().map((p, idx) =>
+                                      p === '...' ? (
+                                        <span key={`ellipsis-${idx}`} className="px-1 text-gray-400 font-bold select-none text-xs">
+                                          ...
+                                        </span>
+                                      ) : (
+                                        <button
+                                          key={`order-page-${p}`}
+                                          type="button"
+                                          onClick={() => setOrdersCurrentPage(p)}
+                                          className={`w-7 h-7 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center justify-center ${
+                                            validOrdersPage === p
+                                              ? 'bg-[#ED2024] text-white shadow-xs'
+                                              : 'bg-white hover:bg-gray-100 text-gray-700 border border-gray-200'
+                                          }`}
+                                        >
+                                          {p}
+                                        </button>
+                                      )
+                                    )}
+                                  </div>
+
+                                  <button
+                                    type="button"
+                                    disabled={validOrdersPage >= ordersTotalPages}
+                                    onClick={() => setOrdersCurrentPage((p) => Math.min(ordersTotalPages, p + 1))}
+                                    className="px-2.5 py-1.5 rounded-lg border border-gray-200 bg-white hover:bg-gray-50 text-xs font-semibold text-gray-700 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer flex items-center gap-1"
+                                  >
+                                    <span>Next</span>
+                                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                  </button>
+                                </div>
+                              )}
+                            </div>
+                          )}
+                        </>
+                      ) : (
                       <div className="py-16 text-center rounded-2xl bg-gray-50 border border-dashed border-gray-300 px-4 space-y-3">
                         <div className="w-14 h-14 rounded-full bg-gray-100 border border-gray-200 mx-auto flex items-center justify-center text-gray-400 text-xl">
                           📦
@@ -1194,7 +1302,8 @@ export default function CustomerAccountPage({
                       </div>
                     )}
                   </div>
-                )}
+                );
+              })()}
               </>
             )}
           </div>
