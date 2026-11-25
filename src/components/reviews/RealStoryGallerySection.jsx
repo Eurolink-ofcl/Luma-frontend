@@ -322,18 +322,25 @@ export default function RealStoryGallerySection({ data }) {
         </div>
 
         {/* Carousel Container with Flanking Left & Right Arrow Buttons */}
-        <div className="relative w-full">
-          {/* Previous Arrow Button (Left) */}
+        <div className="relative w-full px-5 sm:px-8 md:px-10 lg:px-12">
+          {/* Previous Arrow Button (Left) - Frameless chevron matching PSD */}
           <button
             type="button"
             onClick={handlePrev}
             disabled={isAtStart}
             aria-label="Previous slide"
-            className="absolute -left-3 sm:-left-5 lg:-left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white border-2 border-gray-200 hover:border-[#ED2024] text-[#1E293B] hover:text-[#ED2024] shadow-xl flex items-center justify-center transition-all duration-200 disabled:opacity-20 disabled:pointer-events-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#ED2024]/30"
+            className={`absolute left-0 top-1/2 -translate-y-1/2 z-20 w-4 h-7 sm:w-6 sm:h-11 md:w-7 md:h-13 lg:w-8 lg:h-14 flex items-center justify-center transition-all duration-300 focus:outline-none select-none ${
+              isAtStart
+                ? 'opacity-20 cursor-not-allowed pointer-events-none'
+                : 'opacity-85 hover:opacity-100 hover:scale-110 active:scale-95 cursor-pointer'
+            }`}
           >
-            <svg className="w-5 h-5 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-            </svg>
+            <img
+              src="/assets/reviews/arrow-left.png"
+              alt="Previous"
+              className="w-full h-full object-contain pointer-events-none select-none"
+              draggable={false}
+            />
           </button>
 
           {/* Cards Viewport Window */}
@@ -447,17 +454,24 @@ export default function RealStoryGallerySection({ data }) {
             </div>
           </div>
 
-          {/* Next Arrow Button (Right) */}
+          {/* Next Arrow Button (Right) - Frameless chevron matching PSD */}
           <button
             type="button"
             onClick={handleNext}
             disabled={isAtEnd}
             aria-label="Next slide"
-            className="absolute -right-3 sm:-right-5 lg:-right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white border-2 border-gray-200 hover:border-[#ED2024] text-[#1E293B] hover:text-[#ED2024] shadow-xl flex items-center justify-center transition-all duration-200 disabled:opacity-20 disabled:pointer-events-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#ED2024]/30"
+            className={`absolute right-0 top-1/2 -translate-y-1/2 z-20 w-4 h-7 sm:w-6 sm:h-11 md:w-7 md:h-13 lg:w-8 lg:h-14 flex items-center justify-center transition-all duration-300 focus:outline-none select-none ${
+              isAtEnd
+                ? 'opacity-20 cursor-not-allowed pointer-events-none'
+                : 'opacity-85 hover:opacity-100 hover:scale-110 active:scale-95 cursor-pointer'
+            }`}
           >
-            <svg className="w-5 h-5 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-            </svg>
+            <img
+              src="/assets/reviews/arrow-right.png"
+              alt="Next"
+              className="w-full h-full object-contain pointer-events-none select-none"
+              draggable={false}
+            />
           </button>
         </div>
 
