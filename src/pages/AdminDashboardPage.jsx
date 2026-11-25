@@ -468,11 +468,16 @@ export default function AdminDashboardPage({ onNavigateHome, onNavigatePage, onL
             </div>
           </div>
 
-          {/* Quick Actions: Return to Store & Sign Out */}
+          {/* Quick Actions: Return to Products & Sign Out */}
           <div className="grid grid-cols-2 gap-2 pt-1 text-[11.5px]">
             <button
               type="button"
-              onClick={onNavigateHome}
+              onClick={() => {
+                setActiveTab('products');
+                setSidebarOpen(false);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              title="Go to Products Management"
               className="flex items-center justify-center gap-1.5 py-2 px-2.5 rounded-[8px] bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.08] text-white transition-colors cursor-pointer font-bold"
             >
               <span>← Store</span>
