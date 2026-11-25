@@ -136,6 +136,32 @@ const DEFAULT_WAVELENGTHS = [
   },
 ];
 
+export const LUMA_QUIZ_PRODUCTS = [
+  { slug: 'luma-surge', label: 'LUMA Surge (Targeted Muscle Recovery)' },
+  { slug: 'luma-glow', label: 'LUMA Glow (Face Mask / Skincare)' },
+  { slug: 'luma-go', label: 'LUMA Go (Compact Portable Panel)' },
+  { slug: 'luma-nova', label: 'LUMA Nova (Targeted Panel)' },
+  { slug: 'luma-apex', label: 'LUMA Apex (Half-Body Panel)' },
+  { slug: 'luma-ultra', label: 'LUMA Ultra (Full-Body Panel)' },
+  { slug: 'luma-max', label: 'LUMA Max (Commercial Full-Body Panel)' },
+];
+
+export const DEFAULT_OPTION_PRODUCT_MAP = [
+  ['luma-surge', 'luma-glow', 'luma-nova', 'luma-apex'], // Q1
+  ['luma-go', 'luma-surge', 'luma-ultra', 'luma-max'],   // Q2
+  ['luma-glow', 'luma-surge', 'luma-ultra'],             // Q3
+  ['luma-go', 'luma-nova', 'luma-max'],                  // Q4
+  ['luma-glow', 'luma-surge', 'luma-ultra'],             // Q5
+];
+
+export function getDefaultProductSlug(qIdx, optIdx) {
+  if (DEFAULT_OPTION_PRODUCT_MAP[qIdx] && DEFAULT_OPTION_PRODUCT_MAP[qIdx][optIdx]) {
+    return DEFAULT_OPTION_PRODUCT_MAP[qIdx][optIdx];
+  }
+  const fallbackList = ['luma-surge', 'luma-glow', 'luma-nova', 'luma-go', 'luma-apex', 'luma-ultra', 'luma-max'];
+  return fallbackList[optIdx % fallbackList.length] || 'luma-surge';
+}
+
 const DEFAULT_ASSESSMENT_QUIZ = {
   eyebrow: 'THE LUMA 1-MINUTE ASSESSMENT',
   heading: 'FIND THE LIGHT THAT FITS YOU',
@@ -146,10 +172,10 @@ const DEFAULT_ASSESSMENT_QUIZ = {
       title: 'Question 1 of 5',
       question: 'What do you want light to do for you?',
       options: [
-        { title: 'Recover faster', subtitle: 'After training, soreness, long days' },
-        { title: 'Glow', subtitle: 'Skin tone, texture, fine lines' },
-        { title: 'Calm & sleep', subtitle: 'A slower evening, deeper rest' },
-        { title: 'Ease aches', subtitle: 'Joints, back and tension' },
+        { title: 'Recover faster', subtitle: 'After training, soreness, long days', matchedProductSlug: 'luma-surge' },
+        { title: 'Glow', subtitle: 'Skin tone, texture, fine lines', matchedProductSlug: 'luma-glow' },
+        { title: 'Calm & sleep', subtitle: 'A slower evening, deeper rest', matchedProductSlug: 'luma-nova' },
+        { title: 'Ease aches', subtitle: 'Joints, back and tension', matchedProductSlug: 'luma-apex' },
       ],
     },
     {
@@ -157,10 +183,10 @@ const DEFAULT_ASSESSMENT_QUIZ = {
       title: 'Question 2 of 5',
       question: 'Where will it live?',
       options: [
-        { title: 'Bedroom or desk', subtitle: 'Compact, easy to tuck away' },
-        { title: 'Home gym', subtitle: 'Beside the mat or the rack' },
-        { title: 'Dedicated wellness room', subtitle: 'Space to stand and stay' },
-        { title: 'A studio or clinic', subtitle: 'Shared, daily, professional' },
+        { title: 'Bedroom or desk', subtitle: 'Compact, easy to tuck away', matchedProductSlug: 'luma-go' },
+        { title: 'Home gym', subtitle: 'Beside the mat or the rack', matchedProductSlug: 'luma-surge' },
+        { title: 'Dedicated wellness room', subtitle: 'Space to stand and stay', matchedProductSlug: 'luma-ultra' },
+        { title: 'A studio or clinic', subtitle: 'Shared, daily, professional', matchedProductSlug: 'luma-max' },
       ],
     },
     {
@@ -168,9 +194,9 @@ const DEFAULT_ASSESSMENT_QUIZ = {
       title: 'Question 3 of 5',
       question: 'How much of you needs the light?',
       options: [
-        { title: 'Face & targeted spots', subtitle: 'Precise, close-up' },
-        { title: 'Upper body', subtitle: 'Face, neck, shoulders, chest' },
-        { title: 'Head to toe', subtitle: 'Full-body, in one session' },
+        { title: 'Face & targeted spots', subtitle: 'Precise, close-up', matchedProductSlug: 'luma-glow' },
+        { title: 'Upper body', subtitle: 'Face, neck, shoulders, chest', matchedProductSlug: 'luma-surge' },
+        { title: 'Head to toe', subtitle: 'Full-body, in one session', matchedProductSlug: 'luma-ultra' },
       ],
     },
     {
@@ -178,9 +204,9 @@ const DEFAULT_ASSESSMENT_QUIZ = {
       title: 'Question 4 of 5',
       question: 'What does your ritual look like?',
       options: [
-        { title: 'Quick and daily', subtitle: 'Ten minutes, no fuss' },
-        { title: 'A proper pause', subtitle: 'Fifteen to twenty unhurried minutes' },
-        { title: 'Shared', subtitle: 'Family, clients or guests' },
+        { title: 'Quick and daily', subtitle: 'Ten minutes, no fuss', matchedProductSlug: 'luma-go' },
+        { title: 'A proper pause', subtitle: 'Fifteen to twenty unhurried minutes', matchedProductSlug: 'luma-nova' },
+        { title: 'Shared', subtitle: 'Family, clients or guests', matchedProductSlug: 'luma-max' },
       ],
     },
     {
@@ -188,9 +214,9 @@ const DEFAULT_ASSESSMENT_QUIZ = {
       title: 'Question 5 of 5',
       question: 'How do you invest in wellbeing?',
       options: [
-        { title: 'Start simple', subtitle: 'Essential, well made' },
-        { title: 'Balanced', subtitle: 'Performance and value' },
-        { title: 'No compromise', subtitle: 'The full experience' },
+        { title: 'Start simple', subtitle: 'Essential, well made', matchedProductSlug: 'luma-glow' },
+        { title: 'Balanced', subtitle: 'Performance and value', matchedProductSlug: 'luma-surge' },
+        { title: 'No compromise', subtitle: 'The full experience', matchedProductSlug: 'luma-ultra' },
       ],
     },
   ],
@@ -694,7 +720,12 @@ export default function HomeCmsEditor({ onOpenLivePage }) {
         : JSON.parse(JSON.stringify(DEFAULT_ASSESSMENT_QUIZ.questions));
       const currentQuestion = { ...currentList[qIndex] };
       const currentOptions = Array.isArray(currentQuestion.options) ? [...currentQuestion.options] : [];
-      currentOptions.push({ title: 'New Option', subtitle: 'Option description' });
+      const defaultSlug = getDefaultProductSlug(qIndex, currentOptions.length);
+      currentOptions.push({
+        title: 'New Option',
+        subtitle: 'Option description',
+        matchedProductSlug: defaultSlug,
+      });
       currentQuestion.options = currentOptions;
       currentList[qIndex] = currentQuestion;
       return {
@@ -739,9 +770,9 @@ export default function HomeCmsEditor({ onOpenLivePage }) {
         title: `Question ${newTotal} of ${newTotal}`,
         question: 'What is your primary treatment target?',
         options: [
-          { title: 'Full body energy', subtitle: 'Vitality, circulation, and muscle support' },
-          { title: 'Targeted recovery', subtitle: 'Specific joint, tendon, or ache relief' },
-          { title: 'Youthful radiance', subtitle: 'Anti-aging, elasticity, and blemish care' },
+          { title: 'Full body energy', subtitle: 'Vitality, circulation, and muscle support', matchedProductSlug: 'luma-ultra' },
+          { title: 'Targeted recovery', subtitle: 'Specific joint, tendon, or ache relief', matchedProductSlug: 'luma-surge' },
+          { title: 'Youthful radiance', subtitle: 'Anti-aging, elasticity, and blemish care', matchedProductSlug: 'luma-glow' },
         ],
       };
 
@@ -2281,6 +2312,14 @@ export default function HomeCmsEditor({ onOpenLivePage }) {
 
                       {/* Options List */}
                       <div>
+                        {/* Dynamic Recommendation Guide Banner */}
+                        <div className="mb-3.5 p-3 bg-[#FEF2F2] border border-[#FECACA] rounded-lg flex items-start gap-2.5 text-[11.5px] text-[#991B1B]">
+                          <span className="text-base shrink-0">🎯</span>
+                          <div className="leading-snug">
+                            <strong>Dynamic Product Recommendation:</strong> For each option below, choose which LUMA product it recommends. When a customer finishes the quiz, the product with the highest votes across their chosen options is automatically recommended!
+                          </div>
+                        </div>
+
                         <div className="flex items-center justify-between mb-2">
                           <label className="block text-[11px] font-bold uppercase tracking-wider text-[#64748B]">
                             Options ({currentQ.options?.length || 0}):
@@ -2304,36 +2343,71 @@ export default function HomeCmsEditor({ onOpenLivePage }) {
                                 {optIdx + 1}
                               </span>
 
-                              <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-2 w-full">
-                                <input
-                                  type="text"
-                                  value={opt.title || ''}
-                                  onChange={(e) =>
-                                    updateAssessmentOption(
-                                      activeQuizQuestionIdx,
-                                      optIdx,
-                                      'title',
-                                      e.target.value
-                                    )
-                                  }
-                                  className="w-full bg-white border border-[#E2E8F0] focus:border-[#ED2024] rounded-[6px] px-2.5 py-1 text-[12px] font-semibold text-[#1E293B] outline-none"
-                                  placeholder="Option Title (e.g. Recover faster)"
-                                />
+                              <div className="flex-1 grid grid-cols-1 md:grid-cols-12 gap-2.5 w-full">
+                                <div className="md:col-span-4">
+                                  <label className="block text-[10px] font-semibold text-[#64748B] mb-1">
+                                    Option Title
+                                  </label>
+                                  <input
+                                    type="text"
+                                    value={opt.title || ''}
+                                    onChange={(e) =>
+                                      updateAssessmentOption(
+                                        activeQuizQuestionIdx,
+                                        optIdx,
+                                        'title',
+                                        e.target.value
+                                      )
+                                    }
+                                    className="w-full bg-white border border-[#E2E8F0] focus:border-[#ED2024] rounded-[6px] px-2.5 py-1.5 text-[12px] font-semibold text-[#1E293B] outline-none shadow-xs"
+                                    placeholder="Option Title (e.g. Recover faster)"
+                                  />
+                                </div>
 
-                                <input
-                                  type="text"
-                                  value={opt.subtitle || ''}
-                                  onChange={(e) =>
-                                    updateAssessmentOption(
-                                      activeQuizQuestionIdx,
-                                      optIdx,
-                                      'subtitle',
-                                      e.target.value
-                                    )
-                                  }
-                                  className="w-full bg-white border border-[#E2E8F0] focus:border-[#ED2024] rounded-[6px] px-2.5 py-1 text-[12px] text-[#64748B] outline-none"
-                                  placeholder="Option Subtitle (e.g. After training, soreness)"
-                                />
+                                <div className="md:col-span-4">
+                                  <label className="block text-[10px] font-semibold text-[#64748B] mb-1">
+                                    Option Subtitle
+                                  </label>
+                                  <input
+                                    type="text"
+                                    value={opt.subtitle || ''}
+                                    onChange={(e) =>
+                                      updateAssessmentOption(
+                                        activeQuizQuestionIdx,
+                                        optIdx,
+                                        'subtitle',
+                                        e.target.value
+                                      )
+                                    }
+                                    className="w-full bg-white border border-[#E2E8F0] focus:border-[#ED2024] rounded-[6px] px-2.5 py-1.5 text-[12px] text-[#64748B] outline-none shadow-xs"
+                                    placeholder="Option Subtitle (e.g. After training, soreness)"
+                                  />
+                                </div>
+
+                                <div className="md:col-span-4">
+                                  <label className="block text-[10px] font-semibold text-[#ED2024] mb-1 flex items-center justify-between">
+                                    <span>Recommends Product:</span>
+                                    <span className="text-[9px] text-[#64748B] font-normal">1 Vote</span>
+                                  </label>
+                                  <select
+                                    value={opt.matchedProductSlug || getDefaultProductSlug(activeQuizQuestionIdx, optIdx)}
+                                    onChange={(e) =>
+                                      updateAssessmentOption(
+                                        activeQuizQuestionIdx,
+                                        optIdx,
+                                        'matchedProductSlug',
+                                        e.target.value
+                                      )
+                                    }
+                                    className="w-full bg-[#F8FAFC] hover:bg-white border border-[#CBD5E1] focus:border-[#ED2024] rounded-[6px] px-2.5 py-1.5 text-[12px] font-semibold text-[#0F172A] outline-none shadow-xs cursor-pointer"
+                                  >
+                                    {LUMA_QUIZ_PRODUCTS.map((prod) => (
+                                      <option key={prod.slug} value={prod.slug}>
+                                        {prod.label}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </div>
                               </div>
 
                               <button
@@ -2357,6 +2431,13 @@ export default function HomeCmsEditor({ onOpenLivePage }) {
             ) : (
               /* Result Match Screen Editor */
               <div className="p-5 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl space-y-5">
+                {/* Dynamic Status Callout */}
+                <div className="p-3 bg-[#F0FDF4] border border-[#BBF7D0] rounded-lg flex items-start gap-2.5 text-[11.5px] text-[#166534]">
+                  <span className="text-base shrink-0">✨</span>
+                  <div className="leading-snug">
+                    <strong>Dynamic Recommendations Active:</strong> The quiz automatically recommends whichever product receives the most votes based on the customer's selected answers (LUMA Surge, Glow, Go, Nova, Apex, Ultra, or Max) complete with its image, specs, and link. The fields below configure the default fallback panel.
+                  </div>
+                </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                   <div>
                     <label className="block text-[11px] font-semibold text-[#64748B] mb-1">

@@ -376,7 +376,7 @@ export default function App() {
           <ProductRange onAddToCart={() => setIsCartOpen(true)} onNavigate={handleNavigate} data={homeContent?.productRange} />
 
           {/* 1-Minute Assessment Quiz (Layer 12) */}
-          <AssessmentQuiz data={homeContent?.assessmentQuiz} />
+          <AssessmentQuiz data={homeContent?.assessmentQuiz} onNavigate={handleNavigate} />
 
           {/* Contiguous White Sections Wrapper (prevents subpixel dark seam on scaled viewports) */}
           <div className="w-full bg-[#FFFFFF]">

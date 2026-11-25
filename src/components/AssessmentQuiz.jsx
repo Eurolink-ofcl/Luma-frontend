@@ -1,10 +1,264 @@
-﻿const API_BASE_URL =
+const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ||
   (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
     ? `${window.location.origin}/api`
     : 'http://localhost:5000/api');
 
 import React, { useState, useEffect } from 'react';
+
+export const LUMA_QUIZ_PRODUCTS = [
+  { slug: 'luma-surge', label: 'LUMA Surge (Targeted Muscle Recovery)' },
+  { slug: 'luma-glow', label: 'LUMA Glow (Face Mask / Skincare)' },
+  { slug: 'luma-go', label: 'LUMA Go (Compact Portable Panel)' },
+  { slug: 'luma-nova', label: 'LUMA Nova (Targeted Panel)' },
+  { slug: 'luma-apex', label: 'LUMA Apex (Half-Body Panel)' },
+  { slug: 'luma-ultra', label: 'LUMA Ultra (Full-Body Panel)' },
+  { slug: 'luma-max', label: 'LUMA Max (Commercial Full-Body Panel)' },
+];
+
+export const PRODUCT_RECOMMENDATIONS = {
+  'luma-glow': {
+    matchTag: 'YOUR MATCH',
+    brand: 'LUMA',
+    model: 'Glow',
+    productSlug: 'luma-glow',
+    productImage: '/assets/products/luma-glow.png',
+    headline: 'Targeted clinical light for radiant skin and cellular renewal.',
+    summary: 'You want effortless daily skincare rejuvenation, collagen stimulation, and a radiant complexion.',
+    features: [
+      {
+        bold: 'Radiant complexion.',
+        rest: ' Stimulates natural collagen synthesis and smooths fine lines.',
+      },
+      {
+        bold: 'Hands-free comfort.',
+        rest: ' Ultra-flexible, medical-grade silicone for effortless daily wear.',
+      },
+      {
+        bold: '10-minute ritual.',
+        rest: ' Effortless, clinic-grade skincare right from your home or desk.',
+      },
+    ],
+    ctaText: 'EXPLORE GLOW',
+    ctaLink: '/luma-glow',
+  },
+  'luma-go': {
+    matchTag: 'YOUR MATCH',
+    brand: 'LUMA',
+    model: 'Go',
+    productSlug: 'luma-go',
+    productImage: '/assets/products/luma-go.png',
+    headline: 'Portable, targeted relief engineered for wellness anywhere.',
+    summary: 'You need compact, grab-and-go light therapy that travels effortlessly with you.',
+    features: [
+      {
+        bold: 'Portable power.',
+        rest: ' Compact design fits in your bag, carry-on, or desk setup.',
+      },
+      {
+        bold: 'Pinpoint targeting.',
+        rest: ' Direct relief for specific sore joints, tendons, and muscles.',
+      },
+      {
+        bold: 'Quick daily sessions.',
+        rest: ' Ten minutes is all it takes to recharge cellular energy.',
+      },
+    ],
+    ctaText: 'EXPLORE GO',
+    ctaLink: '/luma-go',
+  },
+  'luma-nova': {
+    matchTag: 'YOUR MATCH',
+    brand: 'LUMA',
+    model: 'Nova',
+    productSlug: 'luma-nova',
+    productImage: '/assets/products/luma-nova.png',
+    headline: 'Targeted precision for joints, face, and active recovery.',
+    summary: 'You want targeted therapy for face, neck, joint relief, and focused daily wellness rituals.',
+    features: [
+      {
+        bold: 'Targeted recovery.',
+        rest: ' Optimal size for face, neck, knees, spine, and scalp.',
+      },
+      {
+        bold: 'Dual wavelength.',
+        rest: ' 660nm Red and 850nm Near-Infrared clinical synergy.',
+      },
+      {
+        bold: 'Everyday versatility.',
+        rest: ' Tabletop stand perfect for bedside, floor, or desk rituals.',
+      },
+    ],
+    ctaText: 'EXPLORE NOVA',
+    ctaLink: '/luma-nova',
+  },
+  'luma-surge': {
+    matchTag: 'YOUR MATCH',
+    brand: 'LUMA',
+    model: 'Surge',
+    productSlug: 'luma-surge',
+    productImage: '/assets/products/luma-surge.png',
+    headline: 'Balanced power for the body in motion.',
+    summary: 'You want real performance without the full commitment of space.',
+    features: [
+      {
+        bold: 'Faster recovery.',
+        rest: ' Broader coverage to support muscles after intense effort.',
+      },
+      {
+        bold: 'Calmer evenings.',
+        rest: ' Wind down with warm, restorative light.',
+      },
+      {
+        bold: 'Everyday versatility.',
+        rest: ' Face and upper body in one graceful session.',
+      },
+    ],
+    ctaText: 'EXPLORE SURGE',
+    ctaLink: '/luma-surge',
+  },
+  'luma-apex': {
+    matchTag: 'YOUR MATCH',
+    brand: 'LUMA',
+    model: 'Apex',
+    productSlug: 'luma-apex',
+    productImage: '/assets/about/product-luma-apex.png',
+    headline: 'High-irradiance half-body recovery and muscle rejuvenation.',
+    summary: 'You need powerful half-body recovery to soothe large muscle groups and restore vitality.',
+    features: [
+      {
+        bold: 'Half-body coverage.',
+        rest: ' Covers torso, back, or legs in one intensive session.',
+      },
+      {
+        bold: 'Deep cellular energy.',
+        rest: ' High irradiance for faster athletic recovery and joint relief.',
+      },
+      {
+        bold: 'Pro performance.',
+        rest: ' Calibrated wavelengths engineered for serious daily training.',
+      },
+    ],
+    ctaText: 'EXPLORE APEX',
+    ctaLink: '/luma-apex',
+  },
+  'luma-ultra': {
+    matchTag: 'YOUR MATCH',
+    brand: 'LUMA',
+    model: 'Ultra',
+    productSlug: 'luma-ultra',
+    productImage: '/assets/products/psd-card-ultra.jpg',
+    headline: 'Full-body wellness panel for restorative sleep and systemic vitality.',
+    summary: 'You want comprehensive full-body recovery and cellular recharge in a single immersive session.',
+    features: [
+      {
+        bold: 'Full-body immersion.',
+        rest: ' Expansive coverage from head to waist in a single session.',
+      },
+      {
+        bold: 'Systemic rejuvenation.',
+        rest: ' Enhances sleep quality, circadian rhythm, and daily energy.',
+      },
+      {
+        bold: 'Clinical power.',
+        rest: ' High-output LEDs delivering maximum photobiomodulation depth.',
+      },
+    ],
+    ctaText: 'EXPLORE ULTRA',
+    ctaLink: '/luma-ultra',
+  },
+  'luma-max': {
+    matchTag: 'YOUR MATCH',
+    brand: 'LUMA',
+    model: 'Max',
+    productSlug: 'luma-max',
+    productImage: '/assets/about/product-luma-max.png',
+    headline: 'Maximum clinical irradiance for complete whole-body transformation.',
+    summary: 'You demand the ultimate full-body clinical restoration and multi-user performance without compromise.',
+    features: [
+      {
+        bold: 'The ultimate system.',
+        rest: ' Complete head-to-toe full-body immersion in one treatment.',
+      },
+      {
+        bold: '8 Synchronized wavelengths.',
+        rest: ' Maximum therapeutic spectrum penetration and recovery.',
+      },
+      {
+        bold: 'Commercial grade.',
+        rest: ' Engineered for elite clinics, performance studios, and luxury homes.',
+      },
+    ],
+    ctaText: 'EXPLORE MAX',
+    ctaLink: '/luma-max',
+  },
+};
+
+export const DEFAULT_OPTION_PRODUCT_MAP = [
+  ['luma-surge', 'luma-glow', 'luma-nova', 'luma-apex'], // Q1
+  ['luma-go', 'luma-surge', 'luma-ultra', 'luma-max'],   // Q2
+  ['luma-glow', 'luma-surge', 'luma-ultra'],             // Q3
+  ['luma-go', 'luma-nova', 'luma-max'],                  // Q4
+  ['luma-glow', 'luma-surge', 'luma-ultra'],             // Q5
+];
+
+export function getDefaultProductSlug(qIdx, optIdx) {
+  if (DEFAULT_OPTION_PRODUCT_MAP[qIdx] && DEFAULT_OPTION_PRODUCT_MAP[qIdx][optIdx]) {
+    return DEFAULT_OPTION_PRODUCT_MAP[qIdx][optIdx];
+  }
+  const fallbackList = ['luma-surge', 'luma-glow', 'luma-nova', 'luma-go', 'luma-apex', 'luma-ultra', 'luma-max'];
+  return fallbackList[optIdx % fallbackList.length] || 'luma-surge';
+}
+
+export function calculateQuizRecommendation(answers, questions, customResultMatch) {
+  const activeQuestions = Array.isArray(questions) && questions.length > 0 ? questions : DEFAULT_QUESTIONS;
+  const tally = {};
+  const orderOfAppearance = [];
+
+  activeQuestions.forEach((q, qIdx) => {
+    const selectedOptIdx = answers[qIdx] !== undefined ? answers[qIdx] : 0;
+    const opt = q.options && q.options[selectedOptIdx] ? q.options[selectedOptIdx] : null;
+    let slug = opt?.matchedProductSlug;
+    if (!slug) {
+      slug = getDefaultProductSlug(qIdx, selectedOptIdx);
+    }
+    if (slug) {
+      tally[slug] = (tally[slug] || 0) + 1;
+      orderOfAppearance.push(slug);
+    }
+  });
+
+  // Find product with highest vote count
+  let winner = null;
+  let maxCount = -1;
+
+  for (const [slug, count] of Object.entries(tally)) {
+    if (count > maxCount) {
+      maxCount = count;
+      winner = slug;
+    } else if (count === maxCount) {
+      // Tie breaker: prefer the one that appeared latest in the answers
+      const lastIndexA = orderOfAppearance.lastIndexOf(winner);
+      const lastIndexB = orderOfAppearance.lastIndexOf(slug);
+      if (lastIndexB > lastIndexA) {
+        winner = slug;
+      }
+    }
+  }
+
+  const baseRecommendation = PRODUCT_RECOMMENDATIONS[winner] || PRODUCT_RECOMMENDATIONS['luma-surge'];
+
+  // If CMS customized resultMatch specifically for this winning product, allow overrides
+  if (customResultMatch && customResultMatch.productSlug === winner) {
+    return {
+      ...baseRecommendation,
+      ...customResultMatch,
+      features: customResultMatch.features?.length ? customResultMatch.features : baseRecommendation.features,
+    };
+  }
+
+  return baseRecommendation;
+}
 
 const DEFAULT_QUESTIONS = [
   {
@@ -15,18 +269,22 @@ const DEFAULT_QUESTIONS = [
       {
         title: 'Recover faster',
         subtitle: 'After training, soreness, long days',
+        matchedProductSlug: 'luma-surge',
       },
       {
         title: 'Glow',
         subtitle: 'Skin tone, texture, fine lines',
+        matchedProductSlug: 'luma-glow',
       },
       {
         title: 'Calm & sleep',
         subtitle: 'A slower evening, deeper rest',
+        matchedProductSlug: 'luma-nova',
       },
       {
         title: 'Ease aches',
         subtitle: 'Joints, back and tension',
+        matchedProductSlug: 'luma-apex',
       },
     ],
   },
@@ -38,18 +296,22 @@ const DEFAULT_QUESTIONS = [
       {
         title: 'Bedroom or desk',
         subtitle: 'Compact, easy to tuck away',
+        matchedProductSlug: 'luma-go',
       },
       {
         title: 'Home gym',
         subtitle: 'Beside the mat or the rack',
+        matchedProductSlug: 'luma-surge',
       },
       {
         title: 'Dedicated wellness room',
         subtitle: 'Space to stand and stay',
+        matchedProductSlug: 'luma-ultra',
       },
       {
         title: 'A studio or clinic',
         subtitle: 'Shared, daily, professional',
+        matchedProductSlug: 'luma-max',
       },
     ],
   },
@@ -61,14 +323,17 @@ const DEFAULT_QUESTIONS = [
       {
         title: 'Face & targeted spots',
         subtitle: 'Precise, close-up',
+        matchedProductSlug: 'luma-glow',
       },
       {
         title: 'Upper body',
         subtitle: 'Face, neck, shoulders, chest',
+        matchedProductSlug: 'luma-surge',
       },
       {
         title: 'Head to toe',
         subtitle: 'Full-body, in one session',
+        matchedProductSlug: 'luma-ultra',
       },
     ],
   },
@@ -80,14 +345,17 @@ const DEFAULT_QUESTIONS = [
       {
         title: 'Quick and daily',
         subtitle: 'Ten minutes, no fuss',
+        matchedProductSlug: 'luma-go',
       },
       {
         title: 'A proper pause',
         subtitle: 'Fifteen to twenty unhurried minutes',
+        matchedProductSlug: 'luma-nova',
       },
       {
         title: 'Shared',
         subtitle: 'Family, clients or guests',
+        matchedProductSlug: 'luma-max',
       },
     ],
   },
@@ -99,44 +367,23 @@ const DEFAULT_QUESTIONS = [
       {
         title: 'Start simple',
         subtitle: 'Essential, well made',
+        matchedProductSlug: 'luma-glow',
       },
       {
         title: 'Balanced',
         subtitle: 'Performance and value',
+        matchedProductSlug: 'luma-surge',
       },
       {
         title: 'No compromise',
         subtitle: 'The full experience',
+        matchedProductSlug: 'luma-ultra',
       },
     ],
   },
 ];
 
-const DEFAULT_RESULT = {
-  matchTag: 'YOUR MATCH',
-  brand: 'LUMA',
-  model: 'Surge',
-  productSlug: 'luma-surge',
-  productImage: '/assets/products/luma-surge.png',
-  headline: 'Balanced power for the body in motion.',
-  summary: 'You want real performance without the full commitment of space.',
-  features: [
-    {
-      bold: 'Faster recovery.',
-      rest: ' Broader coverage to support muscles after effort.',
-    },
-    {
-      bold: 'Calmer evenings.',
-      rest: ' Wind down with warm, restorative light.',
-    },
-    {
-      bold: 'Everyday versatility.',
-      rest: ' Face and upper body in one graceful session.',
-    },
-  ],
-  ctaText: 'EXPLORE SURGE',
-  ctaLink: '#products',
-};
+const DEFAULT_RESULT = PRODUCT_RECOMMENDATIONS['luma-surge'];
 
 const renderHeading = (text) => {
   if (!text) {
@@ -167,8 +414,8 @@ const renderHeading = (text) => {
   );
 };
 
-export default function AssessmentQuiz({ data }) {
-  const [currentStep, setCurrentStep] = useState(0); // 0 to 4 = questions, 5 = results
+export default function AssessmentQuiz({ data, onNavigate }) {
+  const [currentStep, setCurrentStep] = useState(0); // 0 to N-1 = questions, N = results
   const [answers, setAnswers] = useState({ 0: 0 });
   const [hoveredIdx, setHoveredIdx] = useState(null);
   const [hasSubmitted, setHasSubmitted] = useState(false);
@@ -182,16 +429,13 @@ export default function AssessmentQuiz({ data }) {
       ? data.questions
       : DEFAULT_QUESTIONS;
 
-  const matchData = {
-    ...DEFAULT_RESULT,
-    ...(data?.resultMatch || {}),
-  };
+  const matchData = calculateQuizRecommendation(answers, activeQuestions, data?.resultMatch);
 
   const handleSelectOption = (index) => {
     setAnswers((prev) => ({ ...prev, [currentStep]: index }));
   };
 
-  // Auto-submit answers to backend when reaching step 5 (results)
+  // Auto-submit answers to backend when reaching results step
   const submitToBackend = async (finalAnswers, customEmail = null, customName = null) => {
     try {
       let loggedUser = null;
@@ -219,10 +463,12 @@ export default function AssessmentQuiz({ data }) {
         };
       });
 
+      const dynamicRecommendedProduct = calculateQuizRecommendation(finalAnswers, activeQuestions, data?.resultMatch);
+
       const matchedProd = {
-        name: `${matchData.brand || 'LUMA'} ${matchData.model || 'Surge'}`.trim(),
-        slug: matchData.productSlug || 'luma-surge',
-        headline: matchData.headline || 'Balanced power for the body in motion.',
+        name: `${dynamicRecommendedProduct.brand || 'LUMA'} ${dynamicRecommendedProduct.model || 'Surge'}`.trim(),
+        slug: dynamicRecommendedProduct.productSlug || 'luma-surge',
+        headline: dynamicRecommendedProduct.headline || 'Balanced power for the body in motion.',
       };
 
       const finalUserName =
@@ -283,6 +529,19 @@ export default function AssessmentQuiz({ data }) {
     setCurrentStep(0);
     setHasSubmitted(false);
     setGuestEmailSaved(false);
+  };
+
+  const handleCtaClick = (e) => {
+    const targetLink = matchData.ctaLink || `/${matchData.productSlug || 'luma-surge'}`;
+    if (targetLink.startsWith('#')) return;
+    e.preventDefault();
+    if (typeof onNavigate === 'function') {
+      onNavigate(matchData.productSlug || 'luma-surge');
+    } else {
+      window.history.pushState({}, '', targetLink);
+      window.dispatchEvent(new PopStateEvent('popstate'));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const handleSaveGuestContact = async (e) => {
@@ -448,6 +707,10 @@ export default function AssessmentQuiz({ data }) {
                 <img
                   src={matchData.productImage || '/assets/products/luma-surge.png'}
                   alt={`${matchData.brand || 'LUMA'} ${matchData.model || 'Surge'}`}
+                  onError={(e) => {
+                    e.currentTarget.onerror = null;
+                    e.currentTarget.src = '/assets/products/luma-surge.png';
+                  }}
                   className="h-48 sm:h-60 lg:w-[calc(363*var(--u))] lg:h-[calc(528*var(--u))] object-contain block"
                 />
               </div>
@@ -539,10 +802,11 @@ export default function AssessmentQuiz({ data }) {
             {/* Full-width CTA Button (PSD Rectangle 11: w=1404, h=86, #ED2024, 32px SemiBold, #F2F1ED) */}
             <div className="mt-6 lg:mt-[calc(71*var(--u))]">
               <a
-                href={matchData.ctaLink || '#products'}
+                href={matchData.ctaLink || `/${matchData.productSlug || 'luma-surge'}`}
+                onClick={handleCtaClick}
                 className="w-full h-11 lg:h-[calc(86*var(--u))] inline-flex items-center justify-center bg-[#ED2024] hover:bg-[#c9181b] text-[#F2F1ED] font-semibold text-xs sm:text-sm lg:text-[calc(32*var(--u))] uppercase tracking-[0.05em] rounded-[6px] lg:rounded-[calc(10*var(--u))] transition-colors cursor-pointer leading-none"
               >
-                {matchData.ctaText || 'EXPLORE SURGE'}
+                {matchData.ctaText || `EXPLORE ${matchData.model?.toUpperCase() || 'SURGE'}`}
               </a>
             </div>
 
