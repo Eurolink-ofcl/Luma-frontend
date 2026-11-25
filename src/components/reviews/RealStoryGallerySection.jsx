@@ -367,7 +367,7 @@ export default function RealStoryGallerySection({ data }) {
                             })
                           }
                           aria-label={`View story: ${card.title}`}
-                          className="group/card relative w-full h-[260px] sm:h-[280px] md:h-[300px] lg:h-[320px] rounded-[20px] overflow-hidden bg-[#121215] border border-gray-200/70 hover:border-[#ED2024] shadow-sm hover:shadow-2xl hover:shadow-[#ED2024]/15 transition-all duration-300 transform hover:-translate-y-1.5 cursor-pointer text-left flex flex-col justify-between p-4 sm:p-5 select-none focus:outline-none"
+                          className="group/card relative w-full h-[350px] sm:h-[390px] md:h-[430px] lg:h-[470px] rounded-[22px] overflow-hidden bg-[#121215] border border-gray-200/70 hover:border-[#ED2024] shadow-md hover:shadow-2xl hover:shadow-[#ED2024]/20 transition-all duration-300 transform hover:-translate-y-1.5 cursor-pointer text-left select-none focus:outline-none"
                         >
                           {/* High-Resolution Background Photo */}
                           <img
@@ -378,66 +378,29 @@ export default function RealStoryGallerySection({ data }) {
                               e.currentTarget.onerror = null;
                               e.currentTarget.src = card.fallbackImage || '/assets/reviews/cards/card-2-luma-mask.png';
                             }}
-                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-600 ease-out group-hover/card:scale-106"
+                            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover/card:scale-106"
                             draggable={false}
                           />
 
-                          {/* Gradient Vignette Overlays for Maximum Contrast & Text Legibility */}
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/45 to-black/20 group-hover/card:via-black/35 transition-colors" />
+                          {/* Subtle Bottom Vignette for the Read More button */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent group-hover/card:from-black/70 transition-colors" />
 
-                          {/* Top Row Badges: Author / Verified Pill + Stars / Video Badge */}
-                          <div className="relative z-10 flex items-center justify-between w-full mb-auto">
-                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-bold uppercase tracking-wider bg-black/65 backdrop-blur-md text-white border border-white/15 shadow-xs">
-                              <span className="w-1.5 h-1.5 rounded-full bg-[#ED2024] animate-pulse" />
-                              <span className="truncate max-w-[130px] sm:max-w-[160px]">
-                                {card.author || card.badgeName || 'VERIFIED USER'}
-                              </span>
-                            </span>
-
-                            {card.type === 'video' ? (
-                              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-bold uppercase tracking-wider bg-[#ED2024] text-white shadow-sm">
-                                <svg className="w-2.5 h-2.5 fill-current" viewBox="0 0 24 24">
+                          {/* Play Button Indicator for Video Cards */}
+                          {card.type === 'video' && (
+                            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+                              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-black/60 backdrop-blur-sm border border-white/30 text-white flex items-center justify-center shadow-xl group-hover/card:scale-110 group-hover/card:bg-[#ED2024] group-hover/card:border-[#ED2024] transition-all duration-300">
+                                <svg className="w-5 h-5 fill-current ml-0.5" viewBox="0 0 24 24">
                                   <path d="M8 5v14l11-7z" />
                                 </svg>
-                                <span>Video</span>
-                              </span>
-                            ) : (
-                              <div className="flex items-center gap-0.5 bg-black/55 backdrop-blur-md px-2 py-1 rounded-full border border-white/10">
-                                {Array.from({ length: card.stars || 5 }).map((_, s) => (
-                                  <span key={s} className="text-[#ED2024] text-[11px] leading-none">
-                                    ★
-                                  </span>
-                                ))}
                               </div>
-                            )}
-                          </div>
-
-                          {/* Bottom Card Content: Featured Device, Title & Quote */}
-                          <div className="relative z-10 w-full mt-auto">
-                            <div className="flex items-center gap-2 mb-1">
-                              <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-[#ED2024]">
-                                {card.product || 'LUMA PANEL'}
-                              </span>
-                              <span className="text-white/40 text-[9px]">•</span>
-                              <span className="text-[10px] text-emerald-400 font-semibold tracking-wide">
-                                ✓ Verified Story
-                              </span>
                             </div>
+                          )}
 
-                            <h4 className="text-[13px] sm:text-[14px] font-semibold text-white leading-snug line-clamp-1 group-hover/card:text-red-100 transition-colors">
-                              {card.title}
-                            </h4>
-
-                            <p className="text-[11px] sm:text-[12px] text-white/75 font-light leading-relaxed line-clamp-2 mt-1">
-                              "{card.story}"
-                            </p>
-                          </div>
-
-                          {/* Hover Click Pill Indicator */}
-                          <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/card:opacity-100 transition-opacity duration-200 pointer-events-none z-20">
-                            <span className="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-black shadow-xl flex items-center gap-1.5 transform scale-90 group-hover/card:scale-100 transition-transform">
-                              <span>Read Story</span>
-                              <span className="text-[#ED2024] font-bold">→</span>
+                          {/* Clean "Read More" Button at Bottom */}
+                          <div className="absolute bottom-4 sm:bottom-5 left-1/2 -translate-x-1/2 z-20">
+                            <span className="px-4 py-2 sm:px-5 sm:py-2.5 rounded-full text-[11px] sm:text-[12px] font-semibold bg-white text-black shadow-lg flex items-center gap-1.5 whitespace-nowrap group-hover/card:bg-[#ED2024] group-hover/card:text-white group-hover/card:scale-105 transition-all duration-200">
+                              <span>Read More</span>
+                              <span className="font-bold text-[#ED2024] group-hover/card:text-white transition-colors">→</span>
                             </span>
                           </div>
                         </button>
