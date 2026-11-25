@@ -140,9 +140,6 @@ export default function BenefitsOverview({ data }) {
   const subtitle = data?.subtitle || 'Evidence-based protocols calibrated for specific wellness outcomes.';
   const cards = (Array.isArray(data?.cards) && data.cards.length > 0) ? data.cards : benefits;
 
-  const isLumaInEyebrow = /LUMA/i.test(eyebrow);
-  const eyebrowPrefix = isLumaInEyebrow ? eyebrow.replace(/LUMA/i, '').trim() : eyebrow;
-
   return (
     <section
       id="benefits"
@@ -154,8 +151,13 @@ export default function BenefitsOverview({ data }) {
         {/* Section Header (y=5700..5940) */}
         <div className="text-center mx-auto mb-12 lg:mb-[calc(98*var(--u))]">
           <p className="text-xs sm:text-sm lg:text-[calc(40*var(--u))] uppercase tracking-[0.02em] font-medium leading-none">
-            <span className="text-[#131313]">{eyebrowPrefix} </span>
-            {isLumaInEyebrow && <span className="text-[#ED2024]">LUMA</span>}
+            {eyebrow.split(/(LUMA)/i).map((part, idx) =>
+              part.toUpperCase() === 'LUMA' ? (
+                <span key={idx} className="text-[#ED2024]">{part}</span>
+              ) : (
+                <span key={idx} className="text-[#131313]">{part}</span>
+              )
+            )}
           </p>
           <h2 className="text-[#131313] font-extralight text-2xl sm:text-3xl md:text-4xl lg:text-[calc(80*var(--u))] tracking-[0.02em] uppercase leading-none mt-3 lg:mt-[calc(47*var(--u))]">
             {heading}
