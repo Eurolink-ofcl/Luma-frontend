@@ -1,55 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { API_BASE_URL, resolveImageUrl } from '../../config/api';
 
-// Exact 8 Curved Position coordinates on 3840x1606 canvas (PSD: bbox y=3091..4697)
-const CARD_POSITIONS = [
-  { left: 'calc(0 * var(--u))', top: 'calc(0 * var(--u))', width: 'calc(390 * var(--u))', height: 'calc(1606 * var(--u))' },
-  { left: 'calc(446 * var(--u))', top: 'calc(245 * var(--u))', width: 'calc(609 * var(--u))', height: 'calc(1055 * var(--u))' },
-  { left: 'calc(1093 * var(--u))', top: 'calc(418 * var(--u))', width: 'calc(450 * var(--u))', height: 'calc(710 * var(--u))' },
-  { left: 'calc(1571 * var(--u))', top: 'calc(483 * var(--u))', width: 'calc(390 * var(--u))', height: 'calc(577 * var(--u))' },
-  { left: 'calc(1983 * var(--u))', top: 'calc(489 * var(--u))', width: 'calc(386 * var(--u))', height: 'calc(566 * var(--u))' },
-  { left: 'calc(2394 * var(--u))', top: 'calc(439 * var(--u))', width: 'calc(429 * var(--u))', height: 'calc(669 * var(--u))' },
-  { left: 'calc(2862 * var(--u))', top: 'calc(297 * var(--u))', width: 'calc(558 * var(--u))', height: 'calc(951 * var(--u))' },
-  { left: 'calc(3472 * var(--u))', top: 'calc(80 * var(--u))', width: 'calc(368 * var(--u))', height: 'calc(1418 * var(--u))' },
-];
-
-// The 8 dedicated transparent-corner 3D perspective curved card assets from PSD
-const GALLERY_CARD_ASSETS = [
-  {
-    image: '/assets/reviews/gallery_cards/card-1-meditation.png',
-    imageWebp: '/assets/reviews/gallery_cards/card-1-meditation.webp',
-  },
-  {
-    image: '/assets/reviews/gallery_cards/card-2-glow-mask.png',
-    imageWebp: '/assets/reviews/gallery_cards/card-2-glow-mask.webp',
-  },
-  {
-    image: '/assets/reviews/gallery_cards/card-3-goggles-recovery.png',
-    imageWebp: '/assets/reviews/gallery_cards/card-3-goggles-recovery.webp',
-  },
-  {
-    image: '/assets/reviews/gallery_cards/card-4-handheld-panel.png',
-    imageWebp: '/assets/reviews/gallery_cards/card-4-handheld-panel.webp',
-  },
-  {
-    image: '/assets/reviews/gallery_cards/card-5-mask-session.png',
-    imageWebp: '/assets/reviews/gallery_cards/card-5-mask-session.webp',
-  },
-  {
-    image: '/assets/reviews/gallery_cards/card-6-unboxing-panel.png',
-    imageWebp: '/assets/reviews/gallery_cards/card-6-unboxing-panel.webp',
-  },
-  {
-    image: '/assets/reviews/gallery_cards/card-7-assembly-stand.png',
-    imageWebp: '/assets/reviews/gallery_cards/card-7-assembly-stand.webp',
-  },
-  {
-    image: '/assets/reviews/gallery_cards/card-8-camera-influencer.png',
-    imageWebp: '/assets/reviews/gallery_cards/card-8-camera-influencer.webp',
-  },
-];
-
-// SLIDE 0: Original Curated PSD Stories
+// ROW 1: Curated Authentic Customer Stories
 const SLIDE_0_CARDS = [
   {
     id: 's0-1',
@@ -136,7 +88,7 @@ const SLIDE_0_CARDS = [
   },
 ];
 
-// SLIDE 1: Customer Verified Real Stories (Dynamically filled with approved customer stories from MongoDB)
+// ROW 2: Verified Users & Real Experiences
 const SLIDE_1_FALLBACK_CARDS = [
   {
     id: 's1-1',
@@ -224,7 +176,7 @@ const SLIDE_1_FALLBACK_CARDS = [
   },
 ];
 
-// SLIDE 2: Daily Wellness & Clinical Protocols
+// ROW 3: Daily Protocols & Clinical Routines
 const SLIDE_2_CARDS = [
   {
     id: 's2-1',
@@ -311,7 +263,7 @@ const SLIDE_2_CARDS = [
   },
 ];
 
-// SLIDE 3: Video Reviews Archive & Irradiance Tests
+// ROW 4: Lab Tests, Unboxings & Video Demonstrations
 const SLIDE_3_CARDS = [
   {
     id: 's3-1',
@@ -399,15 +351,177 @@ const SLIDE_3_CARDS = [
   },
 ];
 
+// Fallback high-resolution images for each row
+const ROW_FALLBACK_IMAGES = [
+  // Row 1
+  [
+    '/assets/reviews/gallery_cards/card-1-meditation.png',
+    '/assets/reviews/cards/card-2-luma-mask.png',
+    '/assets/reviews/gallery_cards/card-3-goggles-recovery.png',
+    '/assets/reviews/gallery_cards/card-4-handheld-panel.png',
+    '/assets/reviews/cards/card-5-mask-session.png',
+    '/assets/reviews/gallery_cards/card-6-unboxing-panel.png',
+    '/assets/reviews/gallery_cards/card-7-assembly-stand.png',
+    '/assets/reviews/gallery_cards/card-8-camera-influencer.png',
+  ],
+  // Row 2
+  [
+    '/assets/benefits/recovery.jpg',
+    '/assets/benefits/clearskin.jpg',
+    '/assets/reviews/gallery_cards/card-3-goggles-recovery.png',
+    '/assets/reviews/gallery_cards/card-4-handheld-panel.png',
+    '/assets/benefits/wellness.jpg',
+    '/assets/reviews/gallery_cards/card-6-unboxing-panel.png',
+    '/assets/reviews/gallery_cards/card-7-assembly-stand.png',
+    '/assets/reviews/gallery_cards/card-8-camera-influencer.png',
+  ],
+  // Row 3
+  [
+    '/assets/about/story-panel.jpg',
+    '/assets/reviews/cards/card-5-mask-session.png',
+    '/assets/benefits/recovery.jpg',
+    '/assets/reviews/gallery_cards/card-3-goggles-recovery.png',
+    '/assets/benefits/cellular.jpg',
+    '/assets/about/benefits-athlete-exact.png',
+    '/assets/reviews/gallery_cards/card-4-handheld-panel.png',
+    '/assets/benefits/wellness.jpg',
+  ],
+  // Row 4
+  [
+    '/assets/reviews/gallery_cards/card-8-camera-influencer.png',
+    '/assets/reviews/cards/card-2-luma-mask.png',
+    '/assets/reviews/gallery_cards/card-4-handheld-panel.png',
+    '/assets/before_after/face-after.jpg',
+    '/assets/benefits/cellular.jpg',
+    '/assets/reviews/gallery_cards/card-7-assembly-stand.png',
+    '/assets/reviews/gallery_cards/card-6-unboxing-panel.png',
+    '/assets/reviews/gallery_cards/card-1-meditation.png',
+  ],
+];
+
+/**
+ * Single Row Marquee Component:
+ * Duplicates its cards for a mathematically continuous, gapless 60fps infinite loop.
+ * Pauses smoothly on hover and elevates cards with interactive modal trigger.
+ */
+function CarouselRow({
+  cards,
+  rowFallbackImages,
+  rowIndex,
+  onSelectCard,
+}) {
+  // Duplicate array once to guarantee seamless infinite wrapping without gaps
+  const loopCards = [...cards, ...cards];
+
+  return (
+    <div className="relative w-full overflow-hidden group py-1.5 sm:py-2">
+      <div
+        className={`flex w-max items-center gap-4 sm:gap-5 md:gap-6 marquee-row-${rowIndex} group-hover:[animation-play-state:paused]`}
+        style={{ willChange: 'transform' }}
+      >
+        {loopCards.map((card, idx) => {
+          const originalIdx = idx % cards.length;
+          const fallback = rowFallbackImages[originalIdx % rowFallbackImages.length];
+          const imgSrc = card.photo || card.thumbnail || fallback;
+
+          return (
+            <button
+              key={`${card.id || originalIdx}-${idx}`}
+              type="button"
+              onClick={() =>
+                onSelectCard({
+                  ...card,
+                  modalImage: imgSrc,
+                  fallbackImage: fallback,
+                })
+              }
+              aria-label={`View story: ${card.title}`}
+              className="group/card relative w-[280px] sm:w-[320px] md:w-[350px] lg:w-[380px] h-[195px] sm:h-[215px] md:h-[230px] lg:h-[240px] rounded-[18px] sm:rounded-[22px] overflow-hidden bg-[#111113] border border-black/10 hover:border-[#ED2024]/80 shadow-md hover:shadow-2xl hover:shadow-[#ED2024]/15 transition-all duration-300 transform hover:-translate-y-1.5 hover:scale-[1.02] cursor-pointer text-left shrink-0 flex flex-col justify-between p-4 sm:p-5 select-none focus:outline-none"
+            >
+              {/* Background Photo */}
+              <img
+                src={imgSrc}
+                alt={card.title}
+                loading="lazy"
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = fallback;
+                }}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover/card:scale-108"
+                draggable={false}
+              />
+
+              {/* Gradient Vignette Overlays for Maximum Contrast and Legibility */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/45 to-black/20 group-hover/card:via-black/35 transition-colors" />
+
+              {/* Top Row Badges */}
+              <div className="relative z-10 flex items-center justify-between w-full mb-auto">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-bold uppercase tracking-wider bg-black/65 backdrop-blur-md text-white border border-white/15 shadow-xs">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#ED2024] animate-pulse" />
+                  <span className="truncate max-w-[140px] sm:max-w-[180px]">
+                    {card.author || card.badgeName || 'VERIFIED USER'}
+                  </span>
+                </span>
+
+                {card.type === 'video' ? (
+                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-bold uppercase tracking-wider bg-[#ED2024] text-white shadow-sm">
+                    <svg className="w-2.5 h-2.5 fill-current" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                    <span>Video</span>
+                  </span>
+                ) : (
+                  <div className="flex items-center gap-0.5 bg-black/55 backdrop-blur-md px-2 py-1 rounded-full border border-white/10">
+                    {Array.from({ length: card.stars || 5 }).map((_, s) => (
+                      <span key={s} className="text-[#ED2024] text-[11px] leading-none">
+                        ★
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Bottom Card Content */}
+              <div className="relative z-10 w-full mt-auto">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-[#ED2024]">
+                    {card.product || 'LUMA PANEL'}
+                  </span>
+                  <span className="text-white/40 text-[9px]">•</span>
+                  <span className="text-[10px] text-emerald-400 font-semibold tracking-wide">
+                    ✓ Verified Result
+                  </span>
+                </div>
+
+                <h4 className="text-[13px] sm:text-[14px] font-semibold text-white leading-snug line-clamp-1 group-hover/card:text-red-100 transition-colors">
+                  {card.title}
+                </h4>
+
+                <p className="text-[11px] sm:text-[12px] text-white/75 font-light leading-relaxed line-clamp-2 mt-1">
+                  "{card.story}"
+                </p>
+              </div>
+
+              {/* Hover Click Pill Indicator */}
+              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/card:opacity-100 transition-opacity duration-200 pointer-events-none z-20">
+                <span className="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-black shadow-xl flex items-center gap-1.5 transform scale-90 group-hover/card:scale-100 transition-transform">
+                  <span>View Story</span>
+                  <span className="text-[#ED2024] font-bold">→</span>
+                </span>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export default function RealStoryGallerySection({ data }) {
-  const [activeDot, setActiveDot] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
   const [adminStories, setAdminStories] = useState([]);
-  const [touchStartX, setTouchStartX] = useState(null);
 
   const title = data?.title || 'REAL STORY';
-  const totalSlides = 4;
 
   // Fetch approved customer stories from backend MongoDB
   useEffect(() => {
@@ -419,13 +533,13 @@ export default function RealStoryGallerySection({ data }) {
             id: s._id || `admin-${idx}`,
             photo: resolveImageUrl(s.photo || s.thumbnail || ''),
             thumbnail: resolveImageUrl(s.thumbnail || s.photo || ''),
-            title: `${s.name}'s Real Story`,
-            author: s.badgeName || s.name.toUpperCase(),
+            title: s.name ? `${s.name}'s Real Story` : 'Customer Real Story',
+            author: s.badgeName || s.name?.toUpperCase() || 'VERIFIED USER',
             product: s.badgeProduct || `${(s.product || 'Luma Apex').toUpperCase()} USER`,
             type: s.mediaLink && s.mediaLink.includes('youtu') ? 'video' : (s.mediaLink ? 'video' : 'photo'),
             mediaLink: s.mediaLink || '',
             stars: s.stars || 5,
-            story: s.story,
+            story: s.story || '',
           }));
           setAdminStories(mapped);
         }
@@ -442,309 +556,142 @@ export default function RealStoryGallerySection({ data }) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // Auto-advance carousel gently when modal is closed and not hovered
-  useEffect(() => {
-    if (isHovered || selectedCard) return;
-    const interval = setInterval(() => {
-      setActiveDot((prev) => (prev < totalSlides - 1 ? prev + 1 : 0));
-    }, 6500);
-    return () => clearInterval(interval);
-  }, [isHovered, selectedCard, totalSlides]);
-
-  const handlePrev = () => {
-    setActiveDot((prev) => (prev > 0 ? prev - 1 : totalSlides - 1));
-  };
-
-  const handleNext = () => {
-    setActiveDot((prev) => (prev < totalSlides - 1 ? prev + 1 : 0));
-  };
-
-  const handleTouchStart = (e) => {
-    if (e.touches && e.touches[0]) {
-      setTouchStartX(e.touches[0].clientX);
-    }
-  };
-
-  const handleTouchEnd = (e) => {
-    if (touchStartX === null) return;
-    const touchEndX = e.changedTouches && e.changedTouches[0] ? e.changedTouches[0].clientX : null;
-    if (touchEndX !== null) {
-      const diff = touchStartX - touchEndX;
-      if (diff > 45) {
-        handleNext();
-      } else if (diff < -45) {
-        handlePrev();
-      }
-    }
-    setTouchStartX(null);
-  };
-
-  // Build the 4 slides matching exact PSD Layer 1: REAL STORY
-  // Dynamic admin-approved customer stories from MongoDB populate Slide 0 (FIRST SLIDE)
-  // so admin approved stories are immediately active and visible on the 3D gallery arc!
-  const slide0Cards = SLIDE_0_CARDS.map((fallback, idx) => {
+  // Distribute customer stories into 4 dedicated rows, populated with admin-approved stories
+  const row1Cards = SLIDE_0_CARDS.map((fallback, idx) => {
     if (adminStories[idx]) {
-      return {
-        ...fallback,
-        ...adminStories[idx],
-      };
+      return { ...fallback, ...adminStories[idx] };
     }
     return fallback;
   });
 
-  const slide1Cards = SLIDE_1_FALLBACK_CARDS.map((fallback, idx) => {
+  const row2Cards = SLIDE_1_FALLBACK_CARDS.map((fallback, idx) => {
     const adminIdx = idx + 8;
     if (adminStories[adminIdx]) {
-      return {
-        ...fallback,
-        ...adminStories[adminIdx],
-      };
+      return { ...fallback, ...adminStories[adminIdx] };
     }
     return fallback;
   });
 
-  const allSlides = [
-    { id: 0, cards: slide0Cards },
-    { id: 1, cards: slide1Cards },
-    { id: 2, cards: SLIDE_2_CARDS },
-    { id: 3, cards: SLIDE_3_CARDS },
-  ];
+  const row3Cards = SLIDE_2_CARDS.map((fallback, idx) => {
+    const adminIdx = idx + 16;
+    if (adminStories[adminIdx]) {
+      return { ...fallback, ...adminStories[adminIdx] };
+    }
+    return fallback;
+  });
+
+  const row4Cards = SLIDE_3_CARDS.map((fallback, idx) => {
+    const adminIdx = idx + 24;
+    if (adminStories[adminIdx]) {
+      return { ...fallback, ...adminStories[adminIdx] };
+    }
+    return fallback;
+  });
 
   return (
     <section
       id="real-story"
-      style={{ '--u': 'calc(100vw / 3840)' }}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
-      className="relative w-full bg-[#FFFFFF] text-[#000000] overflow-hidden font-['Manrope'] select-none pt-10 sm:pt-14 md:pt-18 lg:pt-0 pb-10 sm:pb-14 md:pb-18 lg:pb-0"
+      className="relative w-full bg-[#FFFFFF] text-[#000000] overflow-hidden font-['Manrope'] select-none py-16 sm:py-20 md:py-24"
     >
-      {/* =========================================================================
-          DESKTOP HERO COMPOSITION (Exact PSD 'Layer 1: REAL STORY' y=3091..4697)
-          Aspect ratio: 3840w x 1606h (aspect-[3840/1606])
-          ALL 4 SLIDES DISPLAY IN THE EXACT SAME 8-CARD CURVED PANORAMIC IMAGES GRID!
-          NO TEXT ON THE SLIDE. WHEN USER CLICKS ANY CARD, THE MODAL OPENS WITH THE TEXT.
-          ========================================================================= */}
-      <div className="relative w-full hidden lg:block aspect-[3840/1606] h-[calc(1606*var(--u))] overflow-hidden">
-        {/* Slider Track */}
+      {/* CSS Keyframes for Hardware-Accelerated Continuous Multi-Row Marquee */}
+      <style>{`
+        @keyframes marqueeScrollLeft {
+          0% { transform: translateX(0%); }
+          100% { transform: translateX(-50%); }
+        }
+        @keyframes marqueeScrollRight {
+          0% { transform: translateX(-50%); }
+          100% { transform: translateX(0%); }
+        }
+        .marquee-row-1 {
+          animation: marqueeScrollLeft 38s linear infinite;
+        }
+        .marquee-row-2 {
+          animation: marqueeScrollRight 44s linear infinite;
+        }
+        .marquee-row-3 {
+          animation: marqueeScrollLeft 41s linear infinite;
+        }
+        .marquee-row-4 {
+          animation: marqueeScrollRight 47s linear infinite;
+        }
+        @media (max-width: 768px) {
+          .marquee-row-1 { animation-duration: 26s; }
+          .marquee-row-2 { animation-duration: 30s; }
+          .marquee-row-3 { animation-duration: 28s; }
+          .marquee-row-4 { animation-duration: 32s; }
+        }
+      `}</style>
+
+      {/* Section Header: REAL STORY + Red Brand Bar */}
+      <div className="relative z-10 text-center px-4 mb-8 sm:mb-12 md:mb-14">
+        <span className="text-[11px] sm:text-[12px] font-bold tracking-[0.2em] uppercase text-[#ED2024] block mb-2.5">
+          COMMUNITY VOICES &amp; EXPERIENCES
+        </span>
+        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extralight uppercase tracking-[0.02em] text-[#131313] leading-none">
+          {title}
+        </h2>
         <div
-          className="flex w-full h-full transition-transform duration-700 ease-out will-change-transform"
-          style={{ transform: `translateX(-${activeDot * 100}%)` }}
-        >
-          {allSlides.map((slide, sIdx) => (
-            <div key={slide.id || sIdx} className="relative w-full h-full shrink-0">
-              {/* 8 Separate Interactive Image Cards positioned along the 3D concave curve */}
-              {slide.cards.map((card, cIdx) => {
-                const pos = CARD_POSITIONS[cIdx] || CARD_POSITIONS[0];
-                const cardAsset = GALLERY_CARD_ASSETS[cIdx] || GALLERY_CARD_ASSETS[0];
-
-                return (
-                  <button
-                    key={card.id || `${sIdx}-${cIdx}`}
-                    type="button"
-                    onClick={() =>
-                      setSelectedCard({
-                        ...card,
-                        modalImage: card.photo || card.thumbnail || cardAsset.image,
-                        fallbackImage: cardAsset.image,
-                      })
-                    }
-                    aria-label={`View story: ${card.title}`}
-                    style={{
-                      position: 'absolute',
-                      left: pos.left,
-                      top: pos.top,
-                      width: pos.width,
-                      height: pos.height,
-                    }}
-                    className="group cursor-pointer focus:outline-none transition-transform duration-300 hover:scale-[1.03] hover:z-20 will-change-transform"
-                  >
-                    {/* Individual Card Image - Exact 3D perspective curved silhouette from PSD */}
-                    <div className="w-full h-full overflow-hidden">
-                      {card.photo ? (
-                        <div
-                          className="w-full h-full relative"
-                          style={{
-                            WebkitMaskImage: `url(${cardAsset.imageWebp || cardAsset.image})`,
-                            maskImage: `url(${cardAsset.imageWebp || cardAsset.image})`,
-                            WebkitMaskSize: 'contain',
-                            maskSize: 'contain',
-                            WebkitMaskRepeat: 'no-repeat',
-                            maskRepeat: 'no-repeat',
-                            WebkitMaskPosition: 'center',
-                            maskPosition: 'center',
-                          }}
-                        >
-                          <img
-                            src={card.photo}
-                            alt={card.title}
-                            className="w-full h-full object-cover pointer-events-none select-none filter drop-shadow-sm group-hover:drop-shadow-2xl transition-all duration-300"
-                            draggable={false}
-                          />
-                        </div>
-                      ) : (
-                        <picture>
-                          <source srcSet={cardAsset.imageWebp} type="image/webp" />
-                          <img
-                            src={cardAsset.image}
-                            alt={card.title}
-                            className="w-full h-full object-contain pointer-events-none select-none filter drop-shadow-sm group-hover:drop-shadow-2xl transition-all duration-300"
-                            draggable={false}
-                          />
-                        </picture>
-                      )}
-                    </div>
-
-                    {/* Subtle Hover Action Hint */}
-                    <div className="absolute bottom-6 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none whitespace-nowrap z-10">
-                      <span className="px-3 py-1 rounded-full text-[calc(14*var(--u))] font-semibold bg-black/85 text-white backdrop-blur-sm shadow-md">
-                        🔍 View Story
-                      </span>
-                    </div>
-                  </button>
-                );
-              })}
-
-              {/* Section Header: Title + Red Pill Bar (PSD canvas y=3198..3326 -> relative y=107..235) */}
-              <div
-                style={{ top: 'calc(107 * var(--u))' }}
-                className="absolute left-1/2 -translate-x-1/2 z-10 flex flex-col items-center justify-center text-center pointer-events-none"
-              >
-                <h2 className="text-[calc(80*var(--u))] font-extralight uppercase tracking-[0.02em] text-[#131313] leading-none whitespace-nowrap">
-                  {title}
-                </h2>
-                <div
-                  style={{
-                    marginTop: 'calc(47 * var(--u))',
-                    width: 'calc(150 * var(--u))',
-                    height: 'calc(20 * var(--u))',
-                  }}
-                  className="rounded-full bg-[#ED2124]"
-                  aria-hidden="true"
-                />
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* 4 Pagination Dots (PSD: 4 dots at y=4403, 20x20px each, gap 10px, active #ED2124, rest #C0C0C0) */}
-        <div
-          style={{
-            top: 'calc(1312 * var(--u))',
-            gap: 'calc(14 * var(--u))',
-          }}
-          className="absolute left-1/2 -translate-x-1/2 z-30 flex items-center justify-center pointer-events-auto"
-        >
-          {Array.from({ length: totalSlides }).map((_, idx) => (
-            <button
-              key={idx}
-              type="button"
-              onClick={() => setActiveDot(idx)}
-              aria-label={`Go to slide ${idx + 1}`}
-              style={{
-                width: 'calc(20 * var(--u))',
-                height: 'calc(20 * var(--u))',
-              }}
-              className={`min-w-[12px] min-h-[12px] rounded-full transition-all duration-300 cursor-pointer ${
-                activeDot === idx
-                  ? 'bg-[#ED2124] scale-125 shadow-md'
-                  : 'bg-[#C0C0C0] hover:bg-[#888888]'
-              }`}
-            />
-          ))}
-        </div>
+          className="mt-4 sm:mt-5 w-20 sm:w-28 md:w-36 h-2 sm:h-2.5 rounded-full bg-[#ED2024] mx-auto"
+          aria-hidden="true"
+        />
+        <p className="mt-3.5 sm:mt-4 text-xs sm:text-sm text-[#71717A] uppercase tracking-[0.12em] font-medium max-w-xl mx-auto">
+          Authentic recovery journeys, daily clinical rituals &amp; transformations from LUMA users
+        </p>
       </div>
 
-      {/* =========================================================================
-          MOBILE & TABLET RESPONSIVE LAYOUT (< lg screens)
-          Each slide renders 8 image cards in horizontal scrollable strip.
-          No text on slide; clicking opens modal with story and video.
-          ========================================================================= */}
-      <div
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
-        className="w-full lg:hidden flex flex-col items-center"
-      >
-        <div className="w-full overflow-hidden">
-          <div
-            className="flex w-full transition-transform duration-700 ease-out will-change-transform"
-            style={{ transform: `translateX(-${activeDot * 100}%)` }}
-          >
-            {allSlides.map((slide, sIdx) => (
-              <div key={slide.id || sIdx} className="w-full shrink-0 flex flex-col items-center">
-                <div className="flex flex-col items-center justify-center text-center px-4">
-                  <h2 className="text-[26px] sm:text-[34px] md:text-[44px] font-extralight uppercase tracking-[0.02em] text-[#131313] leading-none">
-                    {title}
-                  </h2>
-                  <div
-                    className="mt-3 sm:mt-4 w-[60px] sm:w-[80px] h-[8px] sm:h-[11px] rounded-full bg-[#ED2124]"
-                    aria-hidden="true"
-                  />
-                </div>
+      {/* Multi-Row Carousel Container with Left & Right Gradient Fade Vignettes */}
+      <div className="relative w-full overflow-hidden">
+        {/* Left Fade Vignette */}
+        <div
+          className="pointer-events-none absolute inset-y-0 left-0 w-12 sm:w-20 md:w-32 bg-gradient-to-r from-white via-white/80 to-transparent z-20"
+          aria-hidden="true"
+        />
+        {/* Right Fade Vignette */}
+        <div
+          className="pointer-events-none absolute inset-y-0 right-0 w-12 sm:w-20 md:w-32 bg-gradient-to-l from-white via-white/80 to-transparent z-20"
+          aria-hidden="true"
+        />
 
-                {/* Scrollable Cards Strip */}
-                <div className="relative w-full mt-6 sm:mt-8 overflow-x-auto scrollbar-none pb-4 px-4">
-                  <div className="flex items-center gap-3 sm:gap-4 min-w-max">
-                    {slide.cards.map((card, cIdx) => {
-                      const cardAsset = GALLERY_CARD_ASSETS[cIdx] || GALLERY_CARD_ASSETS[0];
-                      return (
-                        <button
-                          key={card.id || `${sIdx}-${cIdx}`}
-                          type="button"
-                          onClick={() =>
-                            setSelectedCard({
-                              ...card,
-                              modalImage: card.photo || card.thumbnail || cardAsset.image,
-                              fallbackImage: cardAsset.image,
-                            })
-                          }
-                          className="relative w-[180px] sm:w-[240px] aspect-[3/4] rounded-2xl overflow-hidden shadow-md active:scale-95 transition-transform bg-[#1a1a1a] flex flex-col justify-end p-3 text-left"
-                        >
-                          <img
-                            src={card.photo || card.thumbnail || cardAsset.image}
-                            alt={card.title}
-                            className="absolute inset-0 w-full h-full object-cover"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-                          
-                          <div className="relative z-10 text-white">
-                            <span className="text-[10px] uppercase font-bold text-[#ED2124] tracking-wider block">
-                              {card.author || card.product}
-                            </span>
-                            <h4 className="text-[12px] font-medium leading-snug line-clamp-2">
-                              {card.title}
-                            </h4>
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        {/* 4 Continuously Scrolling Horizontal Rows */}
+        <div className="space-y-4 sm:space-y-5 md:space-y-6">
+          {/* Row 1: Leftward Scroll */}
+          <CarouselRow
+            cards={row1Cards}
+            rowFallbackImages={ROW_FALLBACK_IMAGES[0]}
+            rowIndex={1}
+            onSelectCard={setSelectedCard}
+          />
 
-        {/* Mobile Navigation Dots */}
-        <div className="flex items-center justify-center gap-2 sm:gap-2.5 mt-5 sm:mt-6">
-          {Array.from({ length: totalSlides }).map((_, idx) => (
-            <button
-              key={idx}
-              type="button"
-              onClick={() => setActiveDot(idx)}
-              aria-label={`Go to slide ${idx + 1}`}
-              className={`w-[9px] sm:w-[11px] h-[9px] sm:h-[11px] rounded-full transition-all duration-300 cursor-pointer ${
-                activeDot === idx
-                  ? 'bg-[#ED2124] scale-125 shadow-sm'
-                  : 'bg-[#C0C0C0] hover:bg-[#888888]'
-              }`}
-            />
-          ))}
+          {/* Row 2: Rightward Scroll */}
+          <CarouselRow
+            cards={row2Cards}
+            rowFallbackImages={ROW_FALLBACK_IMAGES[1]}
+            rowIndex={2}
+            onSelectCard={setSelectedCard}
+          />
+
+          {/* Row 3: Leftward Scroll */}
+          <CarouselRow
+            cards={row3Cards}
+            rowFallbackImages={ROW_FALLBACK_IMAGES[2]}
+            rowIndex={3}
+            onSelectCard={setSelectedCard}
+          />
+
+          {/* Row 4: Rightward Scroll */}
+          <CarouselRow
+            cards={row4Cards}
+            rowFallbackImages={ROW_FALLBACK_IMAGES[3]}
+            rowIndex={4}
+            onSelectCard={setSelectedCard}
+          />
         </div>
       </div>
 
       {/* =========================================================================
           INTERACTIVE STORY & VIDEO MODAL POPUP
-          Opens when user clicks ANY card (Cards 1..8 across ALL slides)
+          Opens when user clicks ANY card across ALL 4 rows
           Shows: Photo / Video Player, Full Story Text, Author Badge, Stars & Details
           ========================================================================= */}
       {selectedCard && (
@@ -761,7 +708,7 @@ export default function RealStoryGallerySection({ data }) {
             {/* Modal Header Bar */}
             <div className="px-6 py-4 border-b border-white/10 flex items-center justify-between">
               <div className="flex items-center gap-2.5 flex-wrap">
-                <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#ED2124] text-white">
+                <span className="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[#ED2024] text-white">
                   {selectedCard.author || selectedCard.name}
                 </span>
                 <span className="text-xs font-semibold text-white/70 uppercase">
@@ -808,7 +755,7 @@ export default function RealStoryGallerySection({ data }) {
                       className="absolute inset-0 w-full h-full object-cover opacity-60"
                     />
                     <div className="relative z-10 flex flex-col items-center">
-                      <div className="w-16 h-16 rounded-full bg-[#ED2124] text-white flex items-center justify-center shadow-xl mb-3 animate-pulse">
+                      <div className="w-16 h-16 rounded-full bg-[#ED2024] text-white flex items-center justify-center shadow-xl mb-3 animate-pulse">
                         <svg className="w-7 h-7 fill-white ml-0.5" viewBox="0 0 24 24">
                           <path d="M8 5v14l11-7z" />
                         </svg>
@@ -842,12 +789,9 @@ export default function RealStoryGallerySection({ data }) {
                 {/* 5 Red Stars */}
                 <div className="flex items-center gap-1 shrink-0">
                   {Array.from({ length: selectedCard.stars || 5 }).map((_, i) => (
-                    <img
-                      key={i}
-                      src="/assets/reviews/star-red.png"
-                      alt="Star"
-                      className="w-4 h-4 object-contain"
-                    />
+                    <span key={i} className="text-[#ED2024] text-base">
+                      ★
+                    </span>
                   ))}
                 </div>
               </div>
@@ -861,7 +805,9 @@ export default function RealStoryGallerySection({ data }) {
 
               {/* Verified Product Recommendation Tag */}
               <div className="flex items-center justify-between pt-2 border-t border-white/10 text-xs text-white/60">
-                <span>Featured LUMA Device: <strong className="text-white font-medium">{selectedCard.product}</strong></span>
+                <span>
+                  Featured LUMA Device: <strong className="text-white font-medium">{selectedCard.product}</strong>
+                </span>
                 <span className="text-emerald-400 font-semibold">100 mW/cm² Irradiance Verified</span>
               </div>
             </div>
