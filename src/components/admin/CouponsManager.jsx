@@ -141,10 +141,6 @@ export default function CouponsManager() {
       setModalError('Coupon code is required.');
       return;
     }
-    if (!formData.title.trim()) {
-      setModalError('Coupon title / offer headline is required.');
-      return;
-    }
     if (formData.discountValue === '' || Number(formData.discountValue) < 0) {
       setModalError('Valid discount value is required.');
       return;
@@ -155,7 +151,7 @@ export default function CouponsManager() {
     try {
       const payload = {
         code: formData.code.trim().toUpperCase(),
-        title: formData.title.trim(),
+        title: (formData.title || '').trim() || (formData.description || '').trim() || formData.code.trim().toUpperCase(),
         description: formData.description.trim(),
         discountType: formData.discountType,
         discountValue: Number(formData.discountValue),
@@ -487,7 +483,7 @@ export default function CouponsManager() {
               <thead className="bg-gray-50 border-b border-gray-200 text-[11px] font-bold uppercase tracking-[0.08em] text-gray-500">
                 <tr>
                   <th className="py-3.5 px-4">Coupon Code</th>
-                  <th className="py-3.5 px-4">Offer Title &amp; Description</th>
+                  <th className="py-3.5 px-4">Description / Offer Details</th>
                   <th className="py-3.5 px-4 text-center">Discount Value</th>
                   <th className="py-3.5 px-4 text-center">Min Subtotal</th>
                   <th className="py-3.5 px-4 text-center">Validity / Expiry</th>
@@ -698,21 +694,6 @@ export default function CouponsManager() {
                     <option value="fixed">Fixed Amount (AED) Off</option>
                   </select>
                 </div>
-              </div>
-
-              {/* Offer Headline / Title */}
-              <div>
-                <label className="block text-[11px] font-bold uppercase tracking-wider text-gray-600 mb-1">
-                  Offer Title / Badge Text *
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  placeholder="e.g. 20% Off All Light Therapy Devices"
-                  className="w-full px-3 py-2 text-xs bg-gray-50 border border-gray-300 rounded-[8px] focus:bg-white focus:border-[#ED2024] focus:outline-none"
-                />
               </div>
 
               {/* Description */}
