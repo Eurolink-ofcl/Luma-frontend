@@ -2726,9 +2726,9 @@ export default function HomeCmsEditor({ onOpenLivePage }) {
               </div>
             </div>
 
-            <div className="p-4 rounded-[12px] bg-[#F8FAFC] border border-[#E2E8F0] space-y-3">
+            <div className="p-4 rounded-[12px] bg-[#F8FAFC] border border-[#E2E8F0] space-y-4">
               <span className="text-[11px] font-bold text-[#ED2024] uppercase tracking-wider block">
-                Support Concierge Card
+                Support Concierge Card (Left Column)
               </span>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <div>
@@ -2736,6 +2736,7 @@ export default function HomeCmsEditor({ onOpenLivePage }) {
                   <input
                     type="text"
                     value={supportBox.title || ''}
+                    placeholder="OUR CUSTOMER SUPPORT IS AVAILABLE"
                     onChange={(e) => {
                       setPageData((prev) => ({
                         ...prev,
@@ -2753,6 +2754,7 @@ export default function HomeCmsEditor({ onOpenLivePage }) {
                   <input
                     type="text"
                     value={supportBox.timing || ''}
+                    placeholder="MONDAY - SATURDAY 8AM - 6PM"
                     onChange={(e) => {
                       setPageData((prev) => ({
                         ...prev,
@@ -2766,10 +2768,11 @@ export default function HomeCmsEditor({ onOpenLivePage }) {
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] font-semibold text-[#64748B] mb-1">Average Response</label>
+                  <label className="block text-[11px] font-semibold text-[#64748B] mb-1">Average Response Time</label>
                   <input
                     type="text"
                     value={supportBox.responseTime || ''}
+                    placeholder="AVERAGE ANSWER TIME: 30MINS"
                     onChange={(e) => {
                       setPageData((prev) => ({
                         ...prev,
@@ -2780,6 +2783,63 @@ export default function HomeCmsEditor({ onOpenLivePage }) {
                       }));
                     }}
                     className="w-full bg-white border border-[#E2E8F0] focus:border-[#ED2024] rounded-[6px] px-3 py-1.5 text-[12.5px] text-[#1E293B] outline-none shadow-xs"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1 border-t border-[#E2E8F0]/70">
+                <div>
+                  <label className="block text-[11px] font-semibold text-[#64748B] mb-1">Regional Locations</label>
+                  <input
+                    type="text"
+                    value={supportBox.location || ''}
+                    placeholder="ABU DHABI, DUBAI, AUSTRALIA, UNITED KINGDOME"
+                    onChange={(e) => {
+                      setPageData((prev) => ({
+                        ...prev,
+                        faqsSection: {
+                          ...(prev?.faqsSection || {}),
+                          supportBox: { ...(prev?.faqsSection?.supportBox || {}), location: e.target.value },
+                        },
+                      }));
+                    }}
+                    className="w-full bg-white border border-[#E2E8F0] focus:border-[#ED2024] rounded-[6px] px-3 py-1.5 text-[12.5px] text-[#1E293B] outline-none shadow-xs"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-semibold text-[#64748B] mb-1">Button Text</label>
+                  <input
+                    type="text"
+                    value={supportBox.btnText || ''}
+                    placeholder="CONTACT LUMA"
+                    onChange={(e) => {
+                      setPageData((prev) => ({
+                        ...prev,
+                        faqsSection: {
+                          ...(prev?.faqsSection || {}),
+                          supportBox: { ...(prev?.faqsSection?.supportBox || {}), btnText: e.target.value },
+                        },
+                      }));
+                    }}
+                    className="w-full bg-white border border-[#E2E8F0] focus:border-[#ED2024] rounded-[6px] px-3 py-1.5 text-[12.5px] text-[#1E293B] outline-none shadow-xs font-semibold"
+                  />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-semibold text-[#64748B] mb-1">Button Link / Action</label>
+                  <input
+                    type="text"
+                    value={supportBox.btnLink || ''}
+                    placeholder="#contact or /contact"
+                    onChange={(e) => {
+                      setPageData((prev) => ({
+                        ...prev,
+                        faqsSection: {
+                          ...(prev?.faqsSection || {}),
+                          supportBox: { ...(prev?.faqsSection?.supportBox || {}), btnLink: e.target.value },
+                        },
+                      }));
+                    }}
+                    className="w-full bg-white border border-[#E2E8F0] focus:border-[#ED2024] rounded-[6px] px-3 py-1.5 text-[12.5px] text-[#1E293B] outline-none shadow-xs font-mono"
                   />
                 </div>
               </div>
