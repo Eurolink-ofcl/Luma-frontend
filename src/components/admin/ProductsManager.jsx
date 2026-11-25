@@ -16,6 +16,57 @@ const CATEGORIES = [
   { id: 'accessories', label: 'Accessories' },
 ];
 
+const DEFAULT_SERIES_SPECS_MAP = {
+  'luma-go': {
+    bestFor: 'SPOT\nTREATMENT',
+    coverage: 'TARGETED',
+    fitsBestIn: 'HOME, OFFICE,\nTRAVEL',
+    ledConfig: '12 LEDS',
+    panelSize: '14 × 7 × 2.9 CM',
+    warranty: '3 YEARS',
+  },
+  'luma-nova': {
+    bestFor: 'FACE, JOINTS\n& SCALP',
+    coverage: 'TARGETED',
+    fitsBestIn: 'HOME, OFFICE',
+    ledConfig: '60 LEDS',
+    panelSize: '26.9 × 23 × 5.4 CM',
+    warranty: '3 YEARS',
+  },
+  'luma-surge': {
+    bestFor: 'BACK, SHOULDERS\n& TARGETED MUSCLE',
+    coverage: 'TARGETED',
+    fitsBestIn: 'HOME, HOME GYM',
+    ledConfig: '150 LEDS',
+    panelSize: '47.3 × 30 × 5.4 CM',
+    warranty: '3 YEARS',
+  },
+  'luma-apex': {
+    bestFor: 'UPPER OR LOWER\nBODY RECOVERY',
+    coverage: 'HALF BODY',
+    fitsBestIn: 'HOME GYM,\nRECOVERY ROOM',
+    ledConfig: '300 LEDS',
+    panelSize: '91 × 30 × 5.4 CM',
+    warranty: '3 YEARS',
+  },
+  'luma-ultra': {
+    bestFor: 'DAILY FULL\nBODY RECOVERY',
+    coverage: 'FULL BODY',
+    fitsBestIn: 'HOME WELLNESS\nSPACE, STUDIOS, GYM',
+    ledConfig: '600 LEDS',
+    panelSize: '150 × 42 × 5.4 CM',
+    warranty: '3 YEARS',
+  },
+  'luma-max': {
+    bestFor: 'MULTI-USER,\nHIGH-DEMAND',
+    coverage: 'COVERAGE AREA',
+    fitsBestIn: 'HOME, CLINICS, GYMS,\nWELLNESS CENTRES',
+    ledConfig: '1,200 LEDS',
+    panelSize: '180 × 60 × 5.4 CM',
+    warranty: '3 YEARS',
+  },
+};
+
 const EMPTY_PRODUCT_FORM = {
   displayOrder: 1,
   name: '',
@@ -46,6 +97,14 @@ const EMPTY_PRODUCT_FORM = {
     Irradiance: '120 mW/cm² at 6 inches',
     'Session Time': '10-15 Minutes',
     Warranty: '2-Year Official Warranty',
+  },
+  seriesCompareSpecs: {
+    bestFor: '',
+    coverage: '',
+    fitsBestIn: '',
+    ledConfig: '',
+    panelSize: '',
+    warranty: '3 YEARS',
   },
   specHighlights: [
     { label: 'Leds', value: '12' },
@@ -232,6 +291,14 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
       benefitCards: product.benefitCards || [],
       specRows: product.specRows || [],
       specDeviceImage: product.specDeviceImage || '',
+      seriesCompareSpecs: {
+        bestFor: product.seriesCompareSpecs?.bestFor !== undefined ? product.seriesCompareSpecs.bestFor : (DEFAULT_SERIES_SPECS_MAP[(product.slug || '').toLowerCase()]?.bestFor || ''),
+        coverage: product.seriesCompareSpecs?.coverage !== undefined ? product.seriesCompareSpecs.coverage : (DEFAULT_SERIES_SPECS_MAP[(product.slug || '').toLowerCase()]?.coverage || ''),
+        fitsBestIn: product.seriesCompareSpecs?.fitsBestIn !== undefined ? product.seriesCompareSpecs.fitsBestIn : (DEFAULT_SERIES_SPECS_MAP[(product.slug || '').toLowerCase()]?.fitsBestIn || ''),
+        ledConfig: product.seriesCompareSpecs?.ledConfig !== undefined ? product.seriesCompareSpecs.ledConfig : (DEFAULT_SERIES_SPECS_MAP[(product.slug || '').toLowerCase()]?.ledConfig || ''),
+        panelSize: product.seriesCompareSpecs?.panelSize !== undefined ? product.seriesCompareSpecs.panelSize : (DEFAULT_SERIES_SPECS_MAP[(product.slug || '').toLowerCase()]?.panelSize || ''),
+        warranty: product.seriesCompareSpecs?.warranty !== undefined ? product.seriesCompareSpecs.warranty : (DEFAULT_SERIES_SPECS_MAP[(product.slug || '').toLowerCase()]?.warranty || '3 YEARS'),
+      },
       rating: product.rating ?? 4.9,
       reviewsCount: product.reviewsCount ?? 0,
     });
@@ -390,6 +457,28 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
       ...prev,
       [key]: value,
     }));
+  };
+
+  const updateSeriesCompareSpec = (field, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      seriesCompareSpecs: {
+        ...(prev.seriesCompareSpecs || {}),
+        [field]: value,
+      },
+    }));
+  };
+
+  const handlePopulateDefaultSeriesSpecs = () => {
+    const slugKey = (formData.slug || '').toLowerCase();
+    const defaults = DEFAULT_SERIES_SPECS_MAP[slugKey] || DEFAULT_SERIES_SPECS_MAP['luma-nova'];
+    setFormData((prev) => ({
+      ...prev,
+      seriesCompareSpecs: {
+        ...defaults,
+      },
+    }));
+    showToast(`Loaded standard comparison specifications for ${formData.name || 'this product'}`);
   };
 
   // Feature item helpers
@@ -2441,6 +2530,109 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
                           </div>
                         </div>
                       ))}
+                    </div>
+                  </div>
+
+                  {/* Section D: Series Specifications Matrix (Comparison Table) */}
+                  <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-4">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div>
+                        <h4 className="text-[13px] font-bold uppercase tracking-wider text-gray-900 flex items-center gap-2">
+                          <span className="w-2 h-2 rounded-full bg-[#ED2024]" />
+                          4. Series Specifications Matrix (Comparison Table)
+                        </h4>
+                        <p className="text-[11px] text-gray-500 mt-0.5">
+                          Controls the column values for this product in the multi-product "LUMA SERIES SPECIFICATIONS" comparison table.
+                        </p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handlePopulateDefaultSeriesSpecs}
+                        className="px-3 py-1.5 rounded-[8px] bg-white hover:bg-gray-100 border border-gray-300 text-gray-800 text-[11px] font-bold cursor-pointer transition-colors shadow-xs"
+                      >
+                        ⚡ Fill Standard Defaults
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
+                      <div>
+                        <label className="text-[11px] font-bold uppercase tracking-wider text-gray-700 block mb-1">
+                          Best For
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.seriesCompareSpecs?.bestFor || ''}
+                          onChange={(e) => updateSeriesCompareSpec('bestFor', e.target.value)}
+                          placeholder="e.g. FACE, JOINTS & SCALP"
+                          className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[8px] px-3 py-2 text-gray-900 font-semibold text-[12px] outline-none shadow-xs"
+                        />
+                        <span className="text-[10px] text-gray-400 mt-0.5 block">Use \n or commas for line breaks</span>
+                      </div>
+
+                      <div>
+                        <label className="text-[11px] font-bold uppercase tracking-wider text-gray-700 block mb-1">
+                          Coverage Area
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.seriesCompareSpecs?.coverage || ''}
+                          onChange={(e) => updateSeriesCompareSpec('coverage', e.target.value)}
+                          placeholder="e.g. TARGETED or HALF BODY or FULL BODY"
+                          className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[8px] px-3 py-2 text-gray-900 font-semibold text-[12px] outline-none shadow-xs"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-[11px] font-bold uppercase tracking-wider text-gray-700 block mb-1">
+                          Fits Best In
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.seriesCompareSpecs?.fitsBestIn || ''}
+                          onChange={(e) => updateSeriesCompareSpec('fitsBestIn', e.target.value)}
+                          placeholder="e.g. HOME, OFFICE or HOME GYM"
+                          className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[8px] px-3 py-2 text-gray-900 font-semibold text-[12px] outline-none shadow-xs"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-[11px] font-bold uppercase tracking-wider text-gray-700 block mb-1">
+                          LED Configuration
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.seriesCompareSpecs?.ledConfig || ''}
+                          onChange={(e) => updateSeriesCompareSpec('ledConfig', e.target.value)}
+                          placeholder="e.g. 60 LEDS or 150 LEDS"
+                          className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[8px] px-3 py-2 text-gray-900 font-semibold text-[12px] outline-none shadow-xs"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-[11px] font-bold uppercase tracking-wider text-gray-700 block mb-1">
+                          Panel Size
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.seriesCompareSpecs?.panelSize || ''}
+                          onChange={(e) => updateSeriesCompareSpec('panelSize', e.target.value)}
+                          placeholder="e.g. 26.9 × 23 × 5.4 CM"
+                          className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[8px] px-3 py-2 text-gray-900 font-semibold text-[12px] outline-none shadow-xs"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-[11px] font-bold uppercase tracking-wider text-gray-700 block mb-1">
+                          Warranty
+                        </label>
+                        <input
+                          type="text"
+                          value={formData.seriesCompareSpecs?.warranty || ''}
+                          onChange={(e) => updateSeriesCompareSpec('warranty', e.target.value)}
+                          placeholder="e.g. 3 YEARS"
+                          className="w-full bg-white border border-gray-300 focus:border-[#ED2024] rounded-[8px] px-3 py-2 text-gray-900 font-semibold text-[12px] outline-none shadow-xs"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>

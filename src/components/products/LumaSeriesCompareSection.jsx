@@ -1,4 +1,10 @@
-import React, { useRef, useState, useEffect } from 'react';
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL ||
+  (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
+    ? `${window.location.origin}/api`
+    : 'http://localhost:5000/api');
+
+import React, { useRef, useState, useEffect, useMemo } from 'react';
 import { useCurrency } from '../../context/CurrencyContext';
 
 const SERIES_PRODUCTS = [
@@ -92,6 +98,46 @@ export default function LumaSeriesCompareSection({ currentProductId = 'luma-go' 
   const scrollContainerRef = useRef(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+  const [liveProducts, setLiveProducts] = useState(null);
+
+  useEffect(() => {
+    fetch(`${API_BASE_URL}/products`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data && data.success && Array.isArray(data.data) && data.data.length > 0) {
+          setLiveProducts(data.data);
+        }
+      })
+      .catch((err) => {
+        console.warn('Notice: Loading default series specifications:', err.message);
+      });
+  }, []);
+
+  const seriesProducts = useMemo(() => {
+    return SERIES_PRODUCTS.map((def) => {
+      if (!liveProducts) return def;
+      const matched = liveProducts.find(
+        (p) =>
+          p.slug === def.id ||
+          p.slug === def.name.toLowerCase().replace(/\s+/g, '-') ||
+          (p.name && p.name.toUpperCase().includes(def.name))
+      );
+      if (!matched) return def;
+
+      const customSpecs = matched.seriesCompareSpecs || {};
+      return {
+        ...def,
+        name: matched.name || def.name,
+        priceAmount: matched.price !== undefined ? Number(matched.price) : def.priceAmount,
+        bestFor: customSpecs.bestFor !== undefined && customSpecs.bestFor !== '' ? customSpecs.bestFor : def.bestFor,
+        coverage: customSpecs.coverage !== undefined && customSpecs.coverage !== '' ? customSpecs.coverage : def.coverage,
+        fitsBestIn: customSpecs.fitsBestIn !== undefined && customSpecs.fitsBestIn !== '' ? customSpecs.fitsBestIn : def.fitsBestIn,
+        ledConfig: customSpecs.ledConfig !== undefined && customSpecs.ledConfig !== '' ? customSpecs.ledConfig : def.ledConfig,
+        panelSize: customSpecs.panelSize !== undefined && customSpecs.panelSize !== '' ? customSpecs.panelSize : def.panelSize,
+        warranty: customSpecs.warranty !== undefined && customSpecs.warranty !== '' ? customSpecs.warranty : def.warranty,
+      };
+    });
+  }, [liveProducts]);
 
   const checkScroll = () => {
     const el = scrollContainerRef.current;
@@ -194,8 +240,11 @@ export default function LumaSeriesCompareSection({ currentProductId = 'luma-go' 
                 </th>
 
                 {/* 6 Product Columns */}
-                {SERIES_PRODUCTS.map((prod) => {
-                  const isCurrent = prod.id === currentProductId;
+                {seriesProducts.map((prod) => {
+                  const isCurrent =
+                    prod.id === currentProductId ||
+                    prod.id === (currentProductId || '').toLowerCase().replace(/_/g, '-') ||
+                    prod.name.toLowerCase() === (currentProductId || '').toLowerCase();
                   return (
                     <th
                       key={prod.id}
@@ -223,8 +272,11 @@ export default function LumaSeriesCompareSection({ currentProductId = 'luma-go' 
                   </td>
 
                   {/* 6 Product Values */}
-                  {SERIES_PRODUCTS.map((prod) => {
-                    const isCurrent = prod.id === currentProductId;
+                  {seriesProducts.map((prod) => {
+                    const isCurrent =
+                      prod.id === currentProductId ||
+                      prod.id === (currentProductId || '').toLowerCase().replace(/_/g, '-') ||
+                      prod.name.toLowerCase() === (currentProductId || '').toLowerCase();
                     return (
                       <td
                         key={prod.id}
@@ -239,7 +291,7 @@ export default function LumaSeriesCompareSection({ currentProductId = 'luma-go' 
                             {formatPrice(prod.priceAmount || 1890)}
                           </span>
                         ) : (
-                          prod[param.key].split('\n').map((line, idx) => (
+                          String(prod[param.key] || '').split('\n').map((line, idx) => (
                             <span key={idx} className="block whitespace-nowrap">
                               {line}
                             </span>
