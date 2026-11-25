@@ -400,118 +400,271 @@ const ROW_FALLBACK_IMAGES = [
 ];
 
 /**
- * Single Row Marquee Component:
- * Duplicates its cards for a mathematically continuous, gapless 60fps infinite loop.
- * Pauses smoothly on hover and elevates cards with interactive modal trigger.
+ * Reusable Row Carousel with Independent Previous (←) and Next (→) Controls
+ * - Fixed visible cards per screen width (Mobile: 1, Tablet: 2, Laptop: 3, Desktop: 4)
+ * - Smooth horizontal sliding transition
+ * - Disabled Prev button at start, disabled Next button at end
+ * - Manual click navigation ONLY (no auto-scroll / no autoplay)
  */
-function CarouselRow({
+function NavigableRowCarousel({
+  title,
+  tagline,
   cards,
   rowFallbackImages,
-  rowIndex,
   onSelectCard,
 }) {
-  // Duplicate array once to guarantee seamless infinite wrapping without gaps
-  const loopCards = [...cards, ...cards];
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [visibleCards, setVisibleCards] = useState(4);
+  const [touchStartX, setTouchStartX] = useState(null);
+
+  // Responsive visible cards count
+  useEffect(() => {
+    const updateVisible = () => {
+      const w = window.innerWidth;
+      if (w < 640) {
+        setVisibleCards(1);
+      } else if (w < 1024) {
+        setVisibleCards(2);
+      } else if (w < 1440) {
+        setVisibleCards(3);
+      } else {
+        setVisibleCards(4);
+      }
+    };
+
+    updateVisible();
+    window.addEventListener('resize', updateVisible);
+    return () => window.removeEventListener('resize', updateVisible);
+  }, []);
+
+  const maxIndex = Math.max(0, cards.length - visibleCards);
+  const clampedIndex = Math.min(currentIndex, maxIndex);
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => Math.max(0, prev - 1));
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => Math.min(maxIndex, prev + 1));
+  };
+
+  const handleTouchStart = (e) => {
+    if (e.touches && e.touches[0]) {
+      setTouchStartX(e.touches[0].clientX);
+    }
+  };
+
+  const handleTouchEnd = (e) => {
+    if (touchStartX === null) return;
+    const touchEndX = e.changedTouches && e.changedTouches[0] ? e.changedTouches[0].clientX : null;
+    if (touchEndX !== null) {
+      const diff = touchStartX - touchEndX;
+      if (diff > 40) {
+        handleNext();
+      } else if (diff < -40) {
+        handlePrev();
+      }
+    }
+    setTouchStartX(null);
+  };
+
+  const isAtStart = clampedIndex === 0;
+  const isAtEnd = clampedIndex >= maxIndex;
 
   return (
-    <div className="relative w-full overflow-hidden group py-1.5 sm:py-2">
-      <div
-        className={`flex w-max items-center gap-4 sm:gap-5 md:gap-6 marquee-row-${rowIndex} group-hover:[animation-play-state:paused]`}
-        style={{ willChange: 'transform' }}
-      >
-        {loopCards.map((card, idx) => {
-          const originalIdx = idx % cards.length;
-          const fallback = rowFallbackImages[originalIdx % rowFallbackImages.length];
-          const imgSrc = card.photo || card.thumbnail || fallback;
+    <div className="w-full space-y-3">
+      {/* Row Header Bar: Title, Count Info & Navigation Buttons */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-2 border-b border-gray-100">
+        <div className="flex items-center gap-2.5">
+          <span className="w-2.5 h-2.5 rounded-full bg-[#ED2024]" aria-hidden="true" />
+          <div>
+            <h3 className="text-sm sm:text-base font-bold text-[#1E293B] uppercase tracking-wide">
+              {title}
+            </h3>
+            {tagline && (
+              <p className="text-[11px] sm:text-[12px] text-[#64748B] font-normal">
+                {tagline}
+              </p>
+            )}
+          </div>
+        </div>
 
-          return (
+        {/* Counter and Arrow Controls */}
+        <div className="flex items-center justify-between sm:justify-end gap-3 self-end sm:self-auto w-full sm:w-auto">
+          <span className="text-[11px] sm:text-xs text-[#94A3B8] font-medium tracking-wide">
+            {clampedIndex + 1}–{Math.min(clampedIndex + visibleCards, cards.length)} of {cards.length}
+          </span>
+
+          <div className="flex items-center gap-1.5">
+            {/* Previous Button */}
             <button
-              key={`${card.id || originalIdx}-${idx}`}
               type="button"
-              onClick={() =>
-                onSelectCard({
-                  ...card,
-                  modalImage: imgSrc,
-                  fallbackImage: fallback,
-                })
-              }
-              aria-label={`View story: ${card.title}`}
-              className="group/card relative w-[280px] sm:w-[320px] md:w-[350px] lg:w-[380px] h-[195px] sm:h-[215px] md:h-[230px] lg:h-[240px] rounded-[18px] sm:rounded-[22px] overflow-hidden bg-[#111113] border border-black/10 hover:border-[#ED2024]/80 shadow-md hover:shadow-2xl hover:shadow-[#ED2024]/15 transition-all duration-300 transform hover:-translate-y-1.5 hover:scale-[1.02] cursor-pointer text-left shrink-0 flex flex-col justify-between p-4 sm:p-5 select-none focus:outline-none"
+              onClick={handlePrev}
+              disabled={isAtStart}
+              aria-label={`Previous cards in ${title}`}
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white border border-[#CBD5E1] text-[#1E293B] hover:border-[#ED2024] hover:text-[#ED2024] hover:bg-red-50/50 shadow-xs flex items-center justify-center transition-all duration-200 disabled:opacity-30 disabled:hover:border-[#CBD5E1] disabled:hover:text-[#1E293B] disabled:hover:bg-white disabled:cursor-not-allowed cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#ED2024]/30"
             >
-              {/* Background Photo */}
-              <img
-                src={imgSrc}
-                alt={card.title}
-                loading="lazy"
-                onError={(e) => {
-                  e.currentTarget.onerror = null;
-                  e.currentTarget.src = fallback;
-                }}
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover/card:scale-108"
-                draggable={false}
-              />
-
-              {/* Gradient Vignette Overlays for Maximum Contrast and Legibility */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/45 to-black/20 group-hover/card:via-black/35 transition-colors" />
-
-              {/* Top Row Badges */}
-              <div className="relative z-10 flex items-center justify-between w-full mb-auto">
-                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-bold uppercase tracking-wider bg-black/65 backdrop-blur-md text-white border border-white/15 shadow-xs">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#ED2024] animate-pulse" />
-                  <span className="truncate max-w-[140px] sm:max-w-[180px]">
-                    {card.author || card.badgeName || 'VERIFIED USER'}
-                  </span>
-                </span>
-
-                {card.type === 'video' ? (
-                  <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-bold uppercase tracking-wider bg-[#ED2024] text-white shadow-sm">
-                    <svg className="w-2.5 h-2.5 fill-current" viewBox="0 0 24 24">
-                      <path d="M8 5v14l11-7z" />
-                    </svg>
-                    <span>Video</span>
-                  </span>
-                ) : (
-                  <div className="flex items-center gap-0.5 bg-black/55 backdrop-blur-md px-2 py-1 rounded-full border border-white/10">
-                    {Array.from({ length: card.stars || 5 }).map((_, s) => (
-                      <span key={s} className="text-[#ED2024] text-[11px] leading-none">
-                        ★
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Bottom Card Content */}
-              <div className="relative z-10 w-full mt-auto">
-                <div className="flex items-center gap-2 mb-1">
-                  <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-[#ED2024]">
-                    {card.product || 'LUMA PANEL'}
-                  </span>
-                  <span className="text-white/40 text-[9px]">•</span>
-                  <span className="text-[10px] text-emerald-400 font-semibold tracking-wide">
-                    ✓ Verified Result
-                  </span>
-                </div>
-
-                <h4 className="text-[13px] sm:text-[14px] font-semibold text-white leading-snug line-clamp-1 group-hover/card:text-red-100 transition-colors">
-                  {card.title}
-                </h4>
-
-                <p className="text-[11px] sm:text-[12px] text-white/75 font-light leading-relaxed line-clamp-2 mt-1">
-                  "{card.story}"
-                </p>
-              </div>
-
-              {/* Hover Click Pill Indicator */}
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/card:opacity-100 transition-opacity duration-200 pointer-events-none z-20">
-                <span className="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-black shadow-xl flex items-center gap-1.5 transform scale-90 group-hover/card:scale-100 transition-transform">
-                  <span>View Story</span>
-                  <span className="text-[#ED2024] font-bold">→</span>
-                </span>
-              </div>
+              <svg className="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+              </svg>
             </button>
-          );
-        })}
+
+            {/* Next Button */}
+            <button
+              type="button"
+              onClick={handleNext}
+              disabled={isAtEnd}
+              aria-label={`Next cards in ${title}`}
+              className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white border border-[#CBD5E1] text-[#1E293B] hover:border-[#ED2024] hover:text-[#ED2024] hover:bg-red-50/50 shadow-xs flex items-center justify-center transition-all duration-200 disabled:opacity-30 disabled:hover:border-[#CBD5E1] disabled:hover:text-[#1E293B] disabled:hover:bg-white disabled:cursor-not-allowed cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#ED2024]/30"
+            >
+              <svg className="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Row Carousel Viewport with Left/Right Side Arrows & Smooth Sliding Track */}
+      <div className="relative w-full group/row">
+        {/* Docked Left Arrow Overlay (Quick access directly beside cards) */}
+        <button
+          type="button"
+          onClick={handlePrev}
+          disabled={isAtStart}
+          aria-label="Previous cards"
+          className="hidden sm:flex absolute -left-3.5 md:-left-4 lg:-left-5 top-1/2 -translate-y-1/2 z-20 w-9 h-9 lg:w-10 lg:h-10 rounded-full bg-white/95 backdrop-blur-md border border-gray-200 hover:border-[#ED2024] text-[#1E293B] hover:text-[#ED2024] shadow-md hover:shadow-lg flex items-center justify-center transition-all duration-200 disabled:opacity-0 disabled:pointer-events-none cursor-pointer focus:outline-none"
+        >
+          <svg className="w-4 h-4 lg:w-4.5 lg:h-4.5 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+
+        {/* Viewport Frame */}
+        <div
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          className="w-full overflow-hidden rounded-[20px]"
+        >
+          {/* Sliding Track */}
+          <div
+            className="flex transition-transform duration-500 ease-out will-change-transform"
+            style={{
+              transform: `translateX(-${clampedIndex * (100 / visibleCards)}%)`,
+            }}
+          >
+            {cards.map((card, idx) => {
+              const fallback = rowFallbackImages[idx % rowFallbackImages.length];
+              const imgSrc = card.photo || card.thumbnail || fallback;
+
+              return (
+                <div
+                  key={card.id || idx}
+                  style={{ width: `${100 / visibleCards}%` }}
+                  className="shrink-0 p-1.5 sm:p-2"
+                >
+                  <button
+                    type="button"
+                    onClick={() =>
+                      onSelectCard({
+                        ...card,
+                        modalImage: imgSrc,
+                        fallbackImage: fallback,
+                      })
+                    }
+                    aria-label={`View story: ${card.title}`}
+                    className="group/card relative w-full h-[220px] sm:h-[240px] md:h-[260px] lg:h-[275px] rounded-[18px] sm:rounded-[20px] overflow-hidden bg-[#121215] border border-gray-200/60 hover:border-[#ED2024] shadow-sm hover:shadow-xl hover:shadow-[#ED2024]/12 transition-all duration-300 transform hover:-translate-y-1.5 cursor-pointer text-left flex flex-col justify-between p-4 sm:p-5 select-none focus:outline-none"
+                  >
+                    {/* High-Resolution Background Photo */}
+                    <img
+                      src={imgSrc}
+                      alt={card.title}
+                      loading="lazy"
+                      onError={(e) => {
+                        e.currentTarget.onerror = null;
+                        e.currentTarget.src = fallback;
+                      }}
+                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-600 ease-out group-hover/card:scale-106"
+                      draggable={false}
+                    />
+
+                    {/* Gradient Overlay for Maximum Legibility */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/45 to-black/20 group-hover/card:via-black/35 transition-colors" />
+
+                    {/* Top Row: Author / Verified Pill + Stars / Video Badge */}
+                    <div className="relative z-10 flex items-center justify-between w-full mb-auto">
+                      <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-bold uppercase tracking-wider bg-black/65 backdrop-blur-md text-white border border-white/15 shadow-xs">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#ED2024] animate-pulse" />
+                        <span className="truncate max-w-[130px] sm:max-w-[170px]">
+                          {card.author || card.badgeName || 'VERIFIED USER'}
+                        </span>
+                      </span>
+
+                      {card.type === 'video' ? (
+                        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-bold uppercase tracking-wider bg-[#ED2024] text-white shadow-sm">
+                          <svg className="w-2.5 h-2.5 fill-current" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z" />
+                          </svg>
+                          <span>Video</span>
+                        </span>
+                      ) : (
+                        <div className="flex items-center gap-0.5 bg-black/55 backdrop-blur-md px-2 py-1 rounded-full border border-white/10">
+                          {Array.from({ length: card.stars || 5 }).map((_, s) => (
+                            <span key={s} className="text-[#ED2024] text-[11px] leading-none">
+                              ★
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Bottom Content: Device Tag, Title & Quote */}
+                    <div className="relative z-10 w-full mt-auto">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-widest text-[#ED2024]">
+                          {card.product || 'LUMA PANEL'}
+                        </span>
+                        <span className="text-white/40 text-[9px]">•</span>
+                        <span className="text-[10px] text-emerald-400 font-semibold tracking-wide">
+                          ✓ Verified Story
+                        </span>
+                      </div>
+
+                      <h4 className="text-[13px] sm:text-[14px] font-semibold text-white leading-snug line-clamp-1 group-hover/card:text-red-100 transition-colors">
+                        {card.title}
+                      </h4>
+
+                      <p className="text-[11px] sm:text-[12px] text-white/75 font-light leading-relaxed line-clamp-2 mt-1">
+                        "{card.story}"
+                      </p>
+                    </div>
+
+                    {/* Hover Click Pill Indicator */}
+                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/card:opacity-100 transition-opacity duration-200 pointer-events-none z-20">
+                      <span className="px-3.5 py-1.5 rounded-full text-xs font-semibold bg-white text-black shadow-xl flex items-center gap-1.5 transform scale-90 group-hover/card:scale-100 transition-transform">
+                        <span>Read Story</span>
+                        <span className="text-[#ED2024] font-bold">→</span>
+                      </span>
+                    </div>
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Docked Right Arrow Overlay (Quick access directly beside cards) */}
+        <button
+          type="button"
+          onClick={handleNext}
+          disabled={isAtEnd}
+          aria-label="Next cards"
+          className="hidden sm:flex absolute -right-3.5 md:-right-4 lg:-right-5 top-1/2 -translate-y-1/2 z-20 w-9 h-9 lg:w-10 lg:h-10 rounded-full bg-white/95 backdrop-blur-md border border-gray-200 hover:border-[#ED2024] text-[#1E293B] hover:text-[#ED2024] shadow-md hover:shadow-lg flex items-center justify-center transition-all duration-200 disabled:opacity-0 disabled:pointer-events-none cursor-pointer focus:outline-none"
+        >
+          <svg className="w-4 h-4 lg:w-4.5 lg:h-4.5 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
       </div>
     </div>
   );
@@ -593,97 +746,59 @@ export default function RealStoryGallerySection({ data }) {
       id="real-story"
       className="relative w-full bg-[#FFFFFF] text-[#000000] overflow-hidden font-['Manrope'] select-none py-16 sm:py-20 md:py-24"
     >
-      {/* CSS Keyframes for Hardware-Accelerated Continuous Multi-Row Marquee */}
-      <style>{`
-        @keyframes marqueeScrollLeft {
-          0% { transform: translateX(0%); }
-          100% { transform: translateX(-50%); }
-        }
-        @keyframes marqueeScrollRight {
-          0% { transform: translateX(-50%); }
-          100% { transform: translateX(0%); }
-        }
-        .marquee-row-1 {
-          animation: marqueeScrollLeft 38s linear infinite;
-        }
-        .marquee-row-2 {
-          animation: marqueeScrollRight 44s linear infinite;
-        }
-        .marquee-row-3 {
-          animation: marqueeScrollLeft 41s linear infinite;
-        }
-        .marquee-row-4 {
-          animation: marqueeScrollRight 47s linear infinite;
-        }
-        @media (max-width: 768px) {
-          .marquee-row-1 { animation-duration: 26s; }
-          .marquee-row-2 { animation-duration: 30s; }
-          .marquee-row-3 { animation-duration: 28s; }
-          .marquee-row-4 { animation-duration: 32s; }
-        }
-      `}</style>
+      <div className="w-full max-w-[1560px] mx-auto px-4 sm:px-6 md:px-8 lg:px-10">
+        {/* Section Header: REAL STORY + Red Brand Bar */}
+        <div className="text-center mb-10 sm:mb-12 md:mb-16">
+          <span className="text-[11px] sm:text-[12px] font-bold tracking-[0.2em] uppercase text-[#ED2024] block mb-2.5">
+            COMMUNITY VOICES &amp; EXPERIENCES
+          </span>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extralight uppercase tracking-[0.02em] text-[#131313] leading-none">
+            {title}
+          </h2>
+          <div
+            className="mt-4 sm:mt-5 w-20 sm:w-28 md:w-36 h-2 sm:h-2.5 rounded-full bg-[#ED2024] mx-auto"
+            aria-hidden="true"
+          />
+          <p className="mt-3.5 sm:mt-4 text-xs sm:text-sm text-[#71717A] uppercase tracking-[0.12em] font-medium max-w-xl mx-auto">
+            Browse authentic customer reviews, clinical protocols &amp; recovery transformations across 4 dedicated rows
+          </p>
+        </div>
 
-      {/* Section Header: REAL STORY + Red Brand Bar */}
-      <div className="relative z-10 text-center px-4 mb-8 sm:mb-12 md:mb-14">
-        <span className="text-[11px] sm:text-[12px] font-bold tracking-[0.2em] uppercase text-[#ED2024] block mb-2.5">
-          COMMUNITY VOICES &amp; EXPERIENCES
-        </span>
-        <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extralight uppercase tracking-[0.02em] text-[#131313] leading-none">
-          {title}
-        </h2>
-        <div
-          className="mt-4 sm:mt-5 w-20 sm:w-28 md:w-36 h-2 sm:h-2.5 rounded-full bg-[#ED2024] mx-auto"
-          aria-hidden="true"
-        />
-        <p className="mt-3.5 sm:mt-4 text-xs sm:text-sm text-[#71717A] uppercase tracking-[0.12em] font-medium max-w-xl mx-auto">
-          Authentic recovery journeys, daily clinical rituals &amp; transformations from LUMA users
-        </p>
-      </div>
-
-      {/* Multi-Row Carousel Container with Left & Right Gradient Fade Vignettes */}
-      <div className="relative w-full overflow-hidden">
-        {/* Left Fade Vignette */}
-        <div
-          className="pointer-events-none absolute inset-y-0 left-0 w-12 sm:w-20 md:w-32 bg-gradient-to-r from-white via-white/80 to-transparent z-20"
-          aria-hidden="true"
-        />
-        {/* Right Fade Vignette */}
-        <div
-          className="pointer-events-none absolute inset-y-0 right-0 w-12 sm:w-20 md:w-32 bg-gradient-to-l from-white via-white/80 to-transparent z-20"
-          aria-hidden="true"
-        />
-
-        {/* 4 Continuously Scrolling Horizontal Rows */}
-        <div className="space-y-4 sm:space-y-5 md:space-y-6">
-          {/* Row 1: Leftward Scroll */}
-          <CarouselRow
+        {/* 4 Independently Navigable Horizontal Rows */}
+        <div className="space-y-10 sm:space-y-12 md:space-y-14">
+          {/* Row 1 */}
+          <NavigableRowCarousel
+            title="Row 1: Customer Stories &amp; Daily Recovery"
+            tagline="Athletic recovery, muscle soreness relief, and deep physical resets"
             cards={row1Cards}
             rowFallbackImages={ROW_FALLBACK_IMAGES[0]}
-            rowIndex={1}
             onSelectCard={setSelectedCard}
           />
 
-          {/* Row 2: Rightward Scroll */}
-          <CarouselRow
+          {/* Row 2 */}
+          <NavigableRowCarousel
+            title="Row 2: Verified Users &amp; Skincare Experiences"
+            tagline="Complexion radiance, fine line reduction, and daily facial rituals"
             cards={row2Cards}
             rowFallbackImages={ROW_FALLBACK_IMAGES[1]}
-            rowIndex={2}
             onSelectCard={setSelectedCard}
           />
 
-          {/* Row 3: Leftward Scroll */}
-          <CarouselRow
+          {/* Row 3 */}
+          <NavigableRowCarousel
+            title="Row 3: Clinical Protocols &amp; Wellness Routines"
+            tagline="Circadian rhythm, deep cellular energy, and joint mobility guidance"
             cards={row3Cards}
             rowFallbackImages={ROW_FALLBACK_IMAGES[2]}
-            rowIndex={3}
             onSelectCard={setSelectedCard}
           />
 
-          {/* Row 4: Rightward Scroll */}
-          <CarouselRow
+          {/* Row 4 */}
+          <NavigableRowCarousel
+            title="Row 4: Lab Irradiance Tests &amp; Unboxings"
+            tagline="100 mW/cm² spectrometer tests, wheeled stand assembly, and noise checks"
             cards={row4Cards}
             rowFallbackImages={ROW_FALLBACK_IMAGES[3]}
-            rowIndex={4}
             onSelectCard={setSelectedCard}
           />
         </div>
