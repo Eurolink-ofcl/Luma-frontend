@@ -612,23 +612,13 @@ export default function ReviewsCmsEditor({ onOpenLivePage }) {
         {/* ========================================================================= */}
         {(activeSection === 'all' || activeSection === 'realStories') && (
           <div className="bg-white border border-[#E2E8F0] rounded-[14px] p-6 shadow-xs space-y-5">
-            <div className="border-b border-[#E2E8F0] pb-3 flex items-center justify-between">
-              <div>
-                <h3 className="text-sm font-bold text-[#0F172A] uppercase tracking-wide">
-                  2. Real Stories Carousel ({pageData?.realStories?.reviews?.length || 0} reviews)
-                </h3>
-                <p className="text-xs text-[#64748B] mt-0.5">
-                  Paginated 6 per slide. Edit quotes, product badges, reviewer names, or add new ones.
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={handleAddReview}
-                className="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold cursor-pointer shadow-xs transition-colors flex items-center gap-1.5"
-              >
-                <span>+</span>
-                <span>Add Review</span>
-              </button>
+            <div className="border-b border-[#E2E8F0] pb-3">
+              <h3 className="text-sm font-bold text-[#0F172A] uppercase tracking-wide">
+                2. Real Stories Carousel ({pageData?.realStories?.reviews?.length || 0} reviews)
+              </h3>
+              <p className="text-xs text-[#64748B] mt-0.5">
+                Paginated 6 per slide. Edit quotes, product badges, reviewer names, and ratings.
+              </p>
             </div>
 
             <div className="max-w-md">
