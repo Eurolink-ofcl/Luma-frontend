@@ -393,6 +393,36 @@ export default function HomeCmsEditor({ onOpenLivePage }) {
     }));
   };
 
+  const updateHeroSlide = (index, imageUrl) => {
+    setPageData((prev) => {
+      const currentHero = prev?.hero || {};
+      const baseSlides = [
+        { id: 1, image: currentHero.bgImage || '/assets/hero-bg.jpg', label: 'Slide 1 (Main Hero)' },
+        { id: 2, image: '/assets/about/story-panel.jpg', label: 'Slide 2' },
+        { id: 3, image: '/assets/community-bg.jpg', label: 'Slide 3' },
+        { id: 4, image: '/assets/about-chamber-perfect.jpg', label: 'Slide 4' },
+      ];
+      const currentSlides = Array.isArray(currentHero.slides) && currentHero.slides.length >= 4
+        ? [...currentHero.slides]
+        : baseSlides;
+
+      currentSlides[index] = {
+        ...(currentSlides[index] || { id: index + 1 }),
+        id: index + 1,
+        image: imageUrl,
+      };
+
+      return {
+        ...prev,
+        hero: {
+          ...currentHero,
+          bgImage: index === 0 ? imageUrl : (currentHero.bgImage || currentSlides[0]?.image),
+          slides: currentSlides,
+        },
+      };
+    });
+  };
+
   const updateAboutField = (field, value) => {
     setPageData((prev) => ({
       ...prev,
@@ -1183,16 +1213,72 @@ export default function HomeCmsEditor({ onOpenLivePage }) {
               </div>
             </div>
 
-            {/* Hero Background Image Upload */}
-            <div className="bg-[#F8FAFC] p-4 rounded-[12px] border border-[#E2E8F0]">
-              <ImageUploadField
-                label="Hero Background Banner"
-                value={hero.bgImage || ''}
-                onChange={(url) => updateHeroField('bgImage', url)}
-                defaultPath="/assets/hero-bg.jpg"
-                helpText="Upload background banner image from computer or device"
-              />
-            </div>
+            {/* Hero Carousel Slides Manager (4 Carousel Slides) */}
+            {(() => {
+              const defaultSlidePaths = [
+                '/assets/hero-bg.jpg',
+                '/assets/about/story-panel.jpg',
+                '/assets/community-bg.jpg',
+                '/assets/about-chamber-perfect.jpg',
+              ];
+              const heroSlides = Array.isArray(hero.slides) && hero.slides.length >= 4
+                ? hero.slides.slice(0, 4)
+                : [
+                    { id: 1, image: hero.slides?.[0]?.image || hero.bgImage || defaultSlidePaths[0], label: 'Slide 1 (Main Hero)' },
+                    { id: 2, image: hero.slides?.[1]?.image || defaultSlidePaths[1], label: 'Slide 2' },
+                    { id: 3, image: hero.slides?.[2]?.image || defaultSlidePaths[2], label: 'Slide 3' },
+                    { id: 4, image: hero.slides?.[3]?.image || defaultSlidePaths[3], label: 'Slide 4' },
+                  ];
+
+              return (
+                <div className="bg-[#F8FAFC] p-5 sm:p-6 rounded-[14px] border border-[#E2E8F0] space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-[#E2E8F0] gap-2">
+                    <div>
+                      <h4 className="text-[14px] font-bold text-[#1E293B] flex items-center gap-2">
+                        <span>🎞️</span> Hero Carousel Background Slides (4 Slides)
+                      </h4>
+                      <p className="text-[12px] text-[#64748B] mt-0.5">
+                        Manage the 4 background images corresponding to the 4 carousel dots in the homepage hero banner.
+                      </p>
+                    </div>
+                    <span className="self-start sm:self-auto text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded bg-rose-50 text-[#ED2024] border border-rose-200">
+                      4 Carousel Slides
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+                    {heroSlides.map((slide, sIdx) => (
+                      <div
+                        key={slide.id || sIdx}
+                        className="p-4 rounded-[12px] bg-white border border-[#E2E8F0] shadow-xs space-y-3"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className="w-6 h-6 rounded-full bg-[#ED2024] text-white text-[11px] font-bold flex items-center justify-center shrink-0">
+                              {sIdx + 1}
+                            </span>
+                            <span className="text-[12px] font-bold text-[#1E293B]">
+                              {sIdx === 0 ? 'Slide 1 (Default / Primary)' : `Slide ${sIdx + 1}`}
+                            </span>
+                          </div>
+                          <span className="text-[10px] px-2 py-0.5 rounded bg-gray-100 text-gray-600 font-mono">
+                            Dot {sIdx + 1}
+                          </span>
+                        </div>
+
+                        <ImageUploadField
+                          label={`Slide ${sIdx + 1} Image`}
+                          value={slide.image || ''}
+                          onChange={(url) => updateHeroSlide(sIdx, url)}
+                          defaultPath={defaultSlidePaths[sIdx]}
+                          helpText={`Upload image for Carousel Slide ${sIdx + 1}`}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
           </div>
         )}
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { resolveImageUrl } from '../config/api';
 
 export default function Hero({ data }) {
@@ -16,7 +16,41 @@ export default function Hero({ data }) {
   const exploreBtnLink = data?.exploreBtnLink || '#about';
   const findPanelBtnText = data?.findPanelBtnText || 'FIND YOUR PANEL';
   const findPanelBtnLink = data?.findPanelBtnLink || '#assessment-quiz';
-  const bgImage = resolveImageUrl(data?.bgImage) || data?.bgImage || '/assets/hero-bg.jpg';
+
+  // Build the 4 carousel slides (using custom slides from CMS if provided, or default 4 gallery images)
+  const defaultImages = [
+    resolveImageUrl(data?.bgImage) || data?.bgImage || '/assets/hero-bg.jpg',
+    '/assets/about/story-panel.jpg',
+    '/assets/community-bg.jpg',
+    '/assets/about-chamber-perfect.jpg',
+  ];
+
+  const rawSlides = Array.isArray(data?.slides) && data.slides.length > 0
+    ? data.slides
+    : (Array.isArray(data?.images) && data.images.length > 0 ? data.images : null);
+
+  const slides = rawSlides
+    ? rawSlides.slice(0, 4).map((s, idx) => ({
+        id: s?.id || idx + 1,
+        image: resolveImageUrl(s?.image || s) || s?.image || s || defaultImages[idx % defaultImages.length],
+        alt: s?.alt || `LUMA Hero Slide ${idx + 1}`,
+      }))
+    : defaultImages.map((img, idx) => ({
+        id: idx + 1,
+        image: img,
+        alt: `LUMA Hero Slide ${idx + 1}`,
+      }));
+
+  // Auto-advance carousel slide every 6 seconds
+  useEffect(() => {
+    if (slides.length <= 1) return;
+    const interval = setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % slides.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [slides.length]);
+
+  const currentSlideIdx = activeSlide < slides.length ? activeSlide : 0;
 
   return (
     <main
@@ -24,15 +58,20 @@ export default function Hero({ data }) {
       style={{ '--u': 'calc(100vw / 3840)' }}
       className="relative w-full h-[580px] sm:h-[680px] lg:h-[calc(1845*var(--u))] flex flex-col items-center justify-center lg:justify-start text-center px-4 sm:px-6 lg:px-0 pt-[56px] sm:pt-[76px] lg:pt-[calc(547*var(--u))] pb-16 sm:pb-20 lg:pb-0 overflow-hidden font-['Manrope']"
     >
-      {/* Background with Authenticity & Depth (Exact PSD Composite: Base + RED LIGHT Circles + Layer 19 + Shade) */}
+      {/* Background with Authenticity & Depth (Interactive Carousel with Smooth Crossfade) */}
       <div className="absolute inset-0 w-full h-full z-0 overflow-hidden">
-        <img
-          src={bgImage}
-          alt="LUMA Red Light Therapy Panels in Modern Wellness Gym"
-          className="w-full h-full object-cover object-[66%_center] sm:object-[60%_center] lg:object-center"
-        />
+        {slides.map((slide, idx) => (
+          <img
+            key={slide.id || idx}
+            src={slide.image}
+            alt={slide.alt || 'LUMA Red Light Therapy Panels in Modern Wellness Gym'}
+            className={`absolute inset-0 w-full h-full object-cover object-[66%_center] sm:object-[60%_center] lg:object-center transition-opacity duration-1000 ease-in-out ${
+              currentSlideIdx === idx ? 'opacity-100 z-1 scale-100' : 'opacity-0 z-0 pointer-events-none'
+            }`}
+          />
+        ))}
         {/* Subtle mobile readability vignette */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/25 to-black/70 lg:hidden pointer-events-none" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/25 to-black/70 lg:hidden pointer-events-none z-2" />
       </div>
 
       {/* Content (PSD Group 'Text & Button', y=616..1106 on 3840w canvas) */}
@@ -73,15 +112,15 @@ export default function Hero({ data }) {
           className="flex items-center gap-2 lg:gap-[calc(10*var(--u))] mb-2.5 sm:mb-3 lg:mb-[calc(58*var(--u))]"
           aria-label="Slide navigation"
         >
-          {[0, 1, 2, 3].map((idx) => (
+          {slides.map((_, idx) => (
             <button
               key={idx}
               type="button"
               onClick={() => setActiveSlide(idx)}
               aria-label={`Go to slide ${idx + 1}`}
               className={`w-[7px] h-[7px] sm:w-[8px] sm:h-[8px] lg:w-[calc(19*var(--u))] lg:h-[calc(19*var(--u))] rounded-full transition-all cursor-pointer ${
-                activeSlide === idx
-                  ? 'bg-[#EC2024]'
+                currentSlideIdx === idx
+                  ? 'bg-[#EC2024] scale-110 shadow-sm shadow-[#EC2024]/50'
                   : 'bg-[#4A4A4A] hover:bg-[#777777]'
               }`}
             />
