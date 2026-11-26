@@ -53,8 +53,8 @@ export default function CheckoutModal({
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [street, setStreet] = useState('');
-  const [city, setCity] = useState('Dubai');
-  const [country, setCountry] = useState('United Arab Emirates');
+  const [city, setCity] = useState('');
+  const [country, setCountry] = useState('');
 
   // Coupon states
   const [availableCoupons, setAvailableCoupons] = useState([]);
@@ -76,9 +76,9 @@ export default function CheckoutModal({
       setName(customerUser?.name || '');
       setEmail(customerUser?.email || '');
       setPhone(customerUser?.phone || '');
-      setCity(customerUser?.city || 'Dubai');
-      setCountry(customerUser?.country || 'United Arab Emirates');
-      setStreet(customerUser?.address || 'Downtown Dubai');
+      setCity(customerUser?.city || '');
+      setCountry(customerUser?.country || '');
+      setStreet(customerUser?.address || '');
       setErrorMessage('');
       setCouponError('');
       setCouponSuccess('');
@@ -316,6 +316,16 @@ export default function CheckoutModal({
 
     if (!name.trim()) {
       setErrorMessage('Please enter your full name.');
+      return;
+    }
+
+    if (!phone.trim()) {
+      setErrorMessage('Please fill in your phone number to place your order.');
+      return;
+    }
+
+    if (!street.trim() || !city.trim() || !country.trim()) {
+      setErrorMessage('Please fill in your delivery address (street, city, and country) to place your order.');
       return;
     }
 
@@ -587,10 +597,11 @@ export default function CheckoutModal({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="block text-[10px] uppercase tracking-wider text-white/50 font-medium mb-1">
-                      Phone Number
+                      Phone Number *
                     </label>
                     <input
                       type="tel"
+                      required
                       value={phone}
                       onChange={(e) => setPhone(e.target.value)}
                       placeholder="+971 50 123 4567"
@@ -600,13 +611,14 @@ export default function CheckoutModal({
 
                   <div>
                     <label className="block text-[10px] uppercase tracking-wider text-white/50 font-medium mb-1">
-                      City
+                      City *
                     </label>
                     <input
                       type="text"
+                      required
                       value={city}
                       onChange={(e) => setCity(e.target.value)}
-                      placeholder="Dubai"
+                      placeholder="e.g. Dubai, Kochi, London"
                       className="w-full px-3 py-2 text-xs bg-black/40 border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:border-[#ED2024]"
                     />
                   </div>
@@ -615,26 +627,28 @@ export default function CheckoutModal({
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div>
                     <label className="block text-[10px] uppercase tracking-wider text-white/50 font-medium mb-1">
-                      Country
+                      Country *
                     </label>
                     <input
                       type="text"
+                      required
                       value={country}
                       onChange={(e) => setCountry(e.target.value)}
-                      placeholder="e.g. India or United Arab Emirates"
+                      placeholder="e.g. India, United Arab Emirates, UK"
                       className="w-full px-3 py-2 text-xs bg-black/40 border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:border-[#ED2024]"
                     />
                   </div>
 
                   <div>
                     <label className="block text-[10px] uppercase tracking-wider text-white/50 font-medium mb-1">
-                      Street Address
+                      Street Address *
                     </label>
                     <input
                       type="text"
+                      required
                       value={street}
                       onChange={(e) => setStreet(e.target.value)}
-                      placeholder="e.g. Villa 14, Palm Jumeirah"
+                      placeholder="e.g. Villa 14, Palm Jumeirah or Infopark Rd"
                       className="w-full px-3 py-2 text-xs bg-black/40 border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:border-[#ED2024]"
                     />
                   </div>
