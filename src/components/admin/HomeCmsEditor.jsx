@@ -1,6 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import ImageUploadField from './ImageUploadField';
 
+const parseCardDuration = (raw) => {
+  if (!raw) return { value: '15', unit: 'Min' };
+  const str = String(raw).trim();
+  const match = str.match(/^(\d+)\s*(.*)$/);
+  if (match) {
+    return {
+      value: match[1] || '15',
+      unit: match[2]?.trim() || 'Min',
+    };
+  }
+  return { value: str.replace(/[^0-9]/g, '') || '15', unit: 'Min' };
+};
+
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ||
   (typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'
@@ -1883,16 +1896,50 @@ export default function HomeCmsEditor({ onOpenLivePage }) {
                       />
                     </div>
 
-                    <div>
-                      <label className="block text-[11px] font-semibold text-[#64748B] mb-1">Duration</label>
-                      <input
-                        type="text"
-                        value={card.duration || ''}
-                        onChange={(e) => updateBenefitCard(idx, 'duration', e.target.value)}
-                        className="w-full bg-white border border-[#E2E8F0] focus:border-[#ED2024] rounded-[6px] px-3 py-1.5 text-[12px] text-[#1E293B] outline-none shadow-xs"
-                        placeholder="15 Min"
-                      />
-                    </div>
+                    {(() => {
+                      const { value: cardDurationValue, unit: cardDurationUnit } = parseCardDuration(card.duration);
+                      return (
+                        <div>
+                          <div className="grid grid-cols-5 gap-2">
+                            <div className="col-span-3">
+                              <label className="block text-[11px] font-semibold text-[#64748B] mb-1">Time (Number)</label>
+                              <input
+                                type="number"
+                                min="1"
+                                value={cardDurationValue}
+                                onChange={(e) => {
+                                  const val = e.target.value;
+                                  updateBenefitCard(idx, 'duration', `${val} ${cardDurationUnit}`.trim());
+                                }}
+                                placeholder="15"
+                                className="w-full bg-white border border-[#E2E8F0] focus:border-[#ED2024] rounded-[6px] px-2.5 py-1.5 text-[12px] font-semibold text-[#1E293B] outline-none shadow-xs"
+                              />
+                            </div>
+                            <div className="col-span-2">
+                              <label className="block text-[11px] font-semibold text-[#64748B] mb-1">Unit</label>
+                              <input
+                                type="text"
+                                list={`duration-units-${idx}`}
+                                value={cardDurationUnit}
+                                onChange={(e) => {
+                                  const unit = e.target.value;
+                                  updateBenefitCard(idx, 'duration', `${cardDurationValue} ${unit}`.trim());
+                                }}
+                                placeholder="Min"
+                                className="w-full bg-white border border-[#E2E8F0] focus:border-[#ED2024] rounded-[6px] px-2 py-1.5 text-[12px] font-medium text-[#1E293B] outline-none shadow-xs"
+                              />
+                              <datalist id={`duration-units-${idx}`}>
+                                <option value="Min" />
+                                <option value="Sec" />
+                                <option value="Hr" />
+                                <option value="Mins" />
+                                <option value="Hours" />
+                              </datalist>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })()}
 
                     <div>
                       <label className="block text-[11px] font-semibold text-[#64748B] mb-1">Description</label>

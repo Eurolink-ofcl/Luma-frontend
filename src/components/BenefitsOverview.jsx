@@ -83,6 +83,19 @@ const benefits = [
   },
 ];
 
+const parseDuration = (rawDuration) => {
+  if (!rawDuration) return { value: '15', unit: 'Min' };
+  const str = String(rawDuration).trim();
+  const match = str.match(/^(\d+)\s*(.*)$/);
+  if (match) {
+    return {
+      value: match[1] || '15',
+      unit: match[2]?.trim() || 'Min',
+    };
+  }
+  return { value: str.replace(/[^0-9]/g, '') || '15', unit: 'Min' };
+};
+
 function BenefitCard({ item }) {
   const titleLines = item.titleLines || (
     item.title?.includes('\n')
@@ -91,7 +104,7 @@ function BenefitCard({ item }) {
         ? [item.title.split(' ')[0], item.title.split(' ').slice(1).join(' ')]
         : [item.title || '', '']
   );
-  const durationText = String(item.duration || '15').replace(/[^0-9]/g, '') || '15';
+  const { value: durationValue, unit: durationUnit } = parseDuration(item.duration);
   const desc = item.description || (Array.isArray(item.descriptionLines) ? item.descriptionLines.join(' ') : '');
   const image = item.image || '/assets/benefits/cellular.jpg';
 
@@ -117,10 +130,10 @@ function BenefitCard({ item }) {
           {/* Duration Circular Badge matching PSD Ellipse 5 (83x83px at 3840w, Red outline, stacked text) */}
           <div className="w-10 h-10 lg:w-[calc(83*var(--u))] lg:h-[calc(83*var(--u))] rounded-full border lg:border-[calc(3*var(--u))] border-[#ED2024] bg-white flex flex-col items-center justify-center shrink-0 select-none">
             <span className="text-xs lg:text-[calc(24*var(--u))] font-medium text-[#131313] leading-[1.05]">
-              {durationText}
+              {durationValue}
             </span>
-            <span className="text-[10px] lg:text-[calc(22*var(--u))] font-medium text-[#131313] leading-[1.05]">
-              Min
+            <span className="text-[10px] lg:text-[calc(22*var(--u))] font-medium text-[#131313] leading-[1.05] max-w-[85%] truncate text-center">
+              {durationUnit}
             </span>
           </div>
         </div>
