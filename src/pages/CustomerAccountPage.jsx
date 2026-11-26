@@ -117,7 +117,7 @@ export default function CustomerAccountPage({
         setAddress(c.address || '');
         setCartItems(Array.isArray(c.cart) ? c.cart : []);
         setOrders(Array.isArray(c.orders) ? c.orders : []);
-        if (onUpdateCustomer && c.name !== customerUser?.name) {
+        if (onUpdateCustomer) {
           onUpdateCustomer(c);
         }
       }

@@ -612,17 +612,32 @@ export default function CheckoutModal({
                   </div>
                 </div>
 
-                <div>
-                  <label className="block text-[10px] uppercase tracking-wider text-white/50 font-medium mb-1">
-                    Street Address
-                  </label>
-                  <input
-                    type="text"
-                    value={street}
-                    onChange={(e) => setStreet(e.target.value)}
-                    placeholder="e.g. Villa 14, Palm Jumeirah, Dubai"
-                    className="w-full px-3 py-2 text-xs bg-black/40 border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:border-[#ED2024]"
-                  />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="block text-[10px] uppercase tracking-wider text-white/50 font-medium mb-1">
+                      Country
+                    </label>
+                    <input
+                      type="text"
+                      value={country}
+                      onChange={(e) => setCountry(e.target.value)}
+                      placeholder="e.g. India or United Arab Emirates"
+                      className="w-full px-3 py-2 text-xs bg-black/40 border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:border-[#ED2024]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[10px] uppercase tracking-wider text-white/50 font-medium mb-1">
+                      Street Address
+                    </label>
+                    <input
+                      type="text"
+                      value={street}
+                      onChange={(e) => setStreet(e.target.value)}
+                      placeholder="e.g. Villa 14, Palm Jumeirah"
+                      className="w-full px-3 py-2 text-xs bg-black/40 border border-white/10 rounded-lg text-white placeholder-white/30 focus:outline-none focus:border-[#ED2024]"
+                    />
+                  </div>
                 </div>
               </div>
 
