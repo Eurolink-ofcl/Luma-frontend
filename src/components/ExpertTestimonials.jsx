@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { resolveImageUrl } from '../config/api';
 
 const defaultExperts = [
   {
@@ -14,6 +15,30 @@ const defaultExperts = [
     videoUrl: 'https://www.youtube.com/embed/UF0nQUc44q0',
   },
 ];
+
+const getEmbedVideoUrl = (rawUrl) => {
+  if (!rawUrl || typeof rawUrl !== 'string') return '';
+  const url = rawUrl.trim();
+
+  // YouTube match
+  const ytMatch = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w-]{11})/);
+  if (ytMatch) {
+    return `https://www.youtube.com/embed/${ytMatch[1]}?autoplay=1&rel=0`;
+  }
+
+  // Vimeo match
+  const vimeoMatch = url.match(/vimeo\.com\/(?:video\/)?(\d+)/);
+  if (vimeoMatch) {
+    return `https://player.vimeo.com/video/${vimeoMatch[1]}?autoplay=1`;
+  }
+
+  return url;
+};
+
+const isExternalEmbed = (url) => {
+  if (!url || typeof url !== 'string') return false;
+  return url.includes('youtube.com') || url.includes('youtu.be') || url.includes('vimeo.com');
+};
 
 export default function ExpertTestimonials({ data }) {
   const [activeVideo, setActiveVideo] = useState(null);
@@ -50,14 +75,16 @@ export default function ExpertTestimonials({ data }) {
             <div
               key={idx}
               onClick={() => setActiveVideo(expert)}
-              className="relative w-full sm:w-1/2 lg:w-[calc(989*var(--u))] aspect-[989/1198] lg:h-[calc(1198*var(--u))] rounded-[24px] sm:rounded-[32px] lg:rounded-[calc(60*var(--u))] overflow-hidden cursor-pointer select-none shrink-0"
+              className="group relative w-full sm:w-1/2 lg:w-[calc(989*var(--u))] aspect-[989/1198] lg:h-[calc(1198*var(--u))] rounded-[24px] sm:rounded-[32px] lg:rounded-[calc(60*var(--u))] overflow-hidden cursor-pointer select-none shrink-0 transition-transform duration-300 hover:scale-[1.015] shadow-lg"
+              title={`Click to play video interview with ${expert.name}`}
             >
               <img
-                src={expert.image || expert.cardImg || '/assets/experts/expert_huberman_card.jpg'}
+                src={resolveImageUrl(expert.image || expert.cardImg) || expert.image || expert.cardImg || '/assets/experts/expert_huberman_card.jpg'}
                 alt={expert.name}
-                className="w-full h-full object-cover block select-none"
+                className="w-full h-full object-cover block select-none group-hover:scale-105 transition-transform duration-500"
                 draggable={false}
               />
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors pointer-events-none" />
             </div>
           ))}
         </div>
@@ -66,14 +93,14 @@ export default function ExpertTestimonials({ data }) {
       {/* Video Modal */}
       {activeVideo && (
         <div
-          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-3 sm:p-6"
           onClick={() => setActiveVideo(null)}
         >
           <div
-            className="relative w-full max-w-3xl bg-black rounded-2xl overflow-hidden border border-white/20 shadow-2xl"
+            className="relative w-full max-w-4xl bg-black rounded-2xl overflow-hidden border border-white/20 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="p-4 flex items-center justify-between border-b border-white/10">
+            <div className="p-4 flex items-center justify-between border-b border-white/10 bg-[#0e0e12]">
               <div>
                 <h4 className="text-sm font-bold text-white tracking-wide">{activeVideo.name}</h4>
                 <p className="text-xs text-white/60">{activeVideo.role}</p>
@@ -82,22 +109,43 @@ export default function ExpertTestimonials({ data }) {
                 type="button"
                 onClick={() => setActiveVideo(null)}
                 className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white text-lg transition-colors cursor-pointer"
+                aria-label="Close video dialog"
               >
                 &times;
               </button>
             </div>
-            <div className="aspect-video w-full bg-black flex items-center justify-center">
-              <div className="text-center p-8">
-                <div className="w-16 h-16 rounded-full bg-[#ED2024]/20 border border-[#ED2024] flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-[#ED2024] fill-current translate-x-0.5" viewBox="0 0 24 24">
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
+
+            <div className="aspect-video w-full bg-black flex items-center justify-center overflow-hidden">
+              {activeVideo.videoUrl && isExternalEmbed(activeVideo.videoUrl) ? (
+                <iframe
+                  src={getEmbedVideoUrl(activeVideo.videoUrl)}
+                  title={`${activeVideo.name} Video Interview`}
+                  className="w-full h-full aspect-video border-0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : activeVideo.videoUrl ? (
+                <video
+                  src={resolveImageUrl(activeVideo.videoUrl)}
+                  poster={resolveImageUrl(activeVideo.image || activeVideo.cardImg)}
+                  controls
+                  autoPlay
+                  playsInline
+                  className="w-full h-full object-contain aspect-video bg-black"
+                />
+              ) : (
+                <div className="text-center p-8">
+                  <div className="w-16 h-16 rounded-full bg-[#ED2024]/20 border border-[#ED2024] flex items-center justify-center mx-auto mb-4">
+                    <svg className="w-8 h-8 text-[#ED2024] fill-current translate-x-0.5" viewBox="0 0 24 24">
+                      <path d="M8 5v14l11-7z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-lg font-bold text-white mb-2">{activeVideo.name}</h3>
+                  <p className="text-xs sm:text-sm text-gray-400 max-w-md mx-auto">
+                    Video for this expert has not been uploaded yet. You can upload a video file or link in the admin CMS.
+                  </p>
                 </div>
-                <h3 className="text-lg font-bold text-white mb-2">{activeVideo.name} on Photobiomodulation</h3>
-                <p className="text-xs sm:text-sm text-gray-400 max-w-md mx-auto">
-                  "Red light and near-infrared wavelengths stimulate mitochondrial cytochrome c oxidase, boosting ATP energy production and accelerating cellular repair."
-                </p>
-              </div>
+              )}
             </div>
           </div>
         </div>

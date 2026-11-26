@@ -3279,18 +3279,126 @@ export default function HomeCmsEditor({ onOpenLivePage }) {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
               {expertList.map((exp, idx) => (
-                <div key={exp.id || idx} className="p-4 rounded-[14px] bg-[#F8FAFC] border border-[#E2E8F0] space-y-3">
-                  <span className="text-[11px] font-bold text-[#ED2024] uppercase tracking-wider block">
-                    Expert Video {idx + 1}
-                  </span>
+                <div key={exp.id || idx} className="p-4 sm:p-5 rounded-[14px] bg-[#F8FAFC] border border-[#E2E8F0] space-y-4">
+                  <div className="flex items-center justify-between pb-2 border-b border-[#E2E8F0]">
+                    <span className="text-[12px] font-bold text-[#ED2024] uppercase tracking-wider flex items-center gap-1.5">
+                      <span>🎬</span> Expert Video {idx + 1}
+                    </span>
+                    <span className="text-[10px] px-2 py-0.5 rounded bg-gray-200 text-gray-700 font-mono">
+                      Card {idx + 1}
+                    </span>
+                  </div>
 
+                  {/* 1. Cover Portrait Photo */}
                   <ImageUploadField
-                    label={`Expert ${idx + 1} Card Image`}
+                    label={`Expert ${idx + 1} Card Cover Image`}
                     value={exp.image || ''}
                     onChange={(url) => updateExpertTestimonial(idx, 'image', url)}
                     defaultPath={`/assets/experts/${idx === 0 ? 'expert_huberman_card.jpg' : 'expert_eagleman_card.jpg'}`}
-                    helpText="Upload expert card portrait"
+                    helpText="Upload cover portrait photo (displayed with play icon)"
                   />
+
+                  {/* 2. Video Media: File Upload & Link */}
+                  <div className="p-3.5 rounded-[10px] bg-white border border-[#E2E8F0] space-y-3">
+                    <div className="flex items-center justify-between">
+                      <label className="block text-[11px] font-bold text-[#1E293B] uppercase tracking-wider">
+                        Video Media (Upload File or Link)
+                      </label>
+                      {exp.videoUrl ? (
+                        <span className="text-[10px] text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 flex items-center gap-1">
+                          ✓ Video Configured
+                        </span>
+                      ) : (
+                        <span className="text-[10px] text-amber-600 font-medium bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                          No Video Added
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Option A: Paste Video Link (YouTube, Vimeo, MP4 URL) */}
+                    <div>
+                      <label className="block text-[10.5px] font-semibold text-[#64748B] mb-1">
+                        Option A: Video Link (YouTube, Vimeo, or direct MP4 URL)
+                      </label>
+                      <input
+                        type="url"
+                        value={exp.videoUrl || ''}
+                        onChange={(e) => updateExpertTestimonial(idx, 'videoUrl', e.target.value)}
+                        placeholder="https://www.youtube.com/watch?v=... or direct MP4 link"
+                        className="w-full bg-white border border-[#E2E8F0] focus:border-[#ED2024] rounded-[6px] px-3 py-1.5 text-[12px] text-[#1E293B] outline-none shadow-xs font-mono"
+                      />
+                    </div>
+
+                    {/* Option B: Upload Video File from Device */}
+                    <div>
+                      <label className="block text-[10.5px] font-semibold text-[#64748B] mb-1">
+                        Option B: Upload Video File from Device (MP4, WEBM)
+                      </label>
+                      <div className="flex items-center gap-2">
+                        <label className="cursor-pointer inline-flex items-center gap-2 px-3 py-1.5 rounded-[6px] bg-[#1E293B] hover:bg-black text-white text-[11.5px] font-semibold transition-colors shadow-xs">
+                          <svg className="w-4 h-4 text-[#ED2024]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                          </svg>
+                          <span>Choose Video File...</span>
+                          <input
+                            type="file"
+                            accept="video/mp4,video/webm,video/ogg,video/quicktime,video/*"
+                            className="hidden"
+                            onChange={async (e) => {
+                              const file = e.target.files?.[0];
+                              if (!file) return;
+                              const reader = new FileReader();
+                              reader.onload = async (ev) => {
+                                const base64Data = ev.target.result;
+                                try {
+                                  const res = await fetch(`${API_BASE_URL}/admin/upload`, {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({ video: base64Data, filename: file.name }),
+                                  });
+                                  const data = await res.json();
+                                  if (res.ok && data.success && data.url) {
+                                    updateExpertTestimonial(idx, 'videoUrl', data.url);
+                                  } else {
+                                    updateExpertTestimonial(idx, 'videoUrl', base64Data);
+                                  }
+                                } catch {
+                                  updateExpertTestimonial(idx, 'videoUrl', base64Data);
+                                }
+                              };
+                              reader.readAsDataURL(file);
+                            }}
+                          />
+                        </label>
+                        {exp.videoUrl && (
+                          <button
+                            type="button"
+                            onClick={() => updateExpertTestimonial(idx, 'videoUrl', '')}
+                            className="text-[11px] text-red-600 hover:text-red-700 hover:underline cursor-pointer"
+                          >
+                            Remove Video
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Preview / Test link of active video */}
+                    {exp.videoUrl && (
+                      <div className="pt-2 border-t border-[#F1F5F9] flex items-center justify-between text-[11px] text-gray-600">
+                        <span className="truncate max-w-[260px]">
+                          <strong>Target:</strong> {exp.videoUrl}
+                        </span>
+                        <a
+                          href={exp.videoUrl.startsWith('http') ? exp.videoUrl : `${API_BASE_URL.replace('/api', '')}${exp.videoUrl}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-[#ED2024] font-semibold hover:underline shrink-0 ml-2"
+                        >
+                          Test Link ↗
+                        </a>
+                      </div>
+                    )}
+                  </div>
 
                   <div>
                     <label className="block text-[11px] font-semibold text-[#64748B] mb-1">Expert Name</label>
