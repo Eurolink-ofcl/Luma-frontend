@@ -172,6 +172,8 @@ const EMPTY_PRODUCT_FORM = {
   benefitCards: [],
   specRows: [],
   specDeviceImage: '',
+  whiteMaskImage: '',
+  blackMaskImage: '',
   rating: 4.9,
   reviewsCount: 15,
 };
@@ -291,6 +293,8 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
       benefitCards: product.benefitCards || [],
       specRows: product.specRows || [],
       specDeviceImage: product.specDeviceImage || '',
+      whiteMaskImage: product.whiteMaskImage || '',
+      blackMaskImage: product.blackMaskImage || '',
       seriesCompareSpecs: {
         bestFor: product.seriesCompareSpecs?.bestFor !== undefined ? product.seriesCompareSpecs.bestFor : (DEFAULT_SERIES_SPECS_MAP[(product.slug || '').toLowerCase()]?.bestFor || ''),
         coverage: product.seriesCompareSpecs?.coverage !== undefined ? product.seriesCompareSpecs.coverage : (DEFAULT_SERIES_SPECS_MAP[(product.slug || '').toLowerCase()]?.coverage || ''),
@@ -1809,6 +1813,63 @@ export default function ProductsManager({ onNavigateToProduct, onNavigateStorefr
                           onChange={(url) => handleAddGalleryImage(url)}
                           defaultPath="/assets/products/luma-nova.png"
                           helpText="Upload gallery slide photos for this product."
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Color Variant Photos: White Mask & Black Mask (for LUMA Glow / Face Masks) */}
+                  <div className="pt-4 border-t border-gray-200 space-y-4">
+                    <div className="p-3.5 rounded-[12px] bg-red-50/60 border border-red-200/80">
+                      <div className="flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 rounded-full bg-[#ED2024]" />
+                        <h4 className="text-[13px] font-bold uppercase tracking-wider text-gray-900">
+                          Color Variant Photos (White &amp; Black Mask Round Swatches)
+                        </h4>
+                      </div>
+                      <p className="text-[11.5px] text-gray-600 mt-1">
+                        Configure the exact photos displayed when a customer clicks the <strong>White</strong> or <strong>Black</strong> round color buttons on the product page.
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* White Mask Photo */}
+                      <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-3">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className="w-5 h-5 rounded-full bg-[#EDEDED] border-2 border-gray-400 shadow-xs inline-block" />
+                            <span className="text-[12px] font-bold uppercase tracking-wider text-gray-900">
+                              White Mask Image
+                            </span>
+                          </div>
+                          <span className="text-[10px] text-gray-500 font-semibold uppercase">White Swatch (Left)</span>
+                        </div>
+                        <ImageUploadField
+                          label="Upload White Mask Image"
+                          value={formData.whiteMaskImage || ''}
+                          onChange={(url) => updateFormField('whiteMaskImage', url)}
+                          defaultPath="/assets/about/product-glow-mask.png"
+                          helpText="Displayed when the customer clicks the white round button."
+                        />
+                      </div>
+
+                      {/* Black Mask Photo */}
+                      <div className="p-4 rounded-[12px] bg-gray-50 border border-gray-200 space-y-3">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className="w-5 h-5 rounded-full bg-[#242323] border-2 border-black shadow-xs inline-block" />
+                            <span className="text-[12px] font-bold uppercase tracking-wider text-gray-900">
+                              Black Mask Image
+                            </span>
+                          </div>
+                          <span className="text-[10px] text-gray-500 font-semibold uppercase">Black Swatch (Right)</span>
+                        </div>
+                        <ImageUploadField
+                          label="Upload Black Mask Image"
+                          value={formData.blackMaskImage || ''}
+                          onChange={(url) => updateFormField('blackMaskImage', url)}
+                          defaultPath="/assets/products/list-product-1.jpg"
+                          helpText="Displayed when the customer clicks the black round button."
                         />
                       </div>
                     </div>

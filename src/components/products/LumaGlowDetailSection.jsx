@@ -33,18 +33,16 @@ const CAROUSEL_SLIDES = [
 
 const COLOR_OPTIONS = [
   {
-    id: 'silver',
-    name: 'Silver Mist',
-    fillColor: '#EDEDED',
+    id: 'white',
+    name: 'White Mask',
+    fillColor: '#FFFFFF',
     ringColor: '#EDEDED',
-    slideIndex: 3,
   },
   {
     id: 'black',
-    name: 'Obsidian Black',
+    name: 'Black Mask',
     fillColor: '#242323',
     ringColor: '#ED2024',
-    slideIndex: 0,
   },
 ];
 
@@ -54,6 +52,7 @@ export default function LumaGlowDetailSection({ product, onOpenCart, onBuyNow })
   const { customerUser, openAuthModal } = useAuth();
   const [activeSlide, setActiveSlide] = useState(0);
   const [selectedColor, setSelectedColor] = useState('black');
+  const [overrideImage, setOverrideImage] = useState(null);
   const [openAccordions, setOpenAccordions] = useState({
     spec: true,
     benefits: false,
@@ -61,6 +60,15 @@ export default function LumaGlowDetailSection({ product, onOpenCart, onBuyNow })
     howToUse: false,
     inTheBox: false,
   });
+
+  // Available color variant images from CMS or defaults
+  const whiteMaskSrc = product?.whiteMaskImage
+    ? resolveImageUrl(product.whiteMaskImage)
+    : '/assets/about/product-glow-mask.png';
+
+  const blackMaskSrc = product?.blackMaskImage
+    ? resolveImageUrl(product.blackMaskImage)
+    : (product?.image ? resolveImageUrl(product.image) : '/assets/products/list-product-1.jpg');
 
   const toggleAccordion = (key) => {
     setOpenAccordions((prev) => ({
@@ -71,9 +79,16 @@ export default function LumaGlowDetailSection({ product, onOpenCart, onBuyNow })
 
   const handleColorChange = (color) => {
     setSelectedColor(color.id);
-    if (color.slideIndex !== undefined) {
-      setActiveSlide(color.slideIndex);
+    if (color.id === 'white' || color.id === 'silver') {
+      setOverrideImage(whiteMaskSrc);
+    } else if (color.id === 'black') {
+      setOverrideImage(blackMaskSrc);
     }
+  };
+
+  const handleSlideChange = (idx) => {
+    setActiveSlide(idx);
+    setOverrideImage(null);
   };
 
   const slides =
@@ -166,12 +181,12 @@ export default function LumaGlowDetailSection({ product, onOpenCart, onBuyNow })
             {/* Main Rounded Showcase Frame matching PSD Rectangle 70 copy (918x1144, r=50px) */}
             <div className="relative w-full aspect-[918/1144] rounded-[20px] sm:rounded-[30px] 2xl:rounded-[calc(50*var(--u))] overflow-hidden bg-[#F7F7F7] shadow-sm flex items-center justify-center">
               <img
-                src={currentSlide?.image || currentSlide?.fallback}
-                alt={currentSlide?.alt || 'LUMA GLOW'}
+                src={overrideImage || (selectedColor === 'white' ? whiteMaskSrc : (currentSlide?.image || blackMaskSrc))}
+                alt={selectedColor === 'white' ? 'LUMA GLOW White Mask' : 'LUMA GLOW Black Mask'}
                 className="w-full h-full object-cover transition-opacity duration-300 pointer-events-none"
                 draggable={false}
                 onError={(e) => {
-                  e.target.src = '/assets/about/product-glow-mask.png';
+                  e.target.src = selectedColor === 'white' ? '/assets/about/product-glow-mask.png' : '/assets/products/list-product-1.jpg';
                 }}
               />
             </div>
@@ -183,10 +198,10 @@ export default function LumaGlowDetailSection({ product, onOpenCart, onBuyNow })
                   <button
                     key={slide.id || idx}
                     type="button"
-                    onClick={() => setActiveSlide(idx)}
+                    onClick={() => handleSlideChange(idx)}
                     aria-label={`Slide ${idx + 1}`}
                     className={`w-2.5 h-2.5 2xl:w-[calc(20*var(--u))] 2xl:h-[calc(20*var(--u))] rounded-full transition-all cursor-pointer ${
-                      safeSlideIndex === idx
+                      safeSlideIndex === idx && !overrideImage
                         ? 'bg-[#ED2024]'
                         : 'bg-[#D9D9D9] hover:bg-[#B3B3B3]'
                     }`}
@@ -265,13 +280,14 @@ export default function LumaGlowDetailSection({ product, onOpenCart, onBuyNow })
                   type="button"
                   onClick={() => {
                     const activeColor = COLOR_OPTIONS.find((c) => c.id === selectedColor) || COLOR_OPTIONS[1];
+                    const activeImage = selectedColor === 'white' ? whiteMaskSrc : blackMaskSrc;
                     const item = {
                       id: product?._id || product?.id || 'luma-glow',
                       slug: 'luma-glow',
                       name: product?.name || 'LUMA FACE LED LIGHT THERAPY MASK',
                       price: Number(product?.price) || 326,
-                      image: product?.image || '/assets/glow/glow-1.jpg',
-                      variant: activeColor?.name || 'Obsidian Black',
+                      image: activeImage,
+                      variant: activeColor?.name || 'Black Mask',
                     };
                     const added = addToCart(item, 1, activeColor?.name);
                     if (added) {
@@ -289,13 +305,14 @@ export default function LumaGlowDetailSection({ product, onOpenCart, onBuyNow })
                   type="button"
                   onClick={() => {
                     const activeColor = COLOR_OPTIONS.find((c) => c.id === selectedColor) || COLOR_OPTIONS[1];
+                    const activeImage = selectedColor === 'white' ? whiteMaskSrc : blackMaskSrc;
                     const item = {
                       id: product?._id || product?.id || 'luma-glow',
                       slug: 'luma-glow',
                       name: product?.name || 'LUMA FACE LED LIGHT THERAPY MASK',
                       price: Number(product?.price) || 326,
-                      image: product?.image || '/assets/glow/glow-1.jpg',
-                      variant: activeColor?.name || 'Obsidian Black',
+                      image: activeImage,
+                      variant: activeColor?.name || 'Black Mask',
                     };
                     buyNow(item, onBuyNow || onOpenCart || openCart, 1, activeColor?.name);
                   }}
