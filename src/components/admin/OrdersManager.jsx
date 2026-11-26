@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { resolveImageUrl } from '../../config/api';
 
 const API_BASE_URL =

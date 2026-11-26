@@ -132,8 +132,6 @@ export default function CheckoutModal({
     (c) => c.displayToCustomer === true && c.isActive !== false
   );
 
-  if (!isOpen) return null;
-
   // Local editable items list so customer can choose/toggle mask color variant directly in checkout modal
   const [itemsList, setItemsList] = useState([]);
 
@@ -388,6 +386,8 @@ export default function CheckoutModal({
       setIsSubmitting(false);
     }
   };
+
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-3 sm:p-6 font-['Manrope']">
