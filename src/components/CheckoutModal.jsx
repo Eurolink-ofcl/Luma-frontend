@@ -134,28 +134,60 @@ export default function CheckoutModal({
 
   if (!isOpen) return null;
 
-  // Determine items to checkout
-  const checkoutItems = Array.isArray(cartItems) && cartItems.length > 0
-    ? cartItems.map((item) => ({
-        name: item.title || item.name || 'LUMA Red Light Therapy Device',
-        price: Number(item.price) || 0,
-        quantity: Number(item.quantity) || 1,
-        variant: item.variant || '',
-      }))
-    : [
-        {
-          name: 'LUMA Pro Max 9-Wavelength',
-          price: 4890,
-          quantity: 1,
-          variant: 'Full Body Clinical Stand / Matte Obsidian',
-        },
-        {
-          name: 'LUMA Protective NIR Eyewear',
-          price: 240,
-          quantity: 1,
-          variant: 'Pro Shielding Optical Lens',
-        },
-      ];
+  // Local editable items list so customer can choose/toggle mask color variant directly in checkout modal
+  const [itemsList, setItemsList] = useState([]);
+
+  useEffect(() => {
+    if (isOpen) {
+      const items = Array.isArray(cartItems) && cartItems.length > 0
+        ? cartItems.map((item) => {
+            const isGlowOrMask = (item.name || item.title || '').toLowerCase().includes('glow') ||
+                                 (item.name || item.title || '').toLowerCase().includes('mask') ||
+                                 (item.slug || '').toLowerCase().includes('glow') ||
+                                 (item.slug || '').toLowerCase().includes('mask');
+            let initialVariant = item.variant || '';
+            if (isGlowOrMask && !initialVariant) {
+              initialVariant = 'Black Mask';
+            }
+            return {
+              id: item.id || item._id || item.slug,
+              slug: item.slug,
+              name: item.title || item.name || 'LUMA Red Light Therapy Device',
+              price: Number(item.price) || 0,
+              quantity: Number(item.quantity) || 1,
+              variant: initialVariant,
+              color: initialVariant.toLowerCase().includes('white') ? 'White' : (initialVariant.toLowerCase().includes('black') ? 'Black' : ''),
+              image: item.image || '',
+            };
+          })
+        : [
+            {
+              name: 'LUMA GLOW',
+              price: 326,
+              quantity: 1,
+              variant: 'Black Mask',
+              color: 'Black',
+            },
+          ];
+      setItemsList(items);
+    }
+  }, [isOpen, cartItems]);
+
+  const handleUpdateItemColor = (idx, variantName) => {
+    setItemsList((prev) => {
+      const copy = [...prev];
+      if (copy[idx]) {
+        copy[idx] = {
+          ...copy[idx],
+          variant: variantName,
+          color: variantName.toLowerCase().includes('white') ? 'White' : 'Black',
+        };
+      }
+      return copy;
+    });
+  };
+
+  const checkoutItems = itemsList;
 
   const subtotal = checkoutItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -417,6 +449,27 @@ export default function CheckoutModal({
                   </span>
                 </div>
               </div>
+
+              {/* Confirmed Items List with Selected Color */}
+              {Array.isArray(placedOrder.items) && placedOrder.items.length > 0 && (
+                <div className="py-2 border-y border-white/5 space-y-1.5">
+                  {placedOrder.items.map((it, idx) => (
+                    <div key={idx} className="flex items-center justify-between text-xs text-white/80">
+                      <div className="flex items-center gap-1.5 truncate">
+                        <span className="text-white font-medium">{it.name} &times; {it.quantity || 1}</span>
+                        {(it.variant || it.color) && (
+                          <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#ED2024]/20 text-[#ED2024] border border-[#ED2024]/30">
+                            {it.variant || it.color}
+                          </span>
+                        )}
+                      </div>
+                      <span className="font-semibold text-white whitespace-nowrap">
+                        {formatPrice((it.price || 0) * (it.quantity || 1))} AED
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
 
               {/* Coupon Savings info if applied */}
               {(placedOrder.coupon?.code || appliedCoupon?.code) && (
@@ -740,18 +793,88 @@ export default function CheckoutModal({
                   <span className="text-[11px] text-emerald-400 font-medium">Free Express Delivery</span>
                 </div>
 
-                <div className="space-y-1.5 max-h-24 overflow-y-auto pr-1">
-                  {checkoutItems.map((item, idx) => (
-                    <div
-                      key={idx}
-                      className="flex items-center justify-between text-xs text-white/80"
-                    >
-                      <span className="truncate pr-2">{item.name} &times; {item.quantity}</span>
-                      <span className="font-semibold text-white whitespace-nowrap">
-                        {formatPrice(item.price * item.quantity)}
-                      </span>
-                    </div>
-                  ))}
+                <div className="space-y-2.5 max-h-56 overflow-y-auto pr-1">
+                  {checkoutItems.map((item, idx) => {
+                    const isGlowOrMask =
+                      (item.name || '').toLowerCase().includes('glow') ||
+                      (item.name || '').toLowerCase().includes('mask') ||
+                      (item.slug || '').toLowerCase().includes('glow') ||
+                      (item.slug || '').toLowerCase().includes('mask');
+
+                    const isWhite = (item.variant || '').toLowerCase().includes('white');
+                    const isBlack = (item.variant || '').toLowerCase().includes('black') || !isWhite;
+
+                    return (
+                      <div
+                        key={idx}
+                        className="p-3 rounded-xl bg-white/[0.03] border border-white/10 space-y-2 text-xs"
+                      >
+                        <div className="flex items-center justify-between text-white/90">
+                          <div className="flex items-center gap-2 min-w-0 pr-2">
+                            <span className="font-bold text-[13px] text-white truncate">
+                              {item.name} &times; {item.quantity}
+                            </span>
+                            {item.variant && (
+                              <span
+                                className={`px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider uppercase shrink-0 ${
+                                  isWhite
+                                    ? 'bg-white text-black'
+                                    : 'bg-neutral-800 text-white border border-white/20'
+                                }`}
+                              >
+                                {item.variant}
+                              </span>
+                            )}
+                          </div>
+                          <span className="font-black text-white whitespace-nowrap text-[13px]">
+                            {formatPrice(item.price * item.quantity)} AED
+                          </span>
+                        </div>
+
+                        {/* Interactive Color Variant Selector (White vs Black) */}
+                        {isGlowOrMask && (
+                          <div className="pt-2 border-t border-white/10 flex flex-wrap items-center justify-between gap-2">
+                            <span className="text-[11px] font-semibold text-white/60 uppercase tracking-wider flex items-center gap-1.5">
+                              <span>Choose Mask Color:</span>
+                              <strong className="text-[#ED2024] font-bold">
+                                {isWhite ? 'White Mask' : 'Black Mask'}
+                              </strong>
+                            </span>
+
+                            <div className="flex items-center gap-2">
+                              {/* White Option Button */}
+                              <button
+                                type="button"
+                                onClick={() => handleUpdateItemColor(idx, 'White Mask')}
+                                className={`px-2.5 py-1 rounded-full text-[11px] font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                                  isWhite
+                                    ? 'bg-white text-black ring-2 ring-[#ED2024] shadow-md scale-105'
+                                    : 'bg-white/10 hover:bg-white/20 text-white/70 border border-white/20'
+                                }`}
+                              >
+                                <span className="w-3 h-3 rounded-full bg-white border border-gray-400 inline-block shadow-inner" />
+                                <span>White</span>
+                              </button>
+
+                              {/* Black Option Button */}
+                              <button
+                                type="button"
+                                onClick={() => handleUpdateItemColor(idx, 'Black Mask')}
+                                className={`px-2.5 py-1 rounded-full text-[11px] font-bold flex items-center gap-1.5 transition-all cursor-pointer ${
+                                  isBlack
+                                    ? 'bg-[#18181b] text-white ring-2 ring-[#ED2024] shadow-md border border-neutral-700 scale-105'
+                                    : 'bg-white/10 hover:bg-white/20 text-white/70 border border-white/20'
+                                }`}
+                              >
+                                <span className="w-3 h-3 rounded-full bg-[#242323] border border-black inline-block shadow-inner" />
+                                <span>Black</span>
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
 
                 {/* Subtotal line */}

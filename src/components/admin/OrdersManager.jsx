@@ -711,15 +711,27 @@ export default function OrdersManager({ onOrderUpdated }) {
                       </td>
 
                       {/* Items Purchased */}
-                      <td className="py-3.5 px-4 max-w-[220px]">
+                      <td className="py-3.5 px-4 max-w-[260px]">
                         {ord.items && ord.items.length > 0 ? (
-                          <div>
-                            <div className="text-gray-800 font-medium truncate">
-                              {ord.items[0].name}
-                              {ord.items[0].quantity > 1 ? ` (×${ord.items[0].quantity})` : ''}
+                          <div className="space-y-1">
+                            <div className="flex flex-wrap items-center gap-1.5 text-gray-800 font-medium text-[13px]">
+                              <span>{ord.items[0].name}</span>
+                              {(ord.items[0].variant || ord.items[0].color) && (
+                                <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                                  (ord.items[0].variant || ord.items[0].color).toLowerCase().includes('white')
+                                    ? 'bg-gray-100 text-gray-800 border border-gray-300'
+                                    : 'bg-black text-white border border-gray-800'
+                                }`}>
+                                  <span className={`w-1.5 h-1.5 rounded-full ${
+                                    (ord.items[0].variant || ord.items[0].color).toLowerCase().includes('white') ? 'bg-white border border-gray-400' : 'bg-[#ED2024]'
+                                  }`} />
+                                  <span>{ord.items[0].variant || ord.items[0].color}</span>
+                                </span>
+                              )}
+                              {ord.items[0].quantity > 1 ? <span className="text-gray-500 text-[11px] font-normal">(×{ord.items[0].quantity})</span> : ''}
                             </div>
                             {ord.items.length > 1 && (
-                              <div className="text-[11px] text-[#ED2024] font-semibold mt-0.5">
+                              <div className="text-[11px] text-[#ED2024] font-semibold">
                                 + {ord.items.length - 1} more item{ord.items.length - 1 > 1 ? 's' : ''}
                               </div>
                             )}
@@ -1272,8 +1284,22 @@ export default function OrdersManager({ onOrderUpdated }) {
                             {idx + 1}
                           </div>
                           <div>
-                            <div className="text-[13.5px] font-bold text-gray-900">{item.name}</div>
-                            <div className="text-[12px] text-gray-500">
+                            <div className="text-[13.5px] font-bold text-gray-900 flex flex-wrap items-center gap-2">
+                              <span>{item.name}</span>
+                              {(item.variant || item.color) && (
+                                <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10.5px] font-bold uppercase tracking-wider ${
+                                  (item.variant || item.color).toLowerCase().includes('white')
+                                    ? 'bg-gray-100 text-gray-800 border border-gray-300'
+                                    : 'bg-black text-white border border-gray-800'
+                                }`}>
+                                  <span className={`w-2 h-2 rounded-full ${
+                                    (item.variant || item.color).toLowerCase().includes('white') ? 'bg-white border border-gray-400' : 'bg-[#ED2024]'
+                                  }`} />
+                                  <span>{item.variant || item.color}</span>
+                                </span>
+                              )}
+                            </div>
+                            <div className="text-[12px] text-gray-500 mt-0.5">
                               {formatPrice(item.price)} AED × {item.quantity || 1}
                             </div>
                           </div>
